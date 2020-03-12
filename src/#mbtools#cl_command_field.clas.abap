@@ -79,10 +79,10 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   METHOD constructor.
     " APACK
     apack_manifest = VALUE #(
-      group_id    = 'github.com/mbtools/mbt-bc-cl'
+      group_id    = 'github.com/mbtools/' && c_name
       artifact_id = 'com.marcbernardtools.abap.bc_cl'
       version     = c_version
-      git_url     = 'https://github.com/mbtools/mbt-bc-cl.git'
+      git_url     = 'https://github.com/mbtools/' && c_name && '.git'
     ) ##NO_TEXT.
     " MBT
     mbt_manifest = VALUE #(
