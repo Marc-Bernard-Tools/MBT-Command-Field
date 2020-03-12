@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>MBT Command Field</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+    <RSTAT>K</RSTAT>
+    <MSG_ID>/MBTOOLS/BC_CL</MSG_ID>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>000</KEY>
+     <ENTRY>Enhancement for SAP GUI Command Field</ENTRY>
+     <LENGTH>100</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Enter commands longer than 20 characters in popup</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>Navigation not available</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>040</KEY>
+     <ENTRY>Command</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>041</KEY>
+     <ENTRY>Result</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>042</KEY>
+     <ENTRY>Error</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+   </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Initialize manifests</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>C_DESCRIPTION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Description</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>C_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Name of Tool</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>C_TITLE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Title of Tool</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>C_URI</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>URI</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>C_VERSION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Version</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>EXECUTE_COMMAND</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Execute command from command field</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>INPUT_CHECK</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Check if value is valid command</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>INPUT_SPLIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Split input into command and parameters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>POPUP_COMMAND</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Show popup to enter long commands</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND_FIELD</CLSNAME>
+     <CMPNAME>SHOW_RESULT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Show results in status bar or popup</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

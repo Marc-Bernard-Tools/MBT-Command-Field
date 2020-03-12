@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>MBT Command Field</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp;1 &amp;2 &amp;3 &amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Invalid command</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Enter commands longer than &amp;1 characters in popup</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Results are truncated to &amp;1 lines</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Function module &amp;1 does not exist or is not executable</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Table &amp;1 does not contain any data</TEXT>
+    </T100>
+   </T100>
+   <LONGTEXTS>
+    <item>
+     <DOKIL>
+      <ID>NA</ID>
+      <OBJECT>/MBTOOLS/BC_CL001</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>E</TYP>
+      <VERSION>0001</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00011</TXTLINES>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>/MBTOOLS/BC_CL001</TDNAME>
+      <TDID>NA</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00001</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;CAUSE&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>You entered a command that is unknown.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;SYSTEM_RESPONSE&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The first character of the command string determines the type of</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>command. The following commands are supported:</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>K1</TDFORMAT>
+       <TDLINE>Command,,Description</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>T1</TDFORMAT>
+       <TDLINE>?,,SAP ONE Support Launchpad</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>T1</TDFORMAT>
+       <TDLINE>!,,Run Object</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>T1</TDFORMAT>
+       <TDLINE>#,,Display Object</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>T1</TDFORMAT>
+       <TDLINE>$,,Currency Conversion</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>T1</TDFORMAT>
+       <TDLINE>%,,Unit Conversion</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;WHAT_TO_DO&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>Enter a valid command. You can find more information in the</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>documentation at https://marcbernardtools.com/.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;SYS_ADMIN&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+      </TLINE>
+     </LINES>
+    </item>
+    <item>
+     <DOKIL>
+      <ID>NA</ID>
+      <OBJECT>/MBTOOLS/BC_CL002</OBJECT>
+      <LANGU>E</LANGU>
+      <TYP>E</TYP>
+      <VERSION>0001</VERSION>
+      <MASTERLANG>X</MASTERLANG>
+      <TXTLINES>00006</TXTLINES>
+     </DOKIL>
+     <HEAD>
+      <TDOBJECT>DOKU</TDOBJECT>
+      <TDNAME>/MBTOOLS/BC_CL002</TDNAME>
+      <TDID>NA</TDID>
+      <TDSPRAS>E</TDSPRAS>
+      <TDFORM>S_DOCU_SHOW</TDFORM>
+      <TDSTYLE>S_DOCUS1</TDSTYLE>
+      <TDVERSION>00001</TDVERSION>
+      <TDLINESIZE>072</TDLINESIZE>
+     </HEAD>
+     <LINES>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;CAUSE&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>You entered a command string that is longer than &amp;SYST-MSGV1&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>characters.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;SYSTEM_RESPONSE&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>The standard SAP GUI command field supports only up to &amp;SYST-MSGV1&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>characters.</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;WHAT_TO_DO&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+       <TDLINE>A popup is shown where you can enter longer command strings (up to</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDLINE>&amp;SYST-MSGV2&amp; characters).</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>U1</TDFORMAT>
+       <TDLINE>&amp;SYS_ADMIN&amp;</TDLINE>
+      </TLINE>
+      <TLINE>
+       <TDFORMAT>AS</TDFORMAT>
+      </TLINE>
+     </LINES>
+    </item>
+   </LONGTEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

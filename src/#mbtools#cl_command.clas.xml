@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>MBT Command</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+    <RSTAT>K</RSTAT>
+    <MSG_ID>/MBTOOLS/BC_CL</MSG_ID>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>C_CALLBACK_ALV</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Callback form for ALV</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>C_CALLBACK_PROG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Callback program for EVAL_FORMULA</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>C_TABIX</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Index for pick in object list</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>OBJECT_LIST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object list with icon and text</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>OBJECT_SPLIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Split objects into range of objects</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>OBJ_NAME_SPLIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Split objects names into range of objects names</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>PICK</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Pick object from list</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>RANGE_DERIVE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Derive range from object</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>SELECT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Select objects</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>SELECT_BW</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Select BW objects</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>SPLIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Split parameters into operator and object</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>TADIR_LIST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Object list from directory</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/CL_COMMAND</CLSNAME>
+     <CMPNAME>TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Add object texts</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

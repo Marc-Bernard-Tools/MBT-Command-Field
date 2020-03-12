@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_ENHO" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TOOL>HOOK_IMPL</TOOL>
+   <SHORTTEXT>MBT Command Field</SHORTTEXT>
+   <ORIGINAL_OBJECT>
+    <PGMID>R3TR</PGMID>
+    <ORG_OBJ_TYPE>FUGR</ORG_OBJ_TYPE>
+    <ORG_OBJ_NAME>SHL2</ORG_OBJ_NAME>
+    <ORG_MAIN_TYPE>FUGR</ORG_MAIN_TYPE>
+    <ORG_MAIN_NAME>SHL2</ORG_MAIN_NAME>
+    <PROGRAMNAME>SAPLSHL2</PROGRAMNAME>
+   </ORIGINAL_OBJECT>
+   <ENHANCEMENTS>
+    <ENH_HOOK_IMPL>
+     <PROGRAMNAME>SAPLSHL2</PROGRAMNAME>
+     <ENHMODE>D</ENHMODE>
+     <FULL_NAME>\FU:HELP_START\SE:BEGIN\EI</FULL_NAME>
+     <SOURCE>
+      <item>************************************************************************</item>
+      <item>* /MBTOOLS/BC_COMMAND_FIELD</item>
+      <item>* MBT Command Field</item>
+      <item>*</item>
+      <item>* (c) MBT 2020 https://marcbernardtools.com/</item>
+      <item>************************************************************************</item>
+      <item/>
+      <item>DATA:</item>
+      <item>mbt_active  TYPE abap_bool,</item>
+      <item>mbt_exit    TYPE abap_bool,</item>
+      <item>mbt_command TYPE string.</item>
+      <item/>
+      <item>mbt_active = /mbtools/cl_tools=&gt;is_active( i_name = /mbtools/cl_command_field=&gt;c_name ).</item>
+      <item/>
+      <item>IF mbt_active = abap_true.</item>
+      <item>mbt_command = help_infos-menufunct.</item>
+      <item/>
+      <item>IF help_infos-call = &apos;D&apos; AND help_infos-docuid = &apos;OK&apos;.</item>
+      <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
+      <item/>
+      <item>mbt_exit = /mbtools/cl_command_field=&gt;popup_command( i_input = mbt_command ).</item>
+      <item>ELSEIF help_infos-call = &apos;H&apos;.</item>
+      <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
+      <item/>
+      <item>mbt_exit = /mbtools/cl_command_field=&gt;execute_command( i_input = mbt_command ).</item>
+      <item>ENDIF.</item>
+      <item/>
+      <item>IF mbt_exit = abap_true.</item>
+      <item>RETURN.</item>
+      <item>ENDIF.</item>
+      <item>ENDIF.</item>
+      <item/>
+     </SOURCE>
+    </ENH_HOOK_IMPL>
+   </ENHANCEMENTS>
+   <SPACES>
+    <item>
+     <FULL_NAME>\FU:HELP_START\SE:BEGIN\EI</FULL_NAME>
+     <SPACES>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>2</item>
+      <item>4</item>
+      <item>4</item>
+      <item>4</item>
+      <item>0</item>
+      <item>2</item>
+      <item>0</item>
+      <item>2</item>
+      <item>4</item>
+      <item>0</item>
+      <item>4</item>
+      <item>6</item>
+      <item>0</item>
+      <item>6</item>
+      <item>4</item>
+      <item>6</item>
+      <item>0</item>
+      <item>6</item>
+      <item>4</item>
+      <item>0</item>
+      <item>4</item>
+      <item>6</item>
+      <item>4</item>
+      <item>2</item>
+      <item>0</item>
+     </SPACES>
+    </item>
+   </SPACES>
+  </asx:values>
+ </asx:abap>
+</abapGit>
