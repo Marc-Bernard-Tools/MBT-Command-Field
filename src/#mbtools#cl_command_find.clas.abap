@@ -62,7 +62,11 @@ CLASS /MBTOOLS/CL_COMMAND_FIND IMPLEMENTATION.
     CASE application.
       WHEN 'NOTE' OR 'KBA'.
         " Knowledge Base (SAP Note or KBA)
-        url_path = '/notes/' ##NO_TEXT.
+        IF object CO '0123456789'.
+            url_path = '/notes/' ##NO_TEXT.
+        ELSE.
+            url_path = '/mynotes?tab=Search&q=' ##NO_TEXT.
+        ENDIF.
       WHEN 'DOWNLOAD' OR 'DOWN' OR 'DL' OR 'SWDC'.
         " Downloads (Software Center)
         url_path = '/softwarecenter/search/' ##NO_TEXT.
@@ -101,7 +105,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIND IMPLEMENTATION.
         url_path = '/sap/support/pam/pam.html' ##NO_TEXT.
         url_path = url_path && '?ts=1&o=most_viewed%7Cdesc&st=l&rpp=20&page=1&s=' ##NO_TEXT.
       WHEN OTHERS.
-        " Knowledge Base Search
+        " Default Cross-Search
         url_path = '/solutions/notesv2/?q=' ##NO_TEXT.
     ENDCASE.
 
