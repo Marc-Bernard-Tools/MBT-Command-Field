@@ -309,15 +309,29 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD range_derive.
 
+    CHECK NOT i_input IS INITIAL.
+    
     e_sign = 'I'.
     IF i_input CA '?*'.
-      e_option = 'CP'.
+      IF i_input(1) = '!'.
+        e_option = 'NP'.
+      ELSE.
+        e_option = 'CP'.
+      ENDIF.
       e_low = i_input.
     ELSEIF i_input CS c_split-low_high.
-      e_option = 'BT'.
+      IF i_input(1) = '!'.
+        e_option = 'NB'.
+      ELSE.
+        e_option = 'BT'.
+      ENDIF.
       SPLIT i_input AT c_split-low_high INTO e_low e_high.
     ELSE.
-      e_option = 'EQ'.
+      IF i_input(1) = '!'.
+        e_option = 'NE'.
+      ELSE.
+        e_option = 'EQ'.
+      ENDIF.
       e_low = i_input.
     ENDIF.
 
