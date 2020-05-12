@@ -310,7 +310,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD range_derive.
 
     CHECK NOT i_input IS INITIAL.
-    
+
     e_sign = 'I'.
     IF i_input CA '?*'.
       IF i_input(1) = '!'.

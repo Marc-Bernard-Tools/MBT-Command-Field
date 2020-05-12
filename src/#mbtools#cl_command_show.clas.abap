@@ -35,7 +35,7 @@ ENDCLASS.
 
 
 
-CLASS /mbtools/cl_command_show IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND_SHOW IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -100,41 +100,13 @@ CLASS /mbtools/cl_command_show IMPLEMENTATION.
 
   METHOD show_tool.
 
-    DATA:
-      e071_obj_name TYPE e071-obj_name.
-
-    " First try: workbench tools
-    CALL FUNCTION 'RS_TOOL_ACCESS'
+    CALL METHOD /mbtools/cl_sap=>show_object
       EXPORTING
-        operation           = 'SHOW'
-        object_name         = i_tadir_key-obj_name
-        object_type         = i_tadir_key-object
-      EXCEPTIONS
-        not_executed        = 1
-        invalid_object_type = 2
-        OTHERS              = 3.
-    IF sy-subrc = 0.
-      r_exit = abap_true.
-      RETURN.
-    ENDIF.
-
-    " Second try: transport tool
-    e071_obj_name = i_tadir_key-obj_name.
-
-    CALL FUNCTION 'TR_OBJECT_JUMP_TO_TOOL'
-      EXPORTING
-        iv_action         = 'SHOW'
-        iv_pgmid          = i_tadir_key-pgmid
-        iv_object         = i_tadir_key-object
-        iv_obj_name       = e071_obj_name
-      EXCEPTIONS
-        jump_not_possible = 1
-        OTHERS            = 2.
-    IF sy-subrc = 0.
-      r_exit = abap_true.
-    ELSE.
-      MESSAGE s000 WITH 'Navigation not available'(002).
-    ENDIF.
+        i_pgmid    = i_tadir_key-pgmid
+        i_object   = i_tadir_key-object
+        i_obj_name = i_tadir_key-obj_name
+      RECEIVING
+        r_exit     = r_exit.
 
   ENDMETHOD.
 ENDCLASS.

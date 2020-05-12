@@ -4,71 +4,72 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-class /MBTOOLS/CL_COMMAND_FIELD definition
-  public
-  final
-  create public .
+CLASS /mbtools/cl_command_field DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
-  type-pools ICON .
+  PUBLIC SECTION.
+    TYPE-POOLS icon .
 
-  interfaces ZIF_APACK_MANIFEST .
-  interfaces /MBTOOLS/IF_MANIFEST .
+    INTERFACES zif_apack_manifest .
+    INTERFACES /mbtools/if_manifest .
 
-  constants C_VERSION type STRING value '1.0.0' ##NO_TEXT.
-  constants C_NAME type STRING value 'MBT_Command_Field' ##NO_TEXT.
-  constants C_TITLE type STRING value 'MBT Command Field' ##NO_TEXT.
-  constants C_DESCRIPTION type STRING value 'Enhancement for SAP GUI Command Field' ##NO_TEXT.
-  constants C_URI type STRING value 'https://marcbernardtools.com/tool/mbt-command-field/' ##NO_TEXT.
+    CONSTANTS c_version TYPE string VALUE '1.0.0' ##NO_TEXT.
+    CONSTANTS c_name TYPE string VALUE 'MBT_Command_Field' ##NO_TEXT.
+    CONSTANTS c_title TYPE string VALUE 'MBT Command Field' ##NO_TEXT.
+    CONSTANTS c_description TYPE string VALUE 'Enhancement for SAP GUI Command Field' ##NO_TEXT.
+    CONSTANTS c_uri TYPE string VALUE 'https://marcbernardtools.com/downloads/mbt-command-field/' ##NO_TEXT.
+    CONSTANTS c_package TYPE devclass VALUE '/MBTOOLS/BC_CL' ##NO_TEXT.
 
-  methods CONSTRUCTOR .
-  class-methods EXECUTE_COMMAND
-    importing
-      !I_INPUT type CSEQUENCE
-      !I_VIA_POPUP type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(R_EXIT) type ABAP_BOOL .
-  class-methods POPUP_COMMAND
-    importing
-      !I_INPUT type CSEQUENCE
-      !I_ICON type ICON_D optional
-      !I_RESULT type STRING optional
-    returning
-      value(R_EXIT) type ABAP_BOOL .
-  class-methods SHOW_RESULT
-    importing
-      !I_COMMAND type CSEQUENCE
-      !I_PARAMETERS type CSEQUENCE
-      !I_ICON type ICON_D
-      !I_RESULT type STRING
-      !I_VIA_POPUP type ABAP_BOOL
-    returning
-      value(R_EXIT) type ABAP_BOOL .
+    METHODS constructor .
+    CLASS-METHODS execute_command
+      IMPORTING
+        !i_input      TYPE csequence
+        !i_via_popup  TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(r_exit) TYPE abap_bool .
+    CLASS-METHODS popup_command
+      IMPORTING
+        !i_input      TYPE csequence
+        !i_icon       TYPE icon_d OPTIONAL
+        !i_result     TYPE string OPTIONAL
+      RETURNING
+        VALUE(r_exit) TYPE abap_bool .
+    CLASS-METHODS show_result
+      IMPORTING
+        !i_command    TYPE csequence
+        !i_parameters TYPE csequence
+        !i_icon       TYPE icon_d
+        !i_result     TYPE string
+        !i_via_popup  TYPE abap_bool
+      RETURNING
+        VALUE(r_exit) TYPE abap_bool .
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  aliases APACK_MANIFEST
-    for ZIF_APACK_MANIFEST~DESCRIPTOR .
-  aliases MBT_MANIFEST
-    for /MBTOOLS/IF_MANIFEST~DESCRIPTOR .
+    ALIASES apack_manifest
+      FOR zif_apack_manifest~descriptor .
+    ALIASES mbt_manifest
+      FOR /mbtools/if_manifest~descriptor .
 
-  constants C_BREAK_CHARS type STRING value '=+*/; ' ##NO_TEXT.
-  constants C_MAX_LEN_MSG type I value 50 ##NO_TEXT.
-  constants C_MAX_LEN_RESULT type I value 75 ##NO_TEXT.
-  constants C_MAX_LINES_RESULT type I value 10 ##NO_TEXT.
+    CONSTANTS c_break_chars TYPE string VALUE '=+*/; ' ##NO_TEXT.
+    CONSTANTS c_max_len_msg TYPE i VALUE 50 ##NO_TEXT.
+    CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
+    CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
 
-  class-methods INPUT_CHECK
-    importing
-      !I_INPUT type CSEQUENCE
-    returning
-      value(R_COMMAND) type STRING .
-  class-methods INPUT_SPLIT
-    importing
-      !I_INPUT type CSEQUENCE
-    exporting
-      !E_COMMAND type STRING
-      !E_PARAMETERS type STRING .
+    CLASS-METHODS input_check
+      IMPORTING
+        !i_input         TYPE csequence
+      RETURNING
+        VALUE(r_command) TYPE string .
+    CLASS-METHODS input_split
+      IMPORTING
+        !i_input      TYPE csequence
+      EXPORTING
+        !e_command    TYPE string
+        !e_parameters TYPE string .
 ENDCLASS.
 
 
@@ -212,7 +213,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD POPUP_COMMAND.
+  METHOD popup_command.
 
     DATA:
       fields  TYPE TABLE OF sval,

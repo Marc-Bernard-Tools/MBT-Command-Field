@@ -4,28 +4,28 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-class /MBTOOLS/CL_COMMAND_FIND definition
-  public
-  final
-  create public .
+CLASS /mbtools/cl_command_find DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces /MBTOOLS/IF_COMMAND .
+    INTERFACES /mbtools/if_command .
 
-  aliases EXECUTE
-    for /MBTOOLS/IF_COMMAND~EXECUTE .
+    ALIASES execute
+      FOR /mbtools/if_command~execute .
 
-  methods CONSTRUCTOR .
+    METHODS constructor .
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  aliases COMMAND
-    for /MBTOOLS/IF_COMMAND~COMMAND .
+    ALIASES command
+      FOR /mbtools/if_command~command .
 
-  constants C_SUPPORT_LAUNCHPAD type STRING value 'https://launchpad.support.sap.com/' ##NO_TEXT.
-  constants C_SUPPORT_APPS type STRING value 'https://apps.support.sap.com/' ##NO_TEXT.
+    CONSTANTS c_support_launchpad TYPE string VALUE 'https://launchpad.support.sap.com/' ##NO_TEXT.
+    CONSTANTS c_support_apps TYPE string VALUE 'https://apps.support.sap.com/' ##NO_TEXT.
 ENDCLASS.
 
 
@@ -63,9 +63,9 @@ CLASS /MBTOOLS/CL_COMMAND_FIND IMPLEMENTATION.
       WHEN 'NOTE' OR 'KBA'.
         " Knowledge Base (SAP Note or KBA)
         IF object CO '0123456789'.
-            url_path = '/notes/' ##NO_TEXT.
+          url_path = '/notes/' ##NO_TEXT.
         ELSE.
-            url_path = '/mynotes?tab=Search&q=' ##NO_TEXT.
+          url_path = '/mynotes?tab=Search&q=' ##NO_TEXT.
         ENDIF.
       WHEN 'DOWNLOAD' OR 'DOWN' OR 'DL' OR 'SWDC'.
         " Downloads (Software Center)
