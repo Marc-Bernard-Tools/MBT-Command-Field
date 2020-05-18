@@ -16,11 +16,9 @@ CLASS /mbtools/cl_command_field DEFINITION
     INTERFACES /mbtools/if_manifest .
 
     CONSTANTS c_version TYPE string VALUE '1.0.0' ##NO_TEXT.
-    CONSTANTS c_name TYPE string VALUE 'MBT_Command_Field' ##NO_TEXT.
     CONSTANTS c_title TYPE string VALUE 'MBT Command Field' ##NO_TEXT.
-    CONSTANTS c_description TYPE string VALUE 'Enhancement for SAP GUI Command Field' ##NO_TEXT.
-    CONSTANTS c_uri TYPE string VALUE 'https://marcbernardtools.com/downloads/mbt-command-field/' ##NO_TEXT.
-    CONSTANTS c_package TYPE devclass VALUE '/MBTOOLS/BC_CL' ##NO_TEXT.
+    CONSTANTS c_description TYPE string VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT.
+    CONSTANTS c_download_id TYPE i VALUE 4409.
 
     METHODS constructor .
     CLASS-METHODS execute_command
@@ -78,24 +76,8 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
 
   METHOD constructor.
-    " APACK
-    apack_manifest = VALUE #(
-      group_id    = 'github.com/mbtools/' && c_name
-      artifact_id = 'com.marcbernardtools.abap.bc_cl'
-      version     = c_version
-      git_url     = 'https://github.com/mbtools/' && c_name && '.git'
-    ) ##NO_TEXT.
-    " MBT
-    mbt_manifest = VALUE #(
-      id          = 3
-      name        = c_name
-      version     = c_version
-      title       = c_title
-      description = c_description
-      mbt_url     = 'https://marcbernardtools.com/tool/mbt-command-field/'
-      namespace   = '/MBTOOLS/'
-      package     = '/MBTOOLS/BC_CL'
-    ) ##NO_TEXT.
+    apack_manifest = /mbtools/cl_tools=>build_apack_manifest( me ).
+    mbt_manifest = /mbtools/cl_tools=>build_mbt_manifest( me ).
   ENDMETHOD.
 
 
@@ -112,7 +94,8 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
     CHECK NOT checked_input IS INITIAL.
 
-    LOG-POINT ID /mbtools/bc SUBKEY c_name FIELDS sy-datum sy-uzeit sy-uname.
+    LOG-POINT ID /mbtools/bc SUBKEY /mbtools/cl_tools=>get_name( c_title )
+      FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
     IF strlen( checked_input ) > 18 AND i_via_popup = abap_false.

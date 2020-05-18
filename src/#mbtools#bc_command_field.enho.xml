@@ -30,7 +30,7 @@
       <item>mbt_exit    TYPE abap_bool,</item>
       <item>mbt_command TYPE string.</item>
       <item/>
-      <item>mbt_active = /mbtools/cl_tools=&gt;is_active( i_name = /mbtools/cl_command_field=&gt;c_name ).</item>
+      <item>mbt_active = /mbtools/cl_tools=&gt;is_active( i_title = /mbtools/cl_command_field=&gt;c_title ).</item>
       <item/>
       <item>IF mbt_active = abap_true.</item>
       <item>mbt_command = help_infos-menufunct.</item>
