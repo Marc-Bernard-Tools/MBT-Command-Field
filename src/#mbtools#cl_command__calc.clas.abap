@@ -4,52 +4,53 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-class /MBTOOLS/CL_COMMAND_CALC definition
-  public
-  final
-  create public .
+CLASS /mbtools/cl_command__calc DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces /MBTOOLS/IF_COMMAND .
+    INTERFACES /mbtools/if_command .
 
-  aliases EXECUTE
-    for /MBTOOLS/IF_COMMAND~EXECUTE .
+    ALIASES execute
+      FOR /mbtools/if_command~execute .
 
-  class-methods CLASS_CONSTRUCTOR .
+    CLASS-METHODS class_constructor .
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  aliases COMMAND
-    for /MBTOOLS/IF_COMMAND~COMMAND .
+    ALIASES command
+      FOR /mbtools/if_command~command .
 
-  types:
-    ty_p0  TYPE p LENGTH 16 DECIMALS 0 .
-  types:
-    ty_p7  TYPE p LENGTH 16 DECIMALS 7 .
-  types:
-    ty_p14 TYPE p LENGTH 16 DECIMALS 14 .
+    TYPES:
+      ty_p0  TYPE p LENGTH 16 DECIMALS 0 .
+    TYPES:
+      ty_p7  TYPE p LENGTH 16 DECIMALS 7 .
+    TYPES:
+      ty_p14 TYPE p LENGTH 16 DECIMALS 14 .
 
-  constants C_CALLBACK_PROG type PROGNAME value '/MBTOOLS/BC_COMMAND_FIELD' ##NO_TEXT.
-  constants C_CALLBACK_EVAL type SLIS_FORMNAME value 'CALLBACK_EVAL' ##NO_TEXT.
-  class-data MAX_P0 type TY_P0 .
-  class-data MIN_P0 type TY_P0 .
-  class-data MAX_P7 type TY_P7 .
-  class-data MIN_P7 type TY_P7 .
-  class-data MAX_P14 type TY_P14 .
-  class-data MIN_P14 type TY_P14 .
+    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/BC_COMMAND_FIELD' ##NO_TEXT.
+    CONSTANTS c_callback_eval TYPE slis_formname VALUE 'CALLBACK_EVAL' ##NO_TEXT.
 
-  methods FORMAT_RESULT
-    importing
-      !I_VALUE type F
-    returning
-      value(R_RESULT) type STRING .
+    CLASS-DATA max_p0 TYPE ty_p0 .
+    CLASS-DATA min_p0 TYPE ty_p0 .
+    CLASS-DATA max_p7 TYPE ty_p7 .
+    CLASS-DATA min_p7 TYPE ty_p7 .
+    CLASS-DATA max_p14 TYPE ty_p14 .
+    CLASS-DATA min_p14 TYPE ty_p14 .
+
+    METHODS format_result
+      IMPORTING
+        !i_value        TYPE f
+      RETURNING
+        VALUE(r_result) TYPE string .
 ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_CALC IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND__CALC IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -68,12 +69,12 @@ CLASS /MBTOOLS/CL_COMMAND_CALC IMPLEMENTATION.
     formula = i_parameters.
 
     " First, check if it's just a property
-    CALL METHOD /mbtools/cl_utilities=>get_property
+    /mbtools/cl_utilities=>get_property(
       EXPORTING
         i_property = i_parameters
       IMPORTING
         e_value    = value
-        e_subrc    = subrc.
+        e_subrc    = subrc ).
 
     IF subrc = 0.
       result = value.
@@ -126,7 +127,7 @@ CLASS /MBTOOLS/CL_COMMAND_CALC IMPLEMENTATION.
           " Format result nicely like a calculator
           result = format_result( f ).
           icon   = icon_equal.
-        ELSEIF sy-subrc BETWEEN 1 AND 4 or sy-subrc BETWEEN 6 and 10.
+        ELSEIF sy-subrc BETWEEN 1 AND 4 OR sy-subrc BETWEEN 6 AND 10.
           MESSAGE ID sy-msgid TYPE 'I' NUMBER sy-msgno
              WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO result.
         ELSEIF sy-subrc = 5.

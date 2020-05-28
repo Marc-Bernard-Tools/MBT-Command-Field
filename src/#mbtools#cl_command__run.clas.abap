@@ -4,7 +4,7 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-CLASS /mbtools/cl_command_run DEFINITION
+CLASS /mbtools/cl_command__run DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -26,34 +26,34 @@ CLASS /mbtools/cl_command_run DEFINITION
 
     METHODS run_listcube
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_command_field=>ty_tadir_key
+        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(r_exit) TYPE abap_bool .
-    METHODS run_se16
+    METHODS run_tabl
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_command_field=>ty_tadir_key
+        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(r_exit) TYPE abap_bool .
-    METHODS run_se37
+    METHODS run_func
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_command_field=>ty_tadir_key
+        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(r_exit) TYPE abap_bool .
-    METHODS run_se38
+    METHODS run_prog
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_command_field=>ty_tadir_key
+        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(r_exit) TYPE abap_bool .
-    METHODS run_se93
+    METHODS run_tran
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_command_field=>ty_tadir_key
+        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(r_exit) TYPE abap_bool .
 ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -62,15 +62,15 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
       object      TYPE string,
       object_name TYPE string,
       tadir_count TYPE i,
-      tadir_key   TYPE /mbtools/if_command_field=>ty_tadir_key.
+      tadir_key   TYPE /mbtools/if_definitions=>ty_tadir_key.
 
     " Split parameters into object and object name
-    CALL METHOD command->split
+    command->split(
       EXPORTING
         i_parameters = i_parameters
       IMPORTING
         e_operator   = object
-        e_operand    = object_name.
+        e_operand    = object_name ).
 
     IF object IS INITIAL.
       CONCATENATE
@@ -81,26 +81,26 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
     ENDIF.
 
     " Select objects
-    CALL METHOD command->select
+    command->select(
       EXPORTING
         i_object   = object
-        i_obj_name = object_name.
+        i_obj_name = object_name ).
 
     " Filter table types to ones that work in SE16
-    CALL METHOD command->filter_tabl.
+    command->filter_tabl( ).
 
     " Add object texts
-    CALL METHOD command->text.
+    command->text( ).
 
     DO.
       " Pick exactly one object
-      CALL METHOD command->pick
+      command->pick(
         IMPORTING
           e_tadir_key = tadir_key
           e_count     = tadir_count
         EXCEPTIONS
           cancelled   = 1
-          OTHERS      = 2.
+          OTHERS      = 2 ).
       IF sy-subrc <> 0.
         EXIT.
       ENDIF.
@@ -109,35 +109,25 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
       CASE tadir_key-object.
         WHEN /mbtools/if_command_field=>c_objects_db-tabl OR
              /mbtools/if_command_field=>c_objects_db-view.
-          CALL METHOD run_se16
-            EXPORTING
-              i_tadir_key = tadir_key
-            RECEIVING
-              r_exit      = r_exit.
+
+          r_exit = run_tabl( i_tadir_key = tadir_key ).
+
         WHEN /mbtools/if_command_field=>c_objects_exec-prog.
-          CALL METHOD run_se38
-            EXPORTING
-              i_tadir_key = tadir_key
-            RECEIVING
-              r_exit      = r_exit.
+
+          r_exit = run_prog( i_tadir_key = tadir_key ).
+
         WHEN /mbtools/if_command_field=>c_objects_exec-tran.
-          CALL METHOD run_se93
-            EXPORTING
-              i_tadir_key = tadir_key
-            RECEIVING
-              r_exit      = r_exit.
+
+          r_exit = run_tran( i_tadir_key = tadir_key ).
+
         WHEN /mbtools/if_command_field=>c_objects_exec-func.
-          CALL METHOD run_se37
-            EXPORTING
-              i_tadir_key = tadir_key
-            RECEIVING
-              r_exit      = r_exit.
+
+          r_exit = run_func( i_tadir_key = tadir_key ).
+
         WHEN OTHERS.
-          CALL METHOD run_listcube
-            EXPORTING
-              i_tadir_key = tadir_key
-            RECEIVING
-              r_exit      = r_exit.
+
+          r_exit = run_listcube( i_tadir_key = tadir_key ).
+
       ENDCASE.
 
       IF tadir_count = 1.
@@ -151,6 +141,29 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
   METHOD constructor.
 
     CREATE OBJECT command.
+
+  ENDMETHOD.
+
+
+  METHOD run_func.
+
+    DATA:
+      funcname TYPE funcname.
+
+    CHECK i_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-func.
+
+    " Check if function module exists
+    SELECT SINGLE funcname FROM tfdir INTO funcname
+      WHERE funcname = i_tadir_key-obj_name.
+    IF sy-subrc <> 0.
+      MESSAGE e004 WITH i_tadir_key-obj_name.
+      RETURN.
+    ENDIF.
+
+    " Authorization check on S_DEVELOP happens in function RS_TESTFRAME_CALL
+    SUBMIT rs_testframe_call WITH funcn = funcname AND RETURN.
+
+    r_exit = abap_true.
 
   ENDMETHOD.
 
@@ -181,7 +194,39 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD run_se16.
+  METHOD run_prog.
+
+    DATA: trdir_entry TYPE trdir.
+
+    CHECK i_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-prog.
+
+    " Check if executable program exists
+    SELECT SINGLE * FROM trdir INTO trdir_entry
+      WHERE name = i_tadir_key-obj_name AND subc = '1'.
+    IF sy-subrc = 0.
+      " Run program with authorization check
+      CALL FUNCTION 'SUBMIT_REPORT'
+        EXPORTING
+          report           = trdir_entry-name
+          rdir             = trdir_entry
+          ret_via_leave    = abap_true
+        EXCEPTIONS
+          just_via_variant = 1
+          no_submit_auth   = 2
+          OTHERS           = 3.
+      IF sy-subrc = 0.
+        r_exit = abap_true.
+      ELSEIF sy-subrc = 2.
+        MESSAGE i149(00) WITH trdir_entry-name.
+      ENDIF.
+    ELSE.
+      MESSAGE i541(00) WITH trdir_entry-name.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD run_tabl.
 
     DATA:
       dd02l TYPE dd02l,
@@ -235,62 +280,7 @@ CLASS /MBTOOLS/CL_COMMAND_RUN IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD run_se37.
-
-    DATA:
-      funcname TYPE funcname.
-
-    CHECK i_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-func.
-
-    " Check if function module exists
-    SELECT SINGLE funcname FROM tfdir INTO funcname
-      WHERE funcname = i_tadir_key-obj_name.
-    IF sy-subrc <> 0.
-      MESSAGE e004 WITH i_tadir_key-obj_name.
-      RETURN.
-    ENDIF.
-
-    " Authorization check on S_DEVELOP happens in function RS_TESTFRAME_CALL
-    SUBMIT rs_testframe_call WITH funcn = funcname AND RETURN.
-
-    r_exit = abap_true.
-
-  ENDMETHOD.
-
-
-  METHOD run_se38.
-
-    DATA: trdir_entry TYPE trdir.
-
-    CHECK i_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-prog.
-
-    " Check if executable program exists
-    SELECT SINGLE * FROM trdir INTO trdir_entry
-      WHERE name = i_tadir_key-obj_name AND subc = '1'.
-    IF sy-subrc = 0.
-      " Run program with authorization check
-      CALL FUNCTION 'SUBMIT_REPORT'
-        EXPORTING
-          report           = trdir_entry-name
-          rdir             = trdir_entry
-          ret_via_leave    = abap_true
-        EXCEPTIONS
-          just_via_variant = 1
-          no_submit_auth   = 2
-          OTHERS           = 3.
-      IF sy-subrc = 0.
-        r_exit = abap_true.
-      ELSEIF sy-subrc = 2.
-        MESSAGE i149(00) WITH trdir_entry-name.
-      ENDIF.
-    ELSE.
-      MESSAGE i541(00) WITH trdir_entry-name.
-    ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD run_se93.
+  METHOD run_tran.
 
     DATA: tcode TYPE sy-tcode.
 

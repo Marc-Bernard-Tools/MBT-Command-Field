@@ -7,10 +7,6 @@
 INTERFACE /mbtools/if_command_field
   PUBLIC .
 
-  TYPES ty_tadir_key TYPE adir_key .
-  TYPES:
-    ty_tadir_keys TYPE STANDARD TABLE OF ty_tadir_key .
-
   CONSTANTS:
     BEGIN OF c_commands,
       find TYPE string VALUE 'FIND',
@@ -36,67 +32,73 @@ INTERFACE /mbtools/if_command_field
     END OF c_pgmid .
   CONSTANTS:
     BEGIN OF c_objects_db,
-      tabl TYPE ty_tadir_key-object VALUE 'TABL',
+      tabl TYPE adir_key-object VALUE 'TABL',
       c1   TYPE c VALUE ',',
-      view TYPE ty_tadir_key-object VALUE 'VIEW',
+      view TYPE adir_key-object VALUE 'VIEW',
     END OF c_objects_db.
   CONSTANTS:
     BEGIN OF c_objects_bw,
-      all  TYPE ty_tadir_key-object VALUE 'BW',
+      all  TYPE adir_key-object VALUE 'BW',
       c0   TYPE c VALUE ',',
-      cube TYPE ty_tadir_key-object VALUE 'CUBE',
+      cube TYPE adir_key-object VALUE 'CUBE',
       c1   TYPE c VALUE ',',
-      aggr TYPE ty_tadir_key-object VALUE 'AGGR',
+      aggr TYPE adir_key-object VALUE 'AGGR',
       c2   TYPE c VALUE ',',
-      odso TYPE ty_tadir_key-object VALUE 'ODSO',
+      odso TYPE adir_key-object VALUE 'ODSO',
       c3   TYPE c VALUE ',',
-      adso TYPE ty_tadir_key-object VALUE 'ADSO',
+      adso TYPE adir_key-object VALUE 'ADSO',
       c4   TYPE c VALUE ',',
-      iobj TYPE ty_tadir_key-object VALUE 'IOBJ',
+      iobj TYPE adir_key-object VALUE 'IOBJ',
       c5   TYPE c VALUE ',',
-      iset TYPE ty_tadir_key-object VALUE 'ISET',
+      iset TYPE adir_key-object VALUE 'ISET',
       c6   TYPE c VALUE ',',
-      mpro TYPE ty_tadir_key-object VALUE 'MPRO',
+      mpro TYPE adir_key-object VALUE 'MPRO',
       c7   TYPE c VALUE ',',
-      hybr TYPE ty_tadir_key-object VALUE 'HYBR',
+      hybr TYPE adir_key-object VALUE 'HYBR',
       c8   TYPE c VALUE ',',
-      lpoa TYPE ty_tadir_key-object VALUE 'LPOA',
+      lpoa TYPE adir_key-object VALUE 'LPOA',
       c9   TYPE c VALUE ',',
-      fbpa TYPE ty_tadir_key-object VALUE 'FBPA',
+      fbpa TYPE adir_key-object VALUE 'FBPA',
       c10  TYPE c VALUE ',',
-      segr TYPE ty_tadir_key-object VALUE 'SEGR',
+      segr TYPE adir_key-object VALUE 'SEGR',
       c11  TYPE c VALUE ',',
-      copr TYPE ty_tadir_key-object VALUE 'COPR',
+      copr TYPE adir_key-object VALUE 'COPR',
       c12  TYPE c VALUE ',',
-      ainx TYPE ty_tadir_key-object VALUE 'AINX',
+      ainx TYPE adir_key-object VALUE 'AINX',
       c13  TYPE c VALUE ',',
-      hcpr TYPE ty_tadir_key-object VALUE 'HCPR',
+      hcpr TYPE adir_key-object VALUE 'HCPR',
       c14  TYPE c VALUE ',',
-      trpr TYPE ty_tadir_key-object VALUE 'TRPR',
+      trpr TYPE adir_key-object VALUE 'TRPR',
     END OF c_objects_bw.
   CONSTANTS:
     BEGIN OF c_objects_abap,
-      prog TYPE ty_tadir_key-object VALUE 'PROG',
+      prog TYPE adir_key-object VALUE 'PROG',
       c1   TYPE c VALUE ',',
-      fugr TYPE ty_tadir_key-object VALUE 'FUGR',
+      reps TYPE adir_key-object VALUE 'REPS',
       c2   TYPE c VALUE ',',
-      func TYPE ty_tadir_key-object VALUE 'FUNC',
+      fugr TYPE adir_key-object VALUE 'FUGR',
       c3   TYPE c VALUE ',',
-      intf TYPE ty_tadir_key-object VALUE 'INTF',
+      func TYPE adir_key-object VALUE 'FUNC',
       c4   TYPE c VALUE ',',
-      clas TYPE ty_tadir_key-object VALUE 'CLAS',
+      intf TYPE adir_key-object VALUE 'INTF',
       c5   TYPE c VALUE ',',
-      meth TYPE ty_tadir_key-object VALUE 'METH',
+      clas TYPE adir_key-object VALUE 'CLAS',
       c6   TYPE c VALUE ',',
-      type TYPE ty_tadir_key-object VALUE 'TYPE',
+      meth TYPE adir_key-object VALUE 'METH',
+      c7   TYPE c VALUE ',',
+      type TYPE adir_key-object VALUE 'TYPE',
     END OF c_objects_abap.
   CONSTANTS:
+    BEGIN OF c_objects_limu,
+      mess TYPE adir_key-object VALUE 'MESS',
+    END OF c_objects_limu.
+  CONSTANTS:
     BEGIN OF c_objects_exec,
-      prog TYPE ty_tadir_key-object VALUE 'PROG',
+      prog TYPE adir_key-object VALUE 'PROG',
       c1   TYPE c VALUE ',',
-      tran TYPE ty_tadir_key-object VALUE 'TRAN',
+      tran TYPE adir_key-object VALUE 'TRAN',
       c2   TYPE c VALUE ',',
-      func TYPE ty_tadir_key-object VALUE 'FUNC',
+      func TYPE adir_key-object VALUE 'FUNC',
     END OF c_objects_exec.
   CONSTANTS:
     BEGIN OF c_table_class,

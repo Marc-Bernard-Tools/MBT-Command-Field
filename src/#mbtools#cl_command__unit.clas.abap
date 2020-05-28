@@ -4,7 +4,7 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-CLASS /mbtools/cl_command_unit DEFINITION
+CLASS /mbtools/cl_command__unit DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -15,32 +15,31 @@ CLASS /mbtools/cl_command_unit DEFINITION
 
     ALIASES execute
       FOR /mbtools/if_command~execute .
-
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  aliases COMMAND
-    for /MBTOOLS/IF_COMMAND~COMMAND .
+    ALIASES command
+      FOR /mbtools/if_command~command .
 
-  types:
-    ty_quantity TYPE p LENGTH 16 DECIMALS 5 .
+    TYPES:
+      ty_quantity TYPE p LENGTH 16 DECIMALS 5 .
 
-  methods FORMAT_RESULT
-    importing
-      !I_FROM_QUANTITY type TY_QUANTITY
-      !I_FROM_UNIT type MSEHI
-      !I_TO_QUANTITY type TY_QUANTITY
-      !I_TO_UNIT type MSEHI
-      !I_DENOMINATOR type I
-      !I_NUMERATOR type I
-    returning
-      value(R_RESULT) type STRING .
+    METHODS format_result
+      IMPORTING
+        !i_from_quantity TYPE ty_quantity
+        !i_from_unit     TYPE msehi
+        !i_to_quantity   TYPE ty_quantity
+        !i_to_unit       TYPE msehi
+        !i_denominator   TYPE i
+        !i_numerator     TYPE i
+      RETURNING
+        VALUE(r_result)  TYPE string .
 ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_UNIT IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -63,6 +62,25 @@ CLASS /MBTOOLS/CL_COMMAND_UNIT IMPLEMENTATION.
 
     " 100 M in Miles
     SPLIT i_parameters AT space INTO input_quantity input_unit sy-lisel output_unit.
+
+    " Some mapping for common cases
+    CASE input_unit.
+      WHEN 'C'. "Degrees Celsius
+        input_unit = '°C'.
+      WHEN 'F'. "Fahrenheit
+        input_unit = '°F'.
+      WHEN 'FA'. "farad
+        input_unit = 'F'.
+    ENDCASE.
+
+    CASE output_unit.
+      WHEN 'C'. "Degrees Celsius
+        output_unit = '°C'.
+      WHEN 'F'. "Fahrenheit
+        output_unit = '°F'.
+      WHEN 'FA'. "farad
+        output_unit = 'F'.
+    ENDCASE.
 
     TRY.
         from_quantity = input_quantity.
@@ -150,16 +168,42 @@ CLASS /MBTOOLS/CL_COMMAND_UNIT IMPLEMENTATION.
 
     DATA:
       input_quantity  TYPE c LENGTH 50,
+      input_unit      TYPE t006a-mseh6,
       output_quantity TYPE c LENGTH 50,
+      output_unit     TYPE t006a-mseh6,
       output_ratio    TYPE c LENGTH 50.
 
     WRITE i_from_quantity TO input_quantity UNIT i_from_unit LEFT-JUSTIFIED.
 
-    CONCATENATE input_quantity i_from_unit INTO input_quantity SEPARATED BY space.
+    CALL FUNCTION 'CONVERSION_EXIT_LUNIT_OUTPUT'
+      EXPORTING
+        input          = i_from_unit
+      IMPORTING
+        output         = input_unit
+      EXCEPTIONS
+        unit_not_found = 1
+        OTHERS         = 2.
+    IF sy-subrc <> 0.
+      input_unit = i_from_unit.
+    ENDIF.
+
+    CONCATENATE input_quantity input_unit INTO input_quantity SEPARATED BY space.
+
+    CALL FUNCTION 'CONVERSION_EXIT_LUNIT_OUTPUT'
+      EXPORTING
+        input          = i_to_unit
+      IMPORTING
+        output         = output_unit
+      EXCEPTIONS
+        unit_not_found = 1
+        OTHERS         = 2.
+    IF sy-subrc <> 0.
+      output_unit = i_to_unit.
+    ENDIF.
 
     WRITE i_to_quantity TO output_quantity UNIT i_to_unit LEFT-JUSTIFIED.
 
-    CONCATENATE output_quantity i_to_unit INTO output_quantity SEPARATED BY space.
+    CONCATENATE output_quantity output_unit INTO output_quantity SEPARATED BY space.
 
     output_ratio = |{ i_denominator }:{ i_numerator }|.
 

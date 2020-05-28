@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>/MBTOOLS/CL_COMMAND_SHOW</CLSNAME>
+    <CLSNAME>/MBTOOLS/CL_COMMAND__CALC</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>MBT Command - Show</DESCRIPT>
+    <DESCRIPT>MBT Command - Calculator</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
@@ -13,18 +13,26 @@
     <RSTAT>K</RSTAT>
     <MSG_ID>/MBTOOLS/BC_CL</MSG_ID>
    </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Unknown value</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+   </TPOOL>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>/MBTOOLS/CL_COMMAND_SHOW</CLSNAME>
-     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <CLSNAME>/MBTOOLS/CL_COMMAND__CALC</CLSNAME>
+     <CMPNAME>CLASS_CONSTRUCTOR</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Initialize variables</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>/MBTOOLS/CL_COMMAND_SHOW</CLSNAME>
-     <CMPNAME>SHOW_TOOL</CMPNAME>
+     <CLSNAME>/MBTOOLS/CL_COMMAND__CALC</CLSNAME>
+     <CMPNAME>FORMAT_RESULT</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>Show tool</DESCRIPT>
+     <DESCRIPT>Format result</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

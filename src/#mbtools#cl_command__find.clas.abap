@@ -4,7 +4,7 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-CLASS /mbtools/cl_command_find DEFINITION
+CLASS /mbtools/cl_command__find DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_FIND IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND__FIND IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -44,12 +44,12 @@ CLASS /MBTOOLS/CL_COMMAND_FIND IMPLEMENTATION.
       url         TYPE string.
 
     " Split parameters into application and object
-    CALL METHOD command->split
+    command->split(
       EXPORTING
         i_parameters = i_parameters
       IMPORTING
         e_operator   = application
-        e_operand    = object.
+        e_operand    = object ).
 
     " Default is SAP ONE Support Launchpad
     url_domain = c_support_launchpad.

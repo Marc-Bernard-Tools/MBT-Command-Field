@@ -4,40 +4,40 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-class /MBTOOLS/CL_COMMAND_CURR definition
-  public
-  final
-  create public .
+CLASS /mbtools/cl_command__curr DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces /MBTOOLS/IF_COMMAND .
+    INTERFACES /mbtools/if_command .
 
-  aliases EXECUTE
-    for /MBTOOLS/IF_COMMAND~EXECUTE .
+    ALIASES execute
+      FOR /mbtools/if_command~execute .
 
-  methods CONSTRUCTOR .
+    METHODS constructor .
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  aliases COMMAND
-    for /MBTOOLS/IF_COMMAND~COMMAND .
+    ALIASES command
+      FOR /mbtools/if_command~command .
 
-  methods FORMAT_RESULT
-    importing
-      !I_LOCAL_AMOUNT type TDCURR
-      !I_LOCAL_CURRENCY type TCURR_CURR
-      !I_FOREIGN_AMOUNT type TDCURR
-      !I_FOREIGN_CURRENCY type FCURR_CURR
-      !I_EXCHANGE_RATE type UKURS_CURR
-    returning
-      value(R_RESULT) type STRING .
+    METHODS format_result
+      IMPORTING
+        !i_local_amount     TYPE tdcurr
+        !i_local_currency   TYPE tcurr_curr
+        !i_foreign_amount   TYPE tdcurr
+        !i_foreign_currency TYPE fcurr_curr
+        !i_exchange_rate    TYPE ukurs_curr
+      RETURNING
+        VALUE(r_result)     TYPE string .
 ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_CURR IMPLEMENTATION.
+CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -57,12 +57,12 @@ CLASS /MBTOOLS/CL_COMMAND_CURR IMPLEMENTATION.
     icon = icon_message_error_small.
 
     " Split parameters into type of rate and object
-    CALL METHOD command->split
+    command->split(
       EXPORTING
         i_parameters = i_parameters
       IMPORTING
         e_operator   = type_of_rate
-        e_operand    = object.
+        e_operand    = object ).
 
     IF type_of_rate IS INITIAL.
       type_of_rate = 'M'.

@@ -94,7 +94,8 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
     CHECK NOT checked_input IS INITIAL.
 
-    LOG-POINT ID /mbtools/bc SUBKEY /mbtools/cl_tools=>get_name( c_title )
+    LOG-POINT ID /mbtools/bc
+      SUBKEY /mbtools/cl_tools=>get_name( c_title )
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
@@ -118,32 +119,32 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
       WHEN /mbtools/if_command_field=>c_commands-find OR
            /mbtools/if_command_field=>c_command_shortcuts-find.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_find.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__find.
 
       WHEN /mbtools/if_command_field=>c_commands-show OR
            /mbtools/if_command_field=>c_command_shortcuts-show.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_show.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__show.
 
       WHEN /mbtools/if_command_field=>c_commands-run OR
            /mbtools/if_command_field=>c_command_shortcuts-run.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_run.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__run.
 
       WHEN /mbtools/if_command_field=>c_commands-calc OR
            /mbtools/if_command_field=>c_command_shortcuts-calc.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_calc.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__calc.
 
       WHEN /mbtools/if_command_field=>c_commands-curr OR
            /mbtools/if_command_field=>c_command_shortcuts-curr.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_curr.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__curr.
 
       WHEN /mbtools/if_command_field=>c_commands-unit OR
            /mbtools/if_command_field=>c_command_shortcuts-unit.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command_unit.
+        CREATE OBJECT command_object TYPE /mbtools/cl_command__unit.
 
       WHEN OTHERS. " Invalid Command
         IF i_via_popup = abap_true.
