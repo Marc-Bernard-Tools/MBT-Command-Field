@@ -57,6 +57,8 @@ CLASS /mbtools/cl_command_field DEFINITION
     CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
     CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
 
+    DATA: mr_tool TYPE REF TO /mbtools/cl_tools.
+
     CLASS-METHODS input_check
       IMPORTING
         !i_input         TYPE csequence
@@ -76,8 +78,10 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
 
   METHOD constructor.
-    apack_manifest = /mbtools/cl_tools=>build_apack_manifest( me ).
-    mbt_manifest = /mbtools/cl_tools=>build_mbt_manifest( me ).
+    CREATE OBJECT mr_tool EXPORTING i_tool = me.
+
+    apack_manifest = mr_tool->apack_manifest.
+    mbt_manifest   = mr_tool->mbt_manifest.
   ENDMETHOD.
 
 
@@ -95,7 +99,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
     CHECK NOT checked_input IS INITIAL.
 
     LOG-POINT ID /mbtools/bc
-      SUBKEY /mbtools/cl_tools=>get_name( c_title )
+      SUBKEY c_title
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code

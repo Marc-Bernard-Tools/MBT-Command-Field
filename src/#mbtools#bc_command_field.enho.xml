@@ -26,28 +26,31 @@
       <item>************************************************************************</item>
       <item/>
       <item>DATA:</item>
-      <item>mbt_active  TYPE abap_bool,</item>
       <item>mbt_exit    TYPE abap_bool,</item>
       <item>mbt_command TYPE string.</item>
       <item/>
-      <item>mbt_active = /mbtools/cl_tools=&gt;is_active( i_title = /mbtools/cl_command_field=&gt;c_title ).</item>
+      <item>IF /mbtools/cl_tools=&gt;get_tool( /mbtools/cl_command_field=&gt;c_title )-&gt;is_active( ).</item>
       <item/>
-      <item>IF mbt_active = abap_true.</item>
       <item>mbt_command = help_infos-menufunct.</item>
       <item/>
       <item>IF help_infos-call = &apos;D&apos; AND help_infos-docuid = &apos;OK&apos;.</item>
+      <item/>
       <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
       <item>mbt_exit = /mbtools/cl_command_field=&gt;popup_command( i_input = mbt_command ).</item>
+      <item/>
       <item>ELSEIF help_infos-call = &apos;H&apos;.</item>
+      <item/>
       <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
       <item>mbt_exit = /mbtools/cl_command_field=&gt;execute_command( i_input = mbt_command ).</item>
+      <item/>
       <item>ENDIF.</item>
       <item/>
       <item>IF mbt_exit = abap_true.</item>
       <item>RETURN.</item>
       <item>ENDIF.</item>
+      <item/>
       <item>ENDIF.</item>
       <item/>
      </SOURCE>
@@ -67,26 +70,29 @@
       <item>2</item>
       <item>4</item>
       <item>4</item>
-      <item>4</item>
       <item>0</item>
       <item>2</item>
       <item>0</item>
-      <item>2</item>
+      <item>4</item>
+      <item>0</item>
+      <item>4</item>
+      <item>0</item>
+      <item>6</item>
+      <item>0</item>
+      <item>6</item>
+      <item>0</item>
+      <item>4</item>
+      <item>0</item>
+      <item>6</item>
+      <item>0</item>
+      <item>6</item>
+      <item>0</item>
       <item>4</item>
       <item>0</item>
       <item>4</item>
       <item>6</item>
-      <item>0</item>
-      <item>6</item>
-      <item>4</item>
-      <item>6</item>
-      <item>0</item>
-      <item>6</item>
       <item>4</item>
       <item>0</item>
-      <item>4</item>
-      <item>6</item>
-      <item>4</item>
       <item>2</item>
       <item>0</item>
      </SPACES>

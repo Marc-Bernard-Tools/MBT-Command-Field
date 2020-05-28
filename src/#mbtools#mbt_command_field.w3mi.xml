@@ -2,24 +2,24 @@
 <abapGit version="v1.0.0" serializer="LCL_OBJECT_W3MI" serializer_version="v2.0.0">
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
-   <NAME>/MBTOOLS/COMMAND_FIELD</NAME>
+   <NAME>/MBTOOLS/MBT_COMMAND_FIELD</NAME>
    <TEXT>MBT Command Field</TEXT>
    <PARAMS>
     <WWWPARAMS>
      <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/COMMAND_FIELD</OBJID>
+     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD</OBJID>
      <NAME>fileextension</NAME>
      <VALUE>.png</VALUE>
     </WWWPARAMS>
     <WWWPARAMS>
      <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/COMMAND_FIELD</OBJID>
+     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD</OBJID>
      <NAME>filename</NAME>
      <VALUE>MBT_Command_Field.png</VALUE>
     </WWWPARAMS>
     <WWWPARAMS>
      <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/COMMAND_FIELD</OBJID>
+     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD</OBJID>
      <NAME>mimetype</NAME>
      <VALUE>image/png</VALUE>
     </WWWPARAMS>
