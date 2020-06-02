@@ -270,12 +270,12 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
         no_change_allowed  = 5
         table_is_gtt       = 6
         OTHERS             = 7.
-    IF sy-subrc = 0.
-      r_exit = abap_true.
-    ELSE.
-      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
-         WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    IF sy-subrc <> 0.
+      MESSAGE ID sy-msgid TYPE 'S' NUMBER sy-msgno
+        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
     ENDIF.
+
+    r_exit = abap_true.
 
   ENDMETHOD.
 
