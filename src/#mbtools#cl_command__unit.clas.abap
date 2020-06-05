@@ -20,21 +20,21 @@ CLASS /mbtools/cl_command__unit DEFINITION
   PRIVATE SECTION.
 
     ALIASES command
-      FOR /mbtools/if_command~command .
+      FOR /mbtools/if_command~mo_command .
 
     TYPES:
       ty_quantity TYPE p LENGTH 16 DECIMALS 5 .
 
     METHODS format_result
       IMPORTING
-        !i_from_quantity TYPE ty_quantity
-        !i_from_unit     TYPE msehi
-        !i_to_quantity   TYPE ty_quantity
-        !i_to_unit       TYPE msehi
-        !i_denominator   TYPE i
-        !i_numerator     TYPE i
+        !iv_from_quantity TYPE ty_quantity
+        !iv_from_unit     TYPE msehi
+        !iv_to_quantity   TYPE ty_quantity
+        !iv_to_unit       TYPE msehi
+        !iv_denominator   TYPE i
+        !iv_numerator     TYPE i
       RETURNING
-        VALUE(r_result)  TYPE string .
+        VALUE(rv_result)  TYPE string .
 ENDCLASS.
 
 
@@ -45,87 +45,87 @@ CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      object         TYPE string,
-      input_quantity TYPE c LENGTH 50,
-      input_unit     TYPE msehi,
-      output_unit    TYPE msehi,
-      from_quantity  TYPE ty_quantity,
-      from_unit      TYPE msehi,
-      to_quantity    TYPE ty_quantity,
-      to_unit        TYPE msehi,
-      denominator    TYPE i,
-      numerator      TYPE i,
-      icon           TYPE icon_d,
-      result         TYPE string.
+      lv_object         TYPE string,
+      lv_input_quantity TYPE c LENGTH 50,
+      lv_input_unit     TYPE msehi,
+      lv_output_unit    TYPE msehi,
+      lv_from_quantity  TYPE ty_quantity,
+      lv_from_unit      TYPE msehi,
+      lv_to_quantity    TYPE ty_quantity,
+      lv_to_unit        TYPE msehi,
+      lv_denominator    TYPE i,
+      lv_numerator      TYPE i,
+      lv_icon           TYPE icon_d,
+      lv_result         TYPE string.
 
-    icon = icon_message_error_small.
+    lv_icon = icon_message_error_small.
 
     " 100 M in Miles
-    SPLIT i_parameters AT space INTO input_quantity input_unit sy-lisel output_unit.
+    SPLIT iv_parameters AT space INTO lv_input_quantity lv_input_unit sy-lisel lv_output_unit.
 
     " Some mapping for common cases
-    CASE input_unit.
+    CASE lv_input_unit.
       WHEN 'C'. "Degrees Celsius
-        input_unit = '°C'.
+        lv_input_unit = '°C'.
       WHEN 'F'. "Fahrenheit
-        input_unit = '°F'.
+        lv_input_unit = '°F'.
       WHEN 'FA'. "farad
-        input_unit = 'F'.
+        lv_input_unit = 'F'.
     ENDCASE.
 
-    CASE output_unit.
+    CASE lv_output_unit.
       WHEN 'C'. "Degrees Celsius
-        output_unit = '°C'.
+        lv_output_unit = '°C'.
       WHEN 'F'. "Fahrenheit
-        output_unit = '°F'.
+        lv_output_unit = '°F'.
       WHEN 'FA'. "farad
-        output_unit = 'F'.
+        lv_output_unit = 'F'.
     ENDCASE.
 
     TRY.
-        from_quantity = input_quantity.
+        lv_from_quantity = lv_input_quantity.
       CATCH cx_root.
-        result = 'Quantity not numeric'(001).
+        lv_result = 'Quantity not numeric'(001).
     ENDTRY.
 
-    IF result IS INITIAL.
+    IF lv_result IS INITIAL.
       CALL FUNCTION 'CONVERSION_EXIT_CUNIT_INPUT'
         EXPORTING
-          input          = input_unit
+          input          = lv_input_unit
         IMPORTING
-          output         = from_unit
+          output         = lv_from_unit
         EXCEPTIONS
           unit_not_found = 1
           OTHERS         = 2.
       IF sy-subrc <> 0.
-        result = 'Source unit not found'(002).
+        lv_result = 'Source unit not found'(002).
       ENDIF.
     ENDIF.
 
-    IF result IS INITIAL.
+    IF lv_result IS INITIAL.
       CALL FUNCTION 'CONVERSION_EXIT_CUNIT_INPUT'
         EXPORTING
-          input          = output_unit
+          input          = lv_output_unit
         IMPORTING
-          output         = to_unit
+          output         = lv_to_unit
         EXCEPTIONS
           unit_not_found = 1
           OTHERS         = 2.
       IF sy-subrc <> 0.
-        result = 'Target unit not found'(003).
+        lv_result = 'Target unit not found'(003).
       ENDIF.
     ENDIF.
 
-    IF result IS INITIAL.
+    IF lv_result IS INITIAL.
       CALL FUNCTION 'UNIT_CONVERSION_SIMPLE'
         EXPORTING
-          input                = from_quantity
-          unit_in              = from_unit
-          unit_out             = to_unit
+          input                = lv_from_quantity
+          unit_in              = lv_from_unit
+          unit_out             = lv_to_unit
         IMPORTING
-          denominator          = denominator
-          numerator            = numerator
-          output               = to_quantity
+          denominator          = lv_denominator
+          numerator            = lv_numerator
+          output               = lv_to_quantity
         EXCEPTIONS
           conversion_not_found = 1
           division_by_zero     = 2
@@ -139,27 +139,27 @@ CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
           OTHERS               = 10.
       IF sy-subrc = 0.
         " Format result nicely
-        result = format_result( i_from_quantity = from_quantity
-                                i_from_unit     = from_unit
-                                i_to_quantity   = to_quantity
-                                i_to_unit       = to_unit
-                                i_denominator   = denominator
-                                i_numerator     = numerator ).
+        lv_result = format_result( iv_from_quantity = lv_from_quantity
+                                   iv_from_unit     = lv_from_unit
+                                   iv_to_quantity   = lv_to_quantity
+                                   iv_to_unit       = lv_to_unit
+                                   iv_denominator   = lv_denominator
+                                   iv_numerator     = lv_numerator ).
 
-        icon = icon_bw_convert_unit.
+        lv_icon = icon_bw_convert_unit.
       ELSEIF sy-subrc BETWEEN 1 AND 9.
         MESSAGE ID sy-msgid TYPE 'I' NUMBER sy-msgno
-           WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO result.
+           WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO lv_result.
       ELSE.
-        result = 'Error in UNIT_CONVERSION+SIMPLE' ##NO_TEXT.
+        lv_result = 'Error in UNIT_CONVERSION+SIMPLE' ##NO_TEXT.
       ENDIF.
     ENDIF.
 
-    r_exit = /mbtools/cl_command_field=>show_result( i_command    = i_command
-                                                     i_parameters = i_parameters
-                                                     i_icon       = icon
-                                                     i_result     = result
-                                                     i_via_popup  = i_via_popup ).
+    rv_exit = /mbtools/cl_command_field=>show_result( iv_command    = iv_command
+                                                      iv_parameters = iv_parameters
+                                                      iv_icon       = lv_icon
+                                                      iv_result     = lv_result
+                                                      iv_via_popup  = iv_via_popup ).
 
   ENDMETHOD.
 
@@ -167,49 +167,49 @@ CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
   METHOD format_result.
 
     DATA:
-      input_quantity  TYPE c LENGTH 50,
-      input_unit      TYPE t006a-mseh6,
-      output_quantity TYPE c LENGTH 50,
-      output_unit     TYPE t006a-mseh6,
-      output_ratio    TYPE c LENGTH 50.
+      lv_input_quantity  TYPE c LENGTH 50,
+      lv_input_unit      TYPE t006a-mseh6,
+      lv_output_quantity TYPE c LENGTH 50,
+      lv_output_unit     TYPE t006a-mseh6,
+      lv_output_ratio    TYPE c LENGTH 50.
 
-    WRITE i_from_quantity TO input_quantity UNIT i_from_unit LEFT-JUSTIFIED.
+    WRITE iv_from_quantity TO lv_input_quantity UNIT iv_from_unit LEFT-JUSTIFIED.
 
     CALL FUNCTION 'CONVERSION_EXIT_LUNIT_OUTPUT'
       EXPORTING
-        input          = i_from_unit
+        input          = iv_from_unit
       IMPORTING
-        output         = input_unit
+        output         = lv_input_unit
       EXCEPTIONS
         unit_not_found = 1
         OTHERS         = 2.
     IF sy-subrc <> 0.
-      input_unit = i_from_unit.
+      lv_input_unit = iv_from_unit.
     ENDIF.
 
-    CONCATENATE input_quantity input_unit INTO input_quantity SEPARATED BY space.
+    CONCATENATE lv_input_quantity lv_input_unit INTO lv_input_quantity SEPARATED BY space.
 
     CALL FUNCTION 'CONVERSION_EXIT_LUNIT_OUTPUT'
       EXPORTING
-        input          = i_to_unit
+        input          = iv_to_unit
       IMPORTING
-        output         = output_unit
+        output         = lv_output_unit
       EXCEPTIONS
         unit_not_found = 1
         OTHERS         = 2.
     IF sy-subrc <> 0.
-      output_unit = i_to_unit.
+      lv_output_unit = iv_to_unit.
     ENDIF.
 
-    WRITE i_to_quantity TO output_quantity UNIT i_to_unit LEFT-JUSTIFIED.
+    WRITE iv_to_quantity TO lv_output_quantity UNIT iv_to_unit LEFT-JUSTIFIED.
 
-    CONCATENATE output_quantity output_unit INTO output_quantity SEPARATED BY space.
+    CONCATENATE lv_output_quantity lv_output_unit INTO lv_output_quantity SEPARATED BY space.
 
-    output_ratio = |{ i_denominator }:{ i_numerator }|.
+    lv_output_ratio = |{ iv_denominator }:{ iv_numerator }|.
 
-    CONCATENATE '(' 'at'(004) output_ratio ')' INTO output_ratio SEPARATED BY space.
+    CONCATENATE '(' 'at'(004) lv_output_ratio ')' INTO lv_output_ratio SEPARATED BY space.
 
-    CONCATENATE input_quantity '=' output_quantity output_ratio INTO r_result SEPARATED BY space.
+    CONCATENATE lv_input_quantity '=' lv_output_quantity lv_output_ratio INTO rv_result SEPARATED BY space.
 
   ENDMETHOD.
 ENDCLASS.

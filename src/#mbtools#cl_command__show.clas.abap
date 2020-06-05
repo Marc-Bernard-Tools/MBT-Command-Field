@@ -22,18 +22,18 @@ CLASS /mbtools/cl_command__show DEFINITION
   PRIVATE SECTION.
 
     ALIASES command
-      FOR /mbtools/if_command~command .
+      FOR /mbtools/if_command~mo_command .
 
     METHODS show_tool
       IMPORTING
-        !i_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
+        !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(r_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool .
     METHODS show_message
       IMPORTING
-        !i_message    TYPE /mbtools/if_definitions=>ty_name
+        !iv_message    TYPE /mbtools/if_definitions=>ty_name
       RETURNING
-        VALUE(r_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool .
 ENDCLASS.
 
 
@@ -44,24 +44,24 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      object      TYPE string,
-      object_name TYPE string,
-      tadir_count TYPE i,
-      tadir_key   TYPE /mbtools/if_definitions=>ty_tadir_key.
+      lv_object      TYPE string,
+      lv_object_name TYPE string,
+      lv_tadir_count TYPE i,
+      ls_tadir_key   TYPE /mbtools/if_definitions=>ty_tadir_key.
 
     " Split parameters into object and object name
     command->split(
       EXPORTING
-        i_parameters = i_parameters
+        iv_parameters = iv_parameters
       IMPORTING
-        e_operator   = object
-        e_operand    = object_name ).
+        ev_operator   = lv_object
+        ev_operand    = lv_object_name ).
 
     " Find objects
     command->select(
       EXPORTING
-        i_object   = object
-        i_obj_name = object_name ).
+        iv_object   = lv_object
+        iv_obj_name = lv_object_name ).
 
     " Add object texts
     command->text( ).
@@ -70,8 +70,8 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
       " Pick exactly one object
       command->pick(
         IMPORTING
-          e_tadir_key = tadir_key
-          e_count     = tadir_count
+          es_tadir_key = ls_tadir_key
+          ev_count     = lv_tadir_count
         EXCEPTIONS
           cancelled   = 1
           OTHERS      = 2 ).
@@ -80,9 +80,9 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
       ENDIF.
 
       " Show object definition
-      r_exit = show_tool( i_tadir_key = tadir_key ).
+      rv_exit = show_tool( is_tadir_key = ls_tadir_key ).
 
-      IF tadir_count = 1.
+      IF lv_tadir_count = 1.
         EXIT.
       ENDIF.
     ENDDO.
@@ -99,22 +99,23 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
 
   METHOD show_message.
 
-    DATA: msgid TYPE sy-msgid,
-          msgno TYPE sy-msgno.
+    DATA:
+      lv_msgid TYPE sy-msgid,
+      lv_msgno TYPE sy-msgno.
 
     command->split_message(
       EXPORTING
-        i_message = i_message
+        iv_message = iv_message
       IMPORTING
-        e_msgid   = msgid
-        e_msgno   = msgno ).
+        ev_msgid   = lv_msgid
+        ev_msgno   = lv_msgno ).
 
-    IF NOT msgid IS INITIAL AND NOT msgno IS INITIAL.
+    IF NOT lv_msgid IS INITIAL AND NOT lv_msgno IS INITIAL.
       " Display message with placeholders for parameters
-      MESSAGE  ID msgid TYPE 'I' NUMBER msgno
+      MESSAGE ID lv_msgid TYPE 'I' NUMBER lv_msgno
         WITH '&1' '&2' '&3' '&4'.
 
-      r_exit = abap_true.
+      rv_exit = abap_true.
     ENDIF.
 
   ENDMETHOD.
@@ -123,18 +124,18 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
   METHOD show_tool.
 
     " Show message in popup instead of editor
-    IF i_tadir_key-pgmid  = /mbtools/if_command_field=>c_pgmid-limu AND
-       i_tadir_key-object = /mbtools/if_command_field=>c_objects_limu-mess.
+    IF is_tadir_key-pgmid  = /mbtools/if_command_field=>c_pgmid-limu AND
+       is_tadir_key-object = /mbtools/if_command_field=>c_objects_limu-mess.
 
-      r_exit = show_message( i_tadir_key-obj_name ).
+      rv_exit = show_message( is_tadir_key-obj_name ).
 
     ELSE.
 
-      r_exit = /mbtools/cl_sap=>show_object(
+      rv_exit = /mbtools/cl_sap=>show_object(
         EXPORTING
-          i_pgmid    = i_tadir_key-pgmid
-          i_object   = i_tadir_key-object
-          i_obj_name = i_tadir_key-obj_name ).
+          iv_pgmid    = is_tadir_key-pgmid
+          iv_object   = is_tadir_key-object
+          iv_obj_name = is_tadir_key-obj_name ).
 
     ENDIF.
 

@@ -15,34 +15,35 @@ CLASS /mbtools/cl_command_field DEFINITION
     INTERFACES if_apack_manifest .
     INTERFACES /mbtools/if_manifest .
 
-    CONSTANTS c_version TYPE string VALUE '1.0.0' ##NO_TEXT.
-    CONSTANTS c_title TYPE string VALUE 'MBT Command Field' ##NO_TEXT.
-    CONSTANTS c_description TYPE string VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT.
-    CONSTANTS c_download_id TYPE i VALUE 4409.
+    CONSTANTS:
+      c_version     TYPE string VALUE '1.0.0' ##NO_TEXT,
+      c_title       TYPE string VALUE 'MBT Command Field' ##NO_TEXT,
+      c_description TYPE string VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
+      c_download_id TYPE i VALUE 4409.
 
     METHODS constructor .
     CLASS-METHODS execute_command
       IMPORTING
-        !i_input      TYPE csequence
-        !i_via_popup  TYPE abap_bool DEFAULT abap_false
+        !iv_input      TYPE csequence
+        !iv_via_popup  TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(r_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool .
     CLASS-METHODS popup_command
       IMPORTING
-        !i_input      TYPE csequence
-        !i_icon       TYPE icon_d OPTIONAL
-        !i_result     TYPE string OPTIONAL
+        !iv_input      TYPE csequence
+        !iv_icon       TYPE icon_d OPTIONAL
+        !iv_result     TYPE string OPTIONAL
       RETURNING
-        VALUE(r_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool .
     CLASS-METHODS show_result
       IMPORTING
-        !i_command    TYPE csequence
-        !i_parameters TYPE csequence
-        !i_icon       TYPE icon_d
-        !i_result     TYPE string
-        !i_via_popup  TYPE abap_bool
+        !iv_command    TYPE csequence
+        !iv_parameters TYPE csequence
+        !iv_icon       TYPE icon_d
+        !iv_result     TYPE string
+        !iv_via_popup  TYPE abap_bool
       RETURNING
-        VALUE(r_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -57,19 +58,19 @@ CLASS /mbtools/cl_command_field DEFINITION
     CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
     CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
 
-    DATA: mr_tool TYPE REF TO /mbtools/cl_tools.
+    DATA: mo_tool TYPE REF TO /mbtools/cl_tools.
 
     CLASS-METHODS input_check
       IMPORTING
-        !i_input         TYPE csequence
+        !iv_input         TYPE csequence
       RETURNING
-        VALUE(r_command) TYPE string .
+        VALUE(rv_command) TYPE string .
     CLASS-METHODS input_split
       IMPORTING
-        !i_input      TYPE csequence
+        !iv_input      TYPE csequence
       EXPORTING
-        !e_command    TYPE string
-        !e_parameters TYPE string .
+        !ev_command    TYPE string
+        !ev_parameters TYPE string .
 ENDCLASS.
 
 
@@ -78,91 +79,91 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
 
   METHOD constructor.
-    CREATE OBJECT mr_tool EXPORTING i_tool = me.
+    CREATE OBJECT mo_tool EXPORTING io_tool = me.
 
-    apack_manifest = mr_tool->apack_manifest.
-    mbt_manifest   = mr_tool->mbt_manifest.
+    apack_manifest = mo_tool->apack_manifest.
+    mbt_manifest   = mo_tool->mbt_manifest.
   ENDMETHOD.
 
 
   METHOD execute_command.
 
     DATA:
-      checked_input  TYPE string,
-      command        TYPE string,
-      parameters     TYPE string,
-      command_object TYPE REF TO /mbtools/if_command.
+      lv_checked_input TYPE string,
+      lv_command       TYPE string,
+      lv_parameters    TYPE string,
+      lo_command       TYPE REF TO /mbtools/if_command.
 
     " Check if command is valid
-    checked_input = input_check( i_input ).
+    lv_checked_input = input_check( iv_input ).
 
-    CHECK NOT checked_input IS INITIAL.
+    CHECK NOT lv_checked_input IS INITIAL.
 
     LOG-POINT ID /mbtools/bc
       SUBKEY c_title
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
-    IF strlen( checked_input ) > 18 AND i_via_popup = abap_false.
+    IF strlen( lv_checked_input ) > 18 AND iv_via_popup = abap_false.
       MESSAGE s002 WITH 20 132.
-      r_exit = popup_command( checked_input ).
+      rv_exit = popup_command( lv_checked_input ).
       RETURN.
     ENDIF.
 
     " Split command line into command and parameters
     input_split(
       EXPORTING
-        i_input      = checked_input
+        iv_input      = lv_checked_input
       IMPORTING
-        e_command    = command
-        e_parameters = parameters ).
+        ev_command    = lv_command
+        ev_parameters = lv_parameters ).
 
-    CHECK NOT command IS INITIAL AND NOT parameters IS INITIAL.
+    CHECK NOT lv_command IS INITIAL AND NOT lv_parameters IS INITIAL.
 
-    CASE command.
+    CASE lv_command.
       WHEN /mbtools/if_command_field=>c_commands-find OR
            /mbtools/if_command_field=>c_command_shortcuts-find.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__find.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__find.
 
       WHEN /mbtools/if_command_field=>c_commands-show OR
            /mbtools/if_command_field=>c_command_shortcuts-show.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__show.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__show.
 
       WHEN /mbtools/if_command_field=>c_commands-run OR
            /mbtools/if_command_field=>c_command_shortcuts-run.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__run.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__run.
 
       WHEN /mbtools/if_command_field=>c_commands-calc OR
            /mbtools/if_command_field=>c_command_shortcuts-calc.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__calc.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__calc.
 
       WHEN /mbtools/if_command_field=>c_commands-curr OR
            /mbtools/if_command_field=>c_command_shortcuts-curr.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__curr.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__curr.
 
       WHEN /mbtools/if_command_field=>c_commands-unit OR
            /mbtools/if_command_field=>c_command_shortcuts-unit.
 
-        CREATE OBJECT command_object TYPE /mbtools/cl_command__unit.
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__unit.
 
       WHEN OTHERS. " Invalid Command
-        IF i_via_popup = abap_true.
+        IF iv_via_popup = abap_true.
           MESSAGE w001.
-          r_exit = abap_true.
+          rv_exit = abap_true.
         ELSE.
-          r_exit = abap_false.
+          rv_exit = abap_false.
         ENDIF.
         RETURN.
     ENDCASE.
 
-    r_exit = command_object->execute( i_command    = command
-                                      i_parameters = parameters
-                                      i_via_popup  = i_via_popup ).
+    rv_exit = lo_command->execute( iv_command    = lv_command
+                                   iv_parameters = lv_parameters
+                                   iv_via_popup  = iv_via_popup ).
 
   ENDMETHOD.
 
@@ -170,17 +171,17 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   METHOD input_check.
 
     " Standard SAP ok-codes for help_start
-    IF i_input CP 'HC1*' OR i_input CP 'SG1*' OR i_input = 'GLOS' OR i_input CP 'H_*' OR
-       i_input = 'MSDW' OR i_input = 'STAT' OR i_input = 'SO75' OR i_input = 'SO99' OR
-       i_input = 'SMSG' OR i_input = '-HLDWP' OR i_input = '-HLD' OR i_input = 'ERHI' OR
-       i_input = 'DOCU' OR i_input = 'HF1C' OR i_input = 'HFND' OR i_input = 'HNET' OR
-       i_input = '$S_WPB' OR i_input = '$SHOP' OR strlen( i_input ) < 3.
+    IF iv_input CP 'HC1*' OR iv_input CP 'SG1*' OR iv_input = 'GLOS' OR iv_input CP 'H_*' OR
+       iv_input = 'MSDW' OR iv_input = 'STAT' OR iv_input = 'SO75' OR iv_input = 'SO99' OR
+       iv_input = 'SMSG' OR iv_input = '-HLDWP' OR iv_input = '-HLD' OR iv_input = 'ERHI' OR
+       iv_input = 'DOCU' OR iv_input = 'HF1C' OR iv_input = 'HFND' OR iv_input = 'HNET' OR
+       iv_input = '$S_WPB' OR iv_input = '$SHOP' OR strlen( iv_input ) < 3.
       RETURN.
     ENDIF.
 
-    r_command = i_input.
-    CONDENSE r_command.
-    SHIFT r_command LEFT DELETING LEADING space.
+    rv_command = iv_input.
+    CONDENSE rv_command.
+    SHIFT rv_command LEFT DELETING LEADING space.
 
   ENDMETHOD.
 
@@ -188,15 +189,15 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   METHOD input_split.
 
     " Command shortcut or command word
-    IF i_input(1) CA /mbtools/if_command_field=>c_command_shortcuts.
-      e_command = i_input(1).
-      e_parameters = i_input+1(*).
+    IF iv_input(1) CA /mbtools/if_command_field=>c_command_shortcuts.
+      ev_command    = iv_input(1).
+      ev_parameters = iv_input+1(*).
     ELSE.
-      SPLIT i_input AT space INTO e_command e_parameters.
-      TRANSLATE e_command TO UPPER CASE.
+      SPLIT iv_input AT space INTO ev_command ev_parameters.
+      TRANSLATE ev_command TO UPPER CASE.
     ENDIF.
 
-    SHIFT e_parameters LEFT DELETING LEADING space.
+    SHIFT ev_parameters LEFT DELETING LEADING space.
 
   ENDMETHOD.
 
@@ -204,36 +205,36 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   METHOD popup_command.
 
     DATA:
-      fields  TYPE TABLE OF sval,
-      results TYPE TABLE OF sval-value,
-      tabix   TYPE n LENGTH 2,
-      answer  TYPE c LENGTH 1.
+      lt_field  TYPE TABLE OF sval,
+      lt_result TYPE TABLE OF sval-value,
+      lv_tabix  TYPE n LENGTH 2,
+      lv_answer TYPE c LENGTH 1.
 
     FIELD-SYMBOLS:
-      <field>  TYPE sval,
-      <result> TYPE any.
+      <lv_field>  TYPE sval,
+      <lv_result> TYPE any.
 
     " Always exit command field, for commands processed via popup
-    r_exit = abap_true.
+    rv_exit = abap_true.
 
-    APPEND INITIAL LINE TO fields ASSIGNING <field>.
-    <field>-tabname    = '/MBTOOLS/BC_COMMAND'.
-    <field>-fieldname  = 'COMMAND'.
-    <field>-fieldtext  = icon_greater && 'Command'(040).
-    <field>-value      = i_input.
+    APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
+    <lv_field>-tabname    = '/MBTOOLS/BC_COMMAND'.
+    <lv_field>-fieldname  = 'COMMAND'.
+    <lv_field>-fieldtext  = icon_greater && 'Command'(040).
+    <lv_field>-value      = iv_input.
 
-    " If given, show results of previous command
-    IF NOT i_result IS INITIAL.
+    " If given, show lt_result of previous command
+    IF NOT iv_result IS INITIAL.
       CALL FUNCTION 'RSS_LINE_SPLIT'
         EXPORTING
-          i_input                 = i_result
+          i_input                 = iv_result
           i_line_width            = c_max_len_result
           i_delimiters            = ''
           i_break_chars           = c_break_chars
           i_line_comment_char     = ''
           i_comment_char          = ''
         CHANGING
-          c_t_lines               = results
+          c_t_lines               = lt_result
         EXCEPTIONS
           input_invalid_type      = 1
           unbalanced_delimiters   = 2
@@ -244,52 +245,52 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
         RETURN.
       ENDIF.
 
-      LOOP AT results ASSIGNING <result> TO c_max_lines_result.
-        tabix = sy-tabix.
-        APPEND INITIAL LINE TO fields ASSIGNING <field>.
-        <field>-tabname   = '/MBTOOLS/BC_COMMAND'.
-        <field>-fieldname = 'RESULT_' && tabix.
-        IF tabix = 1.
-          IF i_icon = icon_message_error_small.
-            <field>-fieldtext = i_icon && 'Error'(042).
+      LOOP AT lt_result ASSIGNING <lv_result> TO c_max_lines_result.
+        lv_tabix = sy-tabix.
+        APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
+        <lv_field>-tabname   = '/MBTOOLS/BC_COMMAND'.
+        <lv_field>-fieldname = 'RESULT_' && lv_tabix.
+        IF lv_tabix = 1.
+          IF iv_icon = icon_message_error_small.
+            <lv_field>-fieldtext = iv_icon && 'Error'(042).
           ELSE.
-            <field>-fieldtext = i_icon && 'Result'(041).
+            <lv_field>-fieldtext = iv_icon && 'Result'(041).
           ENDIF.
         ELSE.
-          <field>-fieldtext = icon_space.
+          <lv_field>-fieldtext = icon_space.
         ENDIF.
-        <field>-field_attr = '02'. "no entry
-        <field>-value      = <result>.
+        <lv_field>-field_attr = '02'. "no entry
+        <lv_field>-value      = <lv_result>.
       ENDLOOP.
 
-      IF lines( results ) > c_max_lines_result.
+      IF lines( lt_result ) > c_max_lines_result.
         MESSAGE w003 WITH c_max_lines_result.
       ENDIF.
     ENDIF.
 
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
-        no_value_check  = abap_true
-        popup_title     = c_title
+        no_value_check    = abap_true
+        popup_title       = c_title
       IMPORTING
-        returncode      = answer
+        returncode        = lv_answer
       TABLES
-        fields          = fields
+        lt_field          = lt_field
       EXCEPTIONS
-        error_in_fields = 1
-        OTHERS          = 2.
+        error_in_lt_field = 1
+        OTHERS            = 2.
     IF sy-subrc <> 0.
       MESSAGE e000 WITH 'Error in POPUP_GET_VALUES' ##NO_TEXT.
       RETURN.
-    ELSEIF answer = 'A'.
+    ELSEIF lv_answer = 'A'.
       RETURN.
     ENDIF.
 
-    READ TABLE fields INDEX 1 ASSIGNING <field>.
+    READ TABLE lt_field INDEX 1 ASSIGNING <lv_field>.
     ASSERT sy-subrc = 0.
 
-    execute_command( i_input     = <field>-value
-                     i_via_popup = abap_true ).
+    execute_command( iv_input     = <lv_field>-value
+                     iv_via_popup = abap_true ).
 
   ENDMETHOD.
 
@@ -297,61 +298,61 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
   METHOD show_result.
 
     DATA:
-      length   TYPE i,
-      input    TYPE string,
-      messages TYPE TABLE OF sy-msgv1,
-      msgv1    TYPE sy-msgv1,
-      msgv2    TYPE sy-msgv2,
-      msgv3    TYPE sy-msgv3,
-      msgv4    TYPE sy-msgv4.
+      lv_len   TYPE i,
+      lv_input TYPE string,
+      lt_mess  TYPE TABLE OF sy-msgv1,
+      lv_msgv1 TYPE sy-msgv1,
+      lv_msgv2 TYPE sy-msgv2,
+      lv_msgv3 TYPE sy-msgv3,
+      lv_msgv4 TYPE sy-msgv4.
 
-    length = strlen( i_result ).
+    lv_len = strlen( iv_result ).
 
-    IF length > ( c_max_len_msg * 4 ) OR i_via_popup = abap_true.
+    IF lv_len > ( c_max_len_msg * 4 ) OR iv_via_popup = abap_true.
       " Ouput via popup
-      CONCATENATE i_command i_parameters INTO input SEPARATED BY space.
+      CONCATENATE iv_command iv_parameters INTO lv_input SEPARATED BY space.
 
-      r_exit = popup_command( i_input  = input
-                              i_icon   = i_icon
-                              i_result = i_result ).
+      rv_exit = popup_command( iv_input  = lv_input
+                               iv_icon   = iv_icon
+                               iv_result = iv_result ).
     ELSE.
       " Ouput via message statement
       CALL FUNCTION 'RSS_LINE_SPLIT'
         EXPORTING
-          i_input                 = i_result
+          i_input                 = iv_result
           i_line_width            = c_max_len_msg
           i_delimiters            = ''
           i_break_chars           = c_break_chars
           i_line_comment_char     = ''
           i_comment_char          = ''
         CHANGING
-          c_t_lines               = messages
+          c_t_lines               = lt_mess
         EXCEPTIONS
           input_invalid_type      = 1
           unbalanced_delimiters   = 2
           no_break_position_found = 3
           OTHERS                  = 4.
       IF sy-subrc = 0.
-        READ TABLE messages INTO msgv1 INDEX 1.
-        READ TABLE messages INTO msgv2 INDEX 2.
-        READ TABLE messages INTO msgv3 INDEX 3.
-        READ TABLE messages INTO msgv4 INDEX 4.
+        READ TABLE lt_mess INTO lv_msgv1 INDEX 1.
+        READ TABLE lt_mess INTO lv_msgv2 INDEX 2.
+        READ TABLE lt_mess INTO lv_msgv3 INDEX 3.
+        READ TABLE lt_mess INTO lv_msgv4 INDEX 4.
       ELSE.
-        msgv1 = i_result+0(*).
-        IF length > c_max_len_msg.
-          msgv2 = i_result+c_max_len_msg(*).
+        lv_msgv1 = iv_result+0(*).
+        IF lv_len > c_max_len_msg.
+          lv_msgv2 = iv_result+c_max_len_msg(*).
         ENDIF.
-        IF length > c_max_len_msg * 2.
-          msgv3 = i_result+100(*).
+        IF lv_len > c_max_len_msg * 2.
+          lv_msgv3 = iv_result+100(*).
         ENDIF.
-        IF length > c_max_len_msg * 3.
-          msgv4 = i_result+150(*).
+        IF lv_len > c_max_len_msg * 3.
+          lv_msgv4 = iv_result+150(*).
         ENDIF.
       ENDIF.
 
-      MESSAGE s000 WITH msgv1 msgv2 msgv3 msgv4.
+      MESSAGE s000 WITH lv_msgv1 lv_msgv2 lv_msgv3 lv_msgv4.
 
-      r_exit = abap_true.
+      rv_exit = abap_true.
     ENDIF.
 
   ENDMETHOD.

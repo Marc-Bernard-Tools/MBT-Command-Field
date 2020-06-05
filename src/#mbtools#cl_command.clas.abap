@@ -18,28 +18,28 @@ CLASS /mbtools/cl_command DEFINITION
 
     METHODS select
       IMPORTING
-        VALUE(i_object)   TYPE string OPTIONAL
-        VALUE(i_obj_name) TYPE string .
+        VALUE(iv_object)   TYPE string OPTIONAL
+        VALUE(iv_obj_name) TYPE string .
     METHODS filter_tabl .
     METHODS text .
     METHODS pick
       EXPORTING
-        !e_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key
-        !e_count     TYPE i
+        !es_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key
+        !ev_count     TYPE i
       EXCEPTIONS
         cancelled .
     METHODS split
       IMPORTING
-        !i_parameters TYPE string
+        !iv_parameters TYPE string
       EXPORTING
-        !e_operator   TYPE csequence
-        !e_operand    TYPE csequence .
+        !ev_operator   TYPE csequence
+        !ev_operand    TYPE csequence .
     METHODS split_message
       IMPORTING
-        !i_message TYPE csequence
+        !iv_message TYPE csequence
       EXPORTING
-        !e_msgid   TYPE sy-msgid
-        !e_msgno   TYPE sy-msgno .
+        !ev_msgid   TYPE sy-msgid
+        !ev_msgno   TYPE sy-msgno .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -55,69 +55,69 @@ CLASS /mbtools/cl_command DEFINITION
         values   TYPE c VALUE ',',
         low_high TYPE c LENGTH 2 VALUE '..',
       END OF c_split .
-    CLASS-DATA object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
-    CLASS-DATA tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys .
+    CLASS-DATA mt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
+    CLASS-DATA mt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys .
 
     METHODS name_split
       IMPORTING
-        !i_obj_name    TYPE string
+        !iv_obj_name    TYPE string
       RETURNING
-        VALUE(r_range) TYPE /mbtools/if_definitions=>ty_name_range .
+        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_name_range .
     METHODS object_split
       IMPORTING
-        !i_object      TYPE string
+        !iv_object      TYPE string
       RETURNING
-        VALUE(r_range) TYPE /mbtools/if_definitions=>ty_object_range .
-    METHODS range_derive
+        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_object_range .
+    METHODS rangev_derive
       IMPORTING
-        !i_input      TYPE csequence
-        !i_upper_case TYPE abap_bool DEFAULT abap_true
+        !iv_input      TYPE csequence
+        !iv_upper_case TYPE abap_bool DEFAULT abap_true
       EXPORTING
-        !e_sign       TYPE clike
-        !e_option     TYPE clike
-        !e_low        TYPE csequence
-        !e_high       TYPE csequence .
+        !ev_sign       TYPE clike
+        !ev_option     TYPE clike
+        !ev_low        TYPE csequence
+        !ev_high       TYPE csequence .
     METHODS select_check
       IMPORTING
-        !i_object       TYPE /mbtools/if_definitions=>ty_object
-        !i_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names    TYPE /mbtools/if_definitions=>ty_name_range
-        !i_if_requested TYPE abap_bool DEFAULT abap_false
+        !iv_object       TYPE /mbtools/if_definitions=>ty_object
+        !iv_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names    TYPE /mbtools/if_definitions=>ty_name_range
+        !iv_if_requested TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(r_result) TYPE abap_bool .
+        VALUE(rv_result) TYPE abap_bool .
     METHODS select_object
       IMPORTING
-        !i_object       TYPE /mbtools/if_definitions=>ty_object
-        !i_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_object       TYPE /mbtools/if_definitions=>ty_object
+        !iv_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
       RETURNING
-        VALUE(r_result) TYPE abap_bool .
+        VALUE(rv_result) TYPE abap_bool .
     METHODS select_add
       IMPORTING
-        !i_pgmid     TYPE /mbtools/if_definitions=>ty_pgmid
-        !i_object    TYPE /mbtools/if_definitions=>ty_object
-        !i_sel_name  TYPE /mbtools/if_definitions=>ty_name OPTIONAL
-        !i_sel_names TYPE /mbtools/if_definitions=>ty_names OPTIONAL .
+        !iv_pgmid     TYPE /mbtools/if_definitions=>ty_pgmid
+        !iv_object    TYPE /mbtools/if_definitions=>ty_object
+        !iv_sel_name  TYPE /mbtools/if_definitions=>ty_name OPTIONAL
+        !iv_sel_names TYPE /mbtools/if_definitions=>ty_names OPTIONAL .
     METHODS select_bw
       IMPORTING
-        !i_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
-        !i_obj_name    TYPE string .
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
+        !iv_obj_name    TYPE string .
     METHODS select_func
       IMPORTING
-        !i_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
     METHODS select_mess
       IMPORTING
-        !i_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
     METHODS select_meth
       IMPORTING
-        !i_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
     METHODS select_reps
       IMPORTING
-        !i_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !i_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
 ENDCLASS.
 
 
@@ -128,26 +128,26 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD filter_tabl.
 
     DATA:
-      sel_tabname TYPE RANGE OF tabname,
-      table_names TYPE TABLE OF tabname.
+      lr_tabname TYPE RANGE OF tabname,
+      lt_names   TYPE TABLE OF tabname.
 
     FIELD-SYMBOLS:
-      <tabname_range> LIKE LINE OF sel_tabname,
-      <tadir_key>     TYPE adir_key.
+      <lr_range>     LIKE LINE OF lr_tabname,
+      <ls_tadir_key> TYPE adir_key.
 
     " Get all tabl objects
-    LOOP AT tadir_list ASSIGNING <tadir_key>
+    LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>
       WHERE object = /mbtools/if_command_field=>c_objects_db-tabl.
 
-      APPEND INITIAL LINE TO sel_tabname ASSIGNING <tabname_range>.
-      <tabname_range>-sign   = 'I'.
-      <tabname_range>-option = 'EQ'.
-      <tabname_range>-low    = <tadir_key>-obj_name.
+      APPEND INITIAL LINE TO lr_tabname ASSIGNING <lr_range>.
+      <lr_range>-sign   = 'I'.
+      <lr_range>-option = 'EQ'.
+      <lr_range>-low    = <ls_tadir_key>-obj_name.
     ENDLOOP.
 
     " Only objects that work with SE16
-    SELECT DISTINCT tabname FROM dd02l INTO TABLE table_names
-      WHERE tabname IN sel_tabname AND
+    SELECT DISTINCT tabname FROM dd02l INTO TABLE lt_names
+      WHERE tabname IN lr_tabname AND
         (  tabclass = /mbtools/if_command_field=>c_table_class-transp
         OR tabclass = /mbtools/if_command_field=>c_table_class-cluster
         OR tabclass = /mbtools/if_command_field=>c_table_class-pool
@@ -155,13 +155,13 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       ORDER BY tabname.
 
     " Reduce object list
-    LOOP AT tadir_list ASSIGNING <tadir_key>
+    LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>
       WHERE object = /mbtools/if_command_field=>c_objects_db-tabl.
 
-      READ TABLE table_names TRANSPORTING NO FIELDS
-        WITH TABLE KEY table_line = <tadir_key>-obj_name.
+      READ TABLE lt_names TRANSPORTING NO FIELDS
+        WITH TABLE KEY table_line = <ls_tadir_key>-obj_name ##WARN_OK.
       IF sy-subrc <> 0.
-        DELETE tadir_list.
+        DELETE mt_tadir_list.
       ENDIF.
     ENDLOOP.
 
@@ -171,49 +171,49 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD name_split.
 
     DATA:
-      obj_name  TYPE tadir-obj_name,
-      obj_names TYPE TABLE OF tadir-obj_name.
+      lv_obj_name TYPE tadir-obj_name,
+      lt_obj_name TYPE TABLE OF tadir-obj_name.
 
     FIELD-SYMBOLS:
-      <range> LIKE LINE OF r_range.
+      <lr_range> LIKE LINE OF rr_range.
 
-    CHECK NOT i_obj_name IS INITIAL.
+    CHECK NOT iv_obj_name IS INITIAL.
 
-    IF i_obj_name CS c_split-values.
-      SPLIT i_obj_name AT c_split-values INTO TABLE obj_names.
-      LOOP AT obj_names INTO obj_name.
-        APPEND INITIAL LINE TO r_range ASSIGNING <range>.
+    IF iv_obj_name CS c_split-values.
+      SPLIT iv_obj_name AT c_split-values INTO TABLE lt_obj_name.
+      LOOP AT lt_obj_name INTO lv_obj_name.
+        APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-        range_derive(
+        rangev_derive(
           EXPORTING
-            i_input  = obj_name
+            iv_input  = lv_obj_name
           IMPORTING
-            e_sign   = <range>-sign
-            e_option = <range>-option
-            e_low    = <range>-low
-            e_high   = <range>-high ).
+            ev_sign   = <lr_range>-sign
+            ev_option = <lr_range>-option
+            ev_low    = <lr_range>-low
+            ev_high   = <lr_range>-high ).
 
-        <range>-low  = /mbtools/cl_sap=>object_name_check( <range>-low ).
-        <range>-high = /mbtools/cl_sap=>object_name_check( <range>-high ).
+        <lr_range>-low  = /mbtools/cl_sap=>object_name_check( <lr_range>-low ).
+        <lr_range>-high = /mbtools/cl_sap=>object_name_check( <lr_range>-high ).
       ENDLOOP.
     ELSE.
-      APPEND INITIAL LINE TO r_range ASSIGNING <range>.
+      APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-      range_derive(
+      rangev_derive(
         EXPORTING
-          i_input  = i_obj_name
+          iv_input  = iv_obj_name
         IMPORTING
-          e_sign   = <range>-sign
-          e_option = <range>-option
-          e_low    = <range>-low
-          e_high   = <range>-high ).
+          ev_sign   = <lr_range>-sign
+          ev_option = <lr_range>-option
+          ev_low    = <lr_range>-low
+          ev_high   = <lr_range>-high ).
 
-      <range>-low  = /mbtools/cl_sap=>object_name_check( <range>-low ).
-      <range>-high = /mbtools/cl_sap=>object_name_check( <range>-high ).
+      <lr_range>-low  = /mbtools/cl_sap=>object_name_check( <lr_range>-low ).
+      <lr_range>-high = /mbtools/cl_sap=>object_name_check( <lr_range>-high ).
     ENDIF.
 
-    SORT r_range.
-    DELETE ADJACENT DUPLICATES FROM r_range.
+    SORT rr_range.
+    DELETE ADJACENT DUPLICATES FROM rr_range.
 
   ENDMETHOD.
 
@@ -221,43 +221,43 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD object_split.
 
     DATA:
-      object  TYPE tadir-object,
-      objects TYPE TABLE OF tadir-object.
+      lv_object TYPE tadir-object,
+      lt_object TYPE TABLE OF tadir-object.
 
     FIELD-SYMBOLS:
-      <range> LIKE LINE OF r_range.
+      <lr_range> LIKE LINE OF rr_range.
 
-    CHECK NOT i_object IS INITIAL.
+    CHECK NOT iv_object IS INITIAL.
 
-    IF i_object CS c_split-values.
-      SPLIT i_object AT c_split-values INTO TABLE objects.
-      LOOP AT objects INTO object.
-        APPEND INITIAL LINE TO r_range ASSIGNING <range>.
+    IF iv_object CS c_split-values.
+      SPLIT iv_object AT c_split-values INTO TABLE lt_object.
+      LOOP AT lt_object INTO lv_object.
+        APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-        range_derive(
+        rangev_derive(
           EXPORTING
-            i_input  = object
+            iv_input  = lv_object
           IMPORTING
-            e_sign   = <range>-sign
-            e_option = <range>-option
-            e_low    = <range>-low
-            e_high   = <range>-high ).
+            ev_sign   = <lr_range>-sign
+            ev_option = <lr_range>-option
+            ev_low    = <lr_range>-low
+            ev_high   = <lr_range>-high ).
       ENDLOOP.
     ELSE.
-      APPEND INITIAL LINE TO r_range ASSIGNING <range>.
+      APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-      range_derive(
+      rangev_derive(
         EXPORTING
-          i_input  = i_object
+          iv_input  = iv_object
         IMPORTING
-          e_sign   = <range>-sign
-          e_option = <range>-option
-          e_low    = <range>-low
-          e_high   = <range>-high ).
+          ev_sign   = <lr_range>-sign
+          ev_option = <lr_range>-option
+          ev_low    = <lr_range>-low
+          ev_high   = <lr_range>-high ).
     ENDIF.
 
-    SORT r_range.
-    DELETE ADJACENT DUPLICATES FROM r_range.
+    SORT rr_range.
+    DELETE ADJACENT DUPLICATES FROM rr_range.
 
   ENDMETHOD.
 
@@ -265,40 +265,41 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD pick.
 
     DATA:
-      tabindex  TYPE i,
-      exit_flag TYPE abap_bool,
-      selfield  TYPE slis_selfield,
-      fieldcat  TYPE slis_t_fieldcat_alv,
-      object    TYPE /mbtools/if_definitions=>ty_object_ext.
+      lv_tabindex  TYPE i,
+      lv_exit_flag TYPE abap_bool,
+      ls_selfield  TYPE slis_selfield,
+      lt_fieldcat  TYPE slis_t_fieldcat_alv,
+      ls_object    TYPE /mbtools/if_definitions=>ty_object_ext.
 
     FIELD-SYMBOLS:
-      <fieldcat> TYPE slis_fieldcat_alv.
+      <ls_fieldcat> TYPE slis_fieldcat_alv.
 
-    e_count = lines( object_list ).
+    ev_count = lines( mt_object_list ).
 
-    IF e_count = 0.
+    IF ev_count = 0.
       " Nothing...
-    ELSEIF e_count = 1.
+    ELSEIF ev_count = 1.
       " Exactly one object...
-      tabindex = 1.
+      lv_tabindex = 1.
     ELSE.
       " Multiple objects...
       CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
         EXPORTING
           i_structure_name       = c_object_with_icon_text
         CHANGING
-          ct_fieldcat            = fieldcat
+          ct_fieldcat            = lt_fieldcat
         EXCEPTIONS
           inconsistent_interface = 1
           program_error          = 2
           OTHERS                 = 3.
       ASSERT sy-subrc = 0.
 
-      READ TABLE object_list INTO object INDEX 1.
-      IF sy-subrc = 0 AND object-icon IS INITIAL.
+      READ TABLE mt_object_list INTO ls_object INDEX 1.
+      IF sy-subrc = 0 AND ls_object-icon IS INITIAL.
         " Hide icon and text columns if not filled
-        LOOP AT fieldcat ASSIGNING <fieldcat> WHERE fieldname = 'ICON' OR fieldname = 'TEXT'.
-          <fieldcat>-no_out = abap_true.
+        LOOP AT lt_fieldcat ASSIGNING <ls_fieldcat>
+          WHERE fieldname = 'ICON' OR fieldname = 'TEXT'.
+          <ls_fieldcat>-no_out = abap_true.
         ENDLOOP.
       ENDIF.
 
@@ -308,32 +309,32 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
           i_callback_program      = c_callback_prog
           i_callback_user_command = c_callback_alv
           i_structure_name        = c_object_with_icon_text
-          it_fieldcat             = fieldcat
+          it_fieldcat             = lt_fieldcat
         IMPORTING
-          e_exit_caused_by_caller = exit_flag
+          e_exit_caused_by_caller = lv_exit_flag
         TABLES
-          t_outtab                = object_list
+          t_outtab                = mt_object_list
         EXCEPTIONS
           program_error           = 1
           OTHERS                  = 2.
-      IF sy-subrc = 0 AND exit_flag = abap_true.
+      IF sy-subrc = 0 AND lv_exit_flag = abap_true.
         " Get index of seleced row which was exported in callback routine
-        IMPORT tabindex TO selfield-tabindex FROM MEMORY ID c_tabix.
+        IMPORT tabindex TO ls_selfield-tabindex FROM MEMORY ID c_tabix.
         IF sy-subrc = 0.
-          tabindex = selfield-tabindex.
+          lv_tabindex = ls_selfield-tabindex.
           FREE MEMORY ID c_tabix.
         ENDIF.
       ENDIF.
 
     ENDIF.
 
-    IF tabindex BETWEEN 1 AND e_count.
-      READ TABLE object_list INTO object INDEX tabindex.
+    IF lv_tabindex BETWEEN 1 AND ev_count.
+      READ TABLE mt_object_list INTO ls_object INDEX lv_tabindex.
       ASSERT sy-subrc = 0.
 
-      e_tadir_key-pgmid    = object-pgmid.
-      e_tadir_key-object   = object-object.
-      e_tadir_key-obj_name = object-obj_name.
+      es_tadir_key-pgmid    = ls_object-pgmid.
+      es_tadir_key-object   = ls_object-object.
+      es_tadir_key-obj_name = ls_object-obj_name.
     ELSE.
       RAISE cancelled.
     ENDIF.
@@ -341,43 +342,43 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD range_derive.
+  METHOD rangev_derive.
 
-    CHECK NOT i_input IS INITIAL.
+    CHECK NOT iv_input IS INITIAL.
 
-    e_sign = 'I'.
-    IF i_input CA '?*'.
-      IF i_input(1) = '!'.
-        e_option = 'NP'.
-        e_low    = i_input+1.
+    ev_sign = 'I'.
+    IF iv_input CA '?*'.
+      IF iv_input(1) = '!'.
+        ev_option = 'NP'.
+        ev_low    = iv_input+1.
       ELSE.
-        e_option = 'CP'.
-        e_low    = i_input.
+        ev_option = 'CP'.
+        ev_low    = iv_input.
       ENDIF.
-    ELSEIF i_input CS c_split-low_high.
-      IF i_input(1) = '!'.
-        e_option = 'NB'.
-        SPLIT i_input+1 AT c_split-low_high INTO e_low e_high.
+    ELSEIF iv_input CS c_split-low_high.
+      IF iv_input(1) = '!'.
+        ev_option = 'NB'.
+        SPLIT iv_input+1 AT c_split-low_high INTO ev_low ev_high.
       ELSE.
-        e_option = 'BT'.
-        SPLIT i_input AT c_split-low_high INTO e_low e_high.
+        ev_option = 'BT'.
+        SPLIT iv_input AT c_split-low_high INTO ev_low ev_high.
       ENDIF.
     ELSE.
-      IF i_input(1) = '!'.
-        e_option = 'NE'.
-        e_low    = i_input+1.
+      IF iv_input(1) = '!'.
+        ev_option = 'NE'.
+        ev_low    = iv_input+1.
       ELSE.
-        e_option = 'EQ'.
-        e_low    = i_input.
+        ev_option = 'EQ'.
+        ev_low    = iv_input.
       ENDIF.
     ENDIF.
 
-    SHIFT e_low  LEFT DELETING LEADING space.
-    SHIFT e_high LEFT DELETING LEADING space.
+    SHIFT ev_low  LEFT DELETING LEADING space.
+    SHIFT ev_high LEFT DELETING LEADING space.
 
-    IF i_upper_case = abap_true.
-      TRANSLATE e_low  TO UPPER CASE.
-      TRANSLATE e_high TO UPPER CASE.
+    IF iv_upper_case = abap_true.
+      TRANSLATE ev_low  TO UPPER CASE.
+      TRANSLATE ev_high TO UPPER CASE.
     ENDIF.
 
   ENDMETHOD.
@@ -386,71 +387,70 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD select.
 
     DATA:
-      sel_objects TYPE /mbtools/if_definitions=>ty_object_range,
-      sel_names   TYPE /mbtools/if_definitions=>ty_name_range,
-      names       TYPE /mbtools/if_definitions=>ty_names.
+      lr_objects TYPE /mbtools/if_definitions=>ty_object_range,
+      lr_names   TYPE /mbtools/if_definitions=>ty_name_range.
 
     " Object type selection
-    sel_objects = object_split( i_object ).
+    lr_objects = object_split( iv_object ).
 
     " Object name selection
-    sel_names = name_split( i_obj_name ).
+    lr_names = name_split( iv_obj_name ).
 
-    IF sel_objects IS INITIAL AND sel_names IS INITIAL.
+    IF lr_objects IS INITIAL AND lr_names IS INITIAL.
       RETURN.
     ENDIF.
 
     " Select objects in directory
-    SELECT pgmid object obj_name FROM tadir INTO TABLE tadir_list
+    SELECT pgmid object obj_name FROM tadir INTO TABLE mt_tadir_list
       UP TO c_max_hits ROWS
       WHERE pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
-        AND object   IN sel_objects
-        AND obj_name IN sel_names
+        AND object   IN lr_objects
+        AND obj_name IN lr_names
         AND delflag  = abap_false.
 
     " Select reports (includes)
-    IF lines( tadir_list ) < c_max_hits.
+    IF lines( mt_tadir_list ) < c_max_hits.
       select_reps(
-        i_sel_objects = sel_objects
-        i_sel_names   = sel_names ).
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select function modules
-    IF lines( tadir_list ) < c_max_hits.
+    IF lines( mt_tadir_list ) < c_max_hits.
       select_func(
-        i_sel_objects = sel_objects
-        i_sel_names   = sel_names ).
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select class/interface methods (if requested)
-    IF lines( tadir_list ) < c_max_hits.
+    IF lines( mt_tadir_list ) < c_max_hits.
       select_meth(
-        i_sel_objects = sel_objects
-        i_sel_names   = sel_names ).
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select messages (if requested)
-    IF lines( tadir_list ) < c_max_hits.
+    IF lines( mt_tadir_list ) < c_max_hits.
       select_mess(
-        i_sel_objects = sel_objects
-        i_sel_names   = sel_names ).
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select BW objects using search (if requested)
-    IF lines( tadir_list ) < c_max_hits.
+    IF lines( mt_tadir_list ) < c_max_hits.
       select_bw(
-        i_sel_objects = sel_objects
-        i_sel_names   = sel_names
-        i_obj_name    = i_obj_name ).
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names
+        iv_obj_name    = iv_obj_name ).
     ENDIF.
 
     " Deduplicate
-    SORT tadir_list.
-    DELETE ADJACENT DUPLICATES FROM tadir_list.
+    SORT mt_tadir_list.
+    DELETE ADJACENT DUPLICATES FROM mt_tadir_list.
 
     " Too many hits
-    IF lines( tadir_list ) > c_max_hits.
-      DELETE tadir_list FROM c_max_hits.
+    IF lines( mt_tadir_list ) > c_max_hits.
+      DELETE mt_tadir_list FROM c_max_hits.
       MESSAGE |'Selection limited to { c_max_hits } objects'| TYPE 'S'.
     ENDIF.
 
@@ -459,23 +459,24 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD select_add.
 
-    DATA: sel_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA:
+      lt_names TYPE /mbtools/if_definitions=>ty_names.
 
     FIELD-SYMBOLS:
-      <tadir_key> TYPE /mbtools/if_definitions=>ty_tadir_key,
-      <sel_name>  TYPE /mbtools/if_definitions=>ty_name.
+      <ls_tadir_key> TYPE /mbtools/if_definitions=>ty_tadir_key,
+      <lv_name>      TYPE /mbtools/if_definitions=>ty_name.
 
-    sel_names = i_sel_names.
+    lt_names = iv_sel_names.
 
-    IF NOT i_sel_name IS INITIAL.
-      APPEND i_sel_name TO sel_names.
+    IF NOT iv_sel_name IS INITIAL.
+      APPEND iv_sel_name TO lt_names.
     ENDIF.
 
-    LOOP AT sel_names ASSIGNING <sel_name>.
-      APPEND INITIAL LINE TO tadir_list ASSIGNING <tadir_key>.
-      <tadir_key>-pgmid    = i_pgmid.
-      <tadir_key>-object   = i_object.
-      <tadir_key>-obj_name = <sel_name>.
+    LOOP AT lt_names ASSIGNING <lv_name>.
+      APPEND INITIAL LINE TO mt_tadir_list ASSIGNING <ls_tadir_key>.
+      <ls_tadir_key>-pgmid    = iv_pgmid.
+      <ls_tadir_key>-object   = iv_object.
+      <ls_tadir_key>-obj_name = <lv_name>.
     ENDLOOP.
 
   ENDMETHOD.
@@ -487,60 +488,60 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     " with a simple select on /MBTOOLS/BWDIR
 
     DATA:
-      search         TYPE REF TO cl_rsawbn_ser_search_general,
-      search_objs    TYPE cl_rsawbn_ser_search_obj=>ty_tr_search_obj,
-      search_param   TYPE cl_rsawbn_ser_search_general=>ty_s_search_param,
-      search_results TYPE rsawbn_t_awbobj,
-      awbobj         TYPE rstlogo.
+      lo_search         TYPE REF TO cl_rsawbn_ser_search_general,
+      lt_search_objs    TYPE cl_rsawbn_ser_search_obj=>ty_tr_search_obj,
+      ls_search_param   TYPE cl_rsawbn_ser_search_general=>ty_s_search_param,
+      lt_search_results TYPE rsawbn_t_awbobj,
+      lv_awbobj         TYPE rstlogo.
 
     FIELD-SYMBOLS:
-      <search_obj>    TYPE cl_rsawbn_ser_search_obj=>ty_sr_search_obj,
-      <search_result> TYPE rsawbn_s_awbobj.
+      <ls_search_obj>    TYPE cl_rsawbn_ser_search_obj=>ty_sr_search_obj,
+      <ls_search_result> TYPE rsawbn_s_awbobj.
 
-    CHECK select_check( i_object       = /mbtools/if_command_field=>c_objects_bw-all
-                        i_sel_objects  = i_sel_objects
-                        i_sel_names    = i_sel_names
-                        i_if_requested = abap_true ).
+    CHECK select_check( iv_object       = /mbtools/if_command_field=>c_objects_bw-all
+                        iv_sel_objects  = iv_sel_objects
+                        iv_sel_names    = iv_sel_names
+                        iv_if_requested = abap_true ).
 
-    CREATE OBJECT search.
+    CREATE OBJECT lo_search.
 
     " Set selected BW objects
-    search_objs = search->get_tr_search_obj( ).
+    lt_search_objs = lo_search->get_tr_search_obj( ).
 
-    LOOP AT search_objs ASSIGNING <search_obj>
+    LOOP AT lt_search_objs ASSIGNING <ls_search_obj>
       WHERE r_search_obj->is_folder = abap_false.
 
-      awbobj = <search_obj>-r_search_obj->get_awbobj( ).
+      lv_awbobj = <ls_search_obj>-r_search_obj->get_awbobj( ).
 
-      IF awbobj IN i_sel_objects OR /mbtools/if_command_field=>c_objects_bw-all IN i_sel_objects.
-        <search_obj>-r_search_obj->set_selected( abap_true ).
+      IF lv_awbobj IN iv_sel_objects OR /mbtools/if_command_field=>c_objects_bw-all IN iv_sel_objects.
+        <ls_search_obj>-r_search_obj->set_selected( abap_true ).
       ELSE.
-        <search_obj>-r_search_obj->set_selected( abap_false ).
+        <ls_search_obj>-r_search_obj->set_selected( abap_false ).
       ENDIF.
 
     ENDLOOP.
 
     " Search technical names only (use TREX/HANA if available)
-    search_param-search_term        = i_obj_name.
-    search_param-technm             = abap_true.
-    search_param-descr              = abap_false.
-    search_param-exact_search       = abap_true.
-    search_param-trex_search        = cl_rsos_meta_index=>get_trex_engine_stat( ).
-    search_param-trex_detail_search = abap_false.
-    search_param-search_behaviaour  = cl_rsawbn_ser_search=>c_exact_search.
+    ls_search_param-search_term        = iv_obj_name.
+    ls_search_param-technm             = abap_true.
+    ls_search_param-descr              = abap_false.
+    ls_search_param-exact_search       = abap_true.
+    ls_search_param-trex_search        = cl_rsos_meta_index=>get_trex_engine_stat( ).
+    ls_search_param-trex_detail_search = abap_false.
+    ls_search_param-search_behaviaour  = cl_rsawbn_ser_search=>c_exact_search.
 
-    search->set_o_s_search_param( search_param ).
+    lo_search->set_o_s_search_param( ls_search_param ).
 
     " Run search and get results
-    search->execute_search( ).
+    lo_search->execute_search( ).
 
-    search_results = search->get_result( ).
+    lt_search_results = lo_search->get_result( ).
 
-    LOOP AT search_results ASSIGNING <search_result>.
+    LOOP AT lt_search_results ASSIGNING <ls_search_result>.
       select_add(
-        i_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
-        i_object   = <search_result>-r_awbobj->get_awbobj( )
-        i_sel_name = <search_result>-r_awbobj->get_objnm( ) ).
+        iv_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
+        iv_object   = <ls_search_result>-r_awbobj->get_awbobj( )
+        iv_sel_name = <ls_search_result>-r_awbobj->get_objnm( ) ).
     ENDLOOP.
 
   ENDMETHOD.
@@ -549,29 +550,29 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD select_check.
 
     " Check object selection
-    IF i_sel_objects IS INITIAL.
-      IF i_if_requested = abap_true.
-        r_result = abap_false.
+    IF iv_sel_objects IS INITIAL.
+      IF iv_if_requested = abap_true.
+        rv_result = abap_false.
       ELSE.
-        r_result = abap_true.
+        rv_result = abap_true.
       ENDIF.
-    ELSEIF select_object( i_object = i_object i_sel_objects = i_sel_objects ).
-      r_result = abap_true.
+    ELSEIF select_object( iv_object = iv_object iv_sel_objects = iv_sel_objects ).
+      rv_result = abap_true.
     ELSE.
-      r_result = abap_false.
+      rv_result = abap_false.
     ENDIF.
 
-    CHECK r_result = abap_true.
+    CHECK rv_result = abap_true.
 
     " Check object name selection
-    IF i_sel_names IS INITIAL OR '*' IN i_sel_names.
-      IF i_if_requested = abap_true.
-        r_result = abap_false.
+    IF iv_sel_names IS INITIAL OR '*' IN iv_sel_names.
+      IF iv_if_requested = abap_true.
+        rv_result = abap_false.
       ELSE.
-        r_result = abap_true.
+        rv_result = abap_true.
       ENDIF.
     ELSE.
-      r_result = abap_true.
+      rv_result = abap_true.
     ENDIF.
 
   ENDMETHOD.
@@ -579,21 +580,22 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD select_func.
 
-    DATA: sel_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA:
+      lt_names TYPE /mbtools/if_definitions=>ty_names.
 
-    CHECK select_check( i_object      = /mbtools/if_command_field=>c_objects_abap-func
-                        i_sel_objects = i_sel_objects
-                        i_sel_names   = i_sel_names ).
+    CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-func
+                        iv_sel_objects = iv_sel_objects
+                        iv_sel_names   = iv_sel_names ).
 
-    SELECT funcname FROM tfdir INTO TABLE sel_names
+    SELECT funcname FROM tfdir INTO TABLE lt_names
       UP TO c_max_hits ROWS
-      WHERE funcname IN i_sel_names.
+      WHERE funcname IN iv_sel_names.
 
     IF sy-subrc = 0.
       select_add(
-        i_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
-        i_object    = /mbtools/if_command_field=>c_objects_abap-func
-        i_sel_names = sel_names ).
+        iv_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
+        iv_object    = /mbtools/if_command_field=>c_objects_abap-func
+        iv_sel_names = lt_names ).
     ENDIF.
 
   ENDMETHOD.
@@ -608,81 +610,80 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       END OF ty_mess.
 
     DATA:
-      len       TYPE i,
-      sel_name  TYPE /mbtools/if_definitions=>ty_name,
-      sel_msgid TYPE RANGE OF sy-msgid,
-      sel_msgno TYPE RANGE OF sy-msgno,
-      sel_mess  TYPE ty_mess,
-      sel_messs TYPE TABLE OF ty_mess.
+      lv_name  TYPE /mbtools/if_definitions=>ty_name,
+      lr_msgid TYPE RANGE OF sy-msgid,
+      lr_msgno TYPE RANGE OF sy-msgno,
+      ls_mess  TYPE ty_mess,
+      lt_mess  TYPE TABLE OF ty_mess.
 
     FIELD-SYMBOLS:
-      <sel_msgid> LIKE LINE OF sel_msgid,
-      <sel_msgno> LIKE LINE OF sel_msgno,
-      <sel_names> TYPE LINE OF /mbtools/if_definitions=>ty_name_range.
+      <lr_msgid> LIKE LINE OF lr_msgid,
+      <lr_msgno> LIKE LINE OF lr_msgno,
+      <lr_names> TYPE LINE OF /mbtools/if_definitions=>ty_name_range.
 
-    CHECK select_check( i_object      = /mbtools/if_command_field=>c_objects_limu-mess
-                        i_sel_objects = i_sel_objects
-                        i_sel_names   = i_sel_names ).
+    CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_limu-mess
+                        iv_sel_objects = iv_sel_objects
+                        iv_sel_names   = iv_sel_names ).
 
-    " Convert <message_area><message_number> into separate selections
-    LOOP AT i_sel_names ASSIGNING <sel_names>.
-      CASE <sel_names>-option.
+    " Convert <messagev_area><messagev_number> into separate selections
+    LOOP AT iv_sel_names ASSIGNING <lr_names>.
+      CASE <lr_names>-option.
         WHEN 'EQ'.
-          APPEND INITIAL LINE TO sel_msgid ASSIGNING <sel_msgid>.
-          <sel_msgid>-sign   = 'I'.
-          <sel_msgid>-option = 'EQ'.
-          APPEND INITIAL LINE TO sel_msgno ASSIGNING <sel_msgno>.
-          <sel_msgno>-sign   = 'I'.
-          <sel_msgno>-option = 'EQ'.
+          APPEND INITIAL LINE TO lr_msgid ASSIGNING <lr_msgid>.
+          <lr_msgid>-sign   = 'I'.
+          <lr_msgid>-option = 'EQ'.
+          APPEND INITIAL LINE TO lr_msgno ASSIGNING <lr_msgno>.
+          <lr_msgno>-sign   = 'I'.
+          <lr_msgno>-option = 'EQ'.
 
           split_message(
             EXPORTING
-              i_message = <sel_names>-low
+              iv_message = <lr_names>-low
             IMPORTING
-              e_msgid   = <sel_msgid>-low
-              e_msgno   = <sel_msgno>-low ).
+              ev_msgid   = <lr_msgid>-low
+              ev_msgno   = <lr_msgno>-low ).
         WHEN 'BT'.
-          APPEND INITIAL LINE TO sel_msgid ASSIGNING <sel_msgid>.
-          <sel_msgid>-sign   = 'I'.
-          <sel_msgid>-option = 'BT'.
-          APPEND INITIAL LINE TO sel_msgno ASSIGNING <sel_msgno>.
-          <sel_msgno>-sign   = 'I'.
-          <sel_msgno>-option = 'BT'.
+          APPEND INITIAL LINE TO lr_msgid ASSIGNING <lr_msgid>.
+          <lr_msgid>-sign   = 'I'.
+          <lr_msgid>-option = 'BT'.
+          APPEND INITIAL LINE TO lr_msgno ASSIGNING <lr_msgno>.
+          <lr_msgno>-sign   = 'I'.
+          <lr_msgno>-option = 'BT'.
 
           split_message(
             EXPORTING
-              i_message = <sel_names>-low
+              iv_message = <lr_names>-low
             IMPORTING
-              e_msgid   = <sel_msgid>-low
-              e_msgno   = <sel_msgno>-low ).
+              ev_msgid   = <lr_msgid>-low
+              ev_msgno   = <lr_msgno>-low ).
 
           split_message(
             EXPORTING
-              i_message = <sel_names>-high
+              iv_message = <lr_names>-high
             IMPORTING
-              e_msgid   = <sel_msgid>-high
-              e_msgno   = <sel_msgno>-high ).
+              ev_msgid   = <lr_msgid>-high
+              ev_msgno   = <lr_msgno>-high ).
         WHEN 'CP'.
-          APPEND INITIAL LINE TO sel_msgid ASSIGNING <sel_msgid>.
-          <sel_msgid>-sign   = 'I'.
-          <sel_msgid>-option = 'CP'.
-          <sel_msgid>-low    = <sel_names>-low.
+          APPEND INITIAL LINE TO lr_msgid ASSIGNING <lr_msgid>.
+          <lr_msgid>-sign   = 'I'.
+          <lr_msgid>-option = 'CP'.
+          <lr_msgid>-low    = <lr_names>-low.
       ENDCASE.
     ENDLOOP.
 
-    SELECT arbgb msgnr FROM t100 INTO TABLE sel_messs
+    SELECT arbgb msgnr FROM t100 INTO TABLE lt_mess
       UP TO c_max_hits ROWS
-      WHERE arbgb IN sel_msgid AND msgnr IN sel_msgno AND sprsl = sy-langu.
+      WHERE arbgb IN lr_msgid AND msgnr IN lr_msgno AND sprsl = sy-langu.
 
     IF sy-subrc = 0.
-      LOOP AT sel_messs INTO sel_mess.
-        sel_name = sel_mess-arbgb && sel_mess-msgnr.
-        CHECK sel_name IN i_sel_names.
+      LOOP AT lt_mess INTO ls_mess.
+        lv_name = ls_mess-arbgb && ls_mess-msgnr.
+        CHECK lv_name IN iv_sel_names.
 
         select_add(
-          i_pgmid    = /mbtools/if_command_field=>c_pgmid-limu
-          i_object   = /mbtools/if_command_field=>c_objects_limu-mess
-          i_sel_name = sel_name ).
+          iv_pgmid    = /mbtools/if_command_field=>c_pgmid-limu
+          iv_object   = /mbtools/if_command_field=>c_objects_limu-mess
+          iv_sel_name = lv_name ).
       ENDLOOP.
     ENDIF.
 
@@ -691,22 +692,23 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD select_meth.
 
-    DATA: sel_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA:
+      lt_names TYPE /mbtools/if_definitions=>ty_names.
 
-    CHECK select_check( i_object       = /mbtools/if_command_field=>c_objects_abap-meth
-                        i_sel_objects  = i_sel_objects
-                        i_sel_names    = i_sel_names
-                        i_if_requested = abap_true ).
+    CHECK select_check( iv_object       = /mbtools/if_command_field=>c_objects_abap-meth
+                        iv_sel_objects  = iv_sel_objects
+                        iv_sel_names    = iv_sel_names
+                        iv_if_requested = abap_true ).
 
-    SELECT cmpname FROM seocompodf INTO TABLE sel_names
+    SELECT cmpname FROM seocompodf INTO TABLE lt_names
       UP TO c_max_hits ROWS
-      WHERE cmpname IN i_sel_names.
+      WHERE cmpname IN iv_sel_names.
 
     IF sy-subrc = 0.
       select_add(
-        i_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
-        i_object    = /mbtools/if_command_field=>c_objects_abap-meth
-        i_sel_names = sel_names ).
+        iv_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
+        iv_object    = /mbtools/if_command_field=>c_objects_abap-meth
+        iv_sel_names = lt_names ).
     ENDIF.
 
   ENDMETHOD.
@@ -714,18 +716,20 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD select_object.
 
-    DATA: objects TYPE /mbtools/if_definitions=>ty_objects.
+    DATA:
+      lt_objects TYPE /mbtools/if_definitions=>ty_objects.
 
-    FIELD-SYMBOLS: <object> TYPE /mbtools/if_definitions=>ty_object.
+    FIELD-SYMBOLS:
+      <lv_object> TYPE /mbtools/if_definitions=>ty_object.
 
-    IF i_object IN i_sel_objects.
-      r_result = abap_true.
-    ELSEIF i_object = /mbtools/if_command_field=>c_objects_bw-all.
-      SPLIT /mbtools/if_command_field=>c_objects_bw AT ',' INTO TABLE objects.
+    IF iv_object IN iv_sel_objects.
+      rv_result = abap_true.
+    ELSEIF iv_object = /mbtools/if_command_field=>c_objects_bw-all.
+      SPLIT /mbtools/if_command_field=>c_objects_bw AT ',' INTO TABLE lt_objects.
 
-      LOOP AT objects ASSIGNING <object>.
-        IF <object> IN i_sel_objects.
-          r_result = abap_true.
+      LOOP AT lt_objects ASSIGNING <lv_object>.
+        IF <lv_object> IN iv_sel_objects.
+          rv_result = abap_true.
           EXIT.
         ENDIF.
       ENDLOOP.
@@ -736,21 +740,22 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD select_reps.
 
-    DATA: sel_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA:
+      lt_names TYPE /mbtools/if_definitions=>ty_names.
 
-    CHECK select_check( i_object      = /mbtools/if_command_field=>c_objects_abap-reps
-                        i_sel_objects = i_sel_objects
-                        i_sel_names   = i_sel_names ).
+    CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-reps
+                        iv_sel_objects = iv_sel_objects
+                        iv_sel_names   = iv_sel_names ).
 
-    SELECT name FROM trdir INTO TABLE sel_names
+    SELECT name FROM trdir INTO TABLE lt_names
       UP TO c_max_hits ROWS
-      WHERE name IN i_sel_names AND ( subc = 'I' OR subc = 'M' OR subc = 'S' ).
+      WHERE name IN iv_sel_names AND ( subc = 'I' OR subc = 'M' OR subc = 'S' ).
 
     IF sy-subrc = 0.
       select_add(
-        i_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
-        i_object    = /mbtools/if_command_field=>c_objects_abap-reps
-        i_sel_names = sel_names ).
+        iv_pgmid     = /mbtools/if_command_field=>c_pgmid-limu
+        iv_object    = /mbtools/if_command_field=>c_objects_abap-reps
+        iv_sel_names = lt_names ).
     ENDIF.
 
   ENDMETHOD.
@@ -759,26 +764,27 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD split.
 
     " Get command operator and operand (similar to Google search operators)
-    IF i_parameters CS c_split-operator.
-      SPLIT i_parameters AT c_split-operator INTO e_operator e_operand.
-      TRANSLATE e_operator TO UPPER CASE.
+    IF iv_parameters CS c_split-operator.
+      SPLIT iv_parameters AT c_split-operator INTO ev_operator ev_operand.
+      TRANSLATE ev_operator TO UPPER CASE.
     ELSE.
-      e_operand = i_parameters.
+      ev_operand = iv_parameters.
     ENDIF.
 
-    SHIFT e_operand LEFT DELETING LEADING space.
+    SHIFT ev_operand LEFT DELETING LEADING space.
 
   ENDMETHOD.
 
 
   METHOD split_message.
 
-    DATA len TYPE i.
+    DATA:
+      lv_len TYPE i.
 
-    len = strlen( i_message ) - 3.
-    IF len > 0.
-      e_msgid = i_message(len).
-      e_msgno = i_message+len(*).
+    lv_len = strlen( iv_message ) - 3.
+    IF lv_len > 0.
+      ev_msgid = iv_message(lv_len).
+      ev_msgno = iv_message+lv_len(*).
     ENDIF.
 
   ENDMETHOD.
@@ -787,53 +793,53 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   METHOD text.
 
     DATA:
-      mbt_badi TYPE REF TO cl_badi_base, "/mbtools/bc_cts_req_display,
-      mbt_data TYPE REF TO data,
-      object   TYPE /mbtools/if_definitions=>ty_object_ext,
-      e071     TYPE trwbo_s_e071,
-      e071_tab TYPE trwbo_t_e071.
+      lo_badi   TYPE REF TO cl_badi_base, "/mbtools/bc_cts_req_display,
+      lo_data   TYPE REF TO data,
+      ls_object TYPE /mbtools/if_definitions=>ty_object_ext,
+      ls_e071   TYPE trwbo_s_e071,
+      lt_e071   TYPE trwbo_t_e071.
 
     FIELD-SYMBOLS:
-      <tadir_key>   TYPE /mbtools/if_definitions=>ty_tadir_key,
-      <mbt_txt>     TYPE any,
-      <mbt_txt_tab> TYPE STANDARD TABLE.
+      <ls_tadir_key> TYPE /mbtools/if_definitions=>ty_tadir_key,
+      <ls_txt>       TYPE any,
+      <lt_txt>       TYPE STANDARD TABLE.
 
-    CLEAR object_list.
+    CLEAR mt_object_list.
 
     TRY.
         " Fill icon and description via MBT Transport Request Enhancement (if installed)
-        GET BADI mbt_badi TYPE (c_badi_class).
+        GET BADI lo_badi TYPE (c_badi_class).
 
-        IF mbt_badi IS BOUND.
-          LOOP AT tadir_list ASSIGNING <tadir_key>.
-            MOVE-CORRESPONDING <tadir_key> TO e071.
-            INSERT e071 INTO TABLE e071_tab.
+        IF lo_badi IS BOUND.
+          LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+            MOVE-CORRESPONDING <ls_tadir_key> TO ls_e071.
+            INSERT ls_e071 INTO TABLE lt_e071.
           ENDLOOP.
 
-          CREATE DATA mbt_data TYPE STANDARD TABLE OF (c_badi_type).
-          ASSIGN mbt_data->* TO <mbt_txt_tab>.
+          CREATE DATA lo_data TYPE STANDARD TABLE OF (c_badi_type).
+          ASSIGN lo_data->* TO <lt_txt>.
 
-          CALL BADI mbt_badi->(c_badi_method)
+          CALL BADI lo_badi->(c_badi_method)
             EXPORTING
-              it_e071     = e071_tab
+              it_e071     = lt_e071
             CHANGING
-              ct_e071_txt = <mbt_txt_tab>.
+              ct_e071_txt = <lt_txt>.
 
-          LOOP AT <mbt_txt_tab> ASSIGNING <mbt_txt>.
-            MOVE-CORRESPONDING <mbt_txt> TO object.
-            INSERT object INTO TABLE object_list.
+          LOOP AT <lt_txt> ASSIGNING <ls_txt>.
+            MOVE-CORRESPONDING <ls_txt> TO ls_object.
+            INSERT ls_object INTO TABLE mt_object_list.
           ENDLOOP.
         ENDIF.
 
       CATCH cx_root.
         " Fallback to program id, object and object name only
-        LOOP AT tadir_list ASSIGNING <tadir_key>.
-          MOVE-CORRESPONDING <tadir_key> TO object.
-          INSERT object INTO TABLE object_list.
+        LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+          MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
+          INSERT ls_object INTO TABLE mt_object_list.
         ENDLOOP.
     ENDTRY.
 
-    SORT object_list BY object obj_name.
+    SORT mt_object_list BY object obj_name.
 
   ENDMETHOD.
 ENDCLASS.

@@ -22,17 +22,17 @@ CLASS /mbtools/cl_command__curr DEFINITION
   PRIVATE SECTION.
 
     ALIASES command
-      FOR /mbtools/if_command~command .
+      FOR /mbtools/if_command~mo_command .
 
     METHODS format_result
       IMPORTING
-        !i_local_amount     TYPE tdcurr
-        !i_local_currency   TYPE tcurr_curr
-        !i_foreign_amount   TYPE tdcurr
-        !i_foreign_currency TYPE fcurr_curr
-        !i_exchange_rate    TYPE ukurs_curr
+        !iv_local_amount     TYPE tdcurr
+        !iv_local_currency   TYPE tcurr_curr
+        !iv_foreign_amount   TYPE tdcurr
+        !iv_foreign_currency TYPE fcurr_curr
+        !iv_exchange_rate    TYPE ukurs_curr
       RETURNING
-        VALUE(r_result)     TYPE string .
+        VALUE(rv_result)     TYPE string .
 ENDCLASS.
 
 
@@ -43,69 +43,69 @@ CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      object           TYPE string,
-      input_amount     TYPE c LENGTH 50,
-      type_of_rate     TYPE kurst_curr,
-      local_amount     TYPE tdcurr,
-      local_currency   TYPE tcurr_curr,
-      foreign_amount   TYPE tdcurr,
-      foreign_currency TYPE fcurr_curr,
-      exchange_rate    TYPE ukurs_curr,
-      icon             TYPE icon_d,
-      result           TYPE string.
+      lv_object           TYPE string,
+      lv_input_amount     TYPE c LENGTH 50,
+      lv_type_of_rate     TYPE kurst_curr,
+      lv_local_amount     TYPE tdcurr,
+      lv_local_currency   TYPE tcurr_curr,
+      lv_foreign_amount   TYPE tdcurr,
+      lv_foreign_currency TYPE fcurr_curr,
+      lv_exchange_rate    TYPE ukurs_curr,
+      lv_icon             TYPE icon_d,
+      lv_result           TYPE string.
 
-    icon = icon_message_error_small.
+    lv_icon = icon_message_error_small.
 
     " Split parameters into type of rate and object
     command->split(
       EXPORTING
-        i_parameters = i_parameters
+        iv_parameters = iv_parameters
       IMPORTING
-        e_operator   = type_of_rate
-        e_operand    = object ).
+        ev_operator   = lv_type_of_rate
+        ev_operand    = lv_object ).
 
-    IF type_of_rate IS INITIAL.
-      type_of_rate = 'M'.
+    IF lv_type_of_rate IS INITIAL.
+      lv_type_of_rate = 'M'.
     ENDIF.
 
     " 100 EUR in USD
-    SPLIT object AT space INTO input_amount local_currency sy-lisel foreign_currency.
+    SPLIT lv_object AT space INTO lv_input_amount lv_local_currency sy-lisel lv_foreign_currency.
 
     TRY.
-        local_amount = input_amount.
+        lv_local_amount = lv_input_amount.
       CATCH cx_root.
-        result =  'Amount not numeric'(001).
+        lv_result =  'Amount not numeric'(001).
     ENDTRY.
 
-    IF result IS INITIAL.
-      TRANSLATE local_currency TO UPPER CASE.
-      SELECT SINGLE waers FROM tcurc INTO local_currency
-        WHERE waers = local_currency.
+    IF lv_result IS INITIAL.
+      TRANSLATE lv_local_currency TO UPPER CASE.
+      SELECT SINGLE waers FROM tcurc INTO lv_local_currency
+        WHERE waers = lv_local_currency.
       IF sy-subrc <> 0.
-        result = 'Source currency not found'(002).
+        lv_result = 'Source currency not found'(002).
       ENDIF.
     ENDIF.
 
-    IF result IS INITIAL.
-      TRANSLATE foreign_currency TO UPPER CASE.
-      SELECT SINGLE waers FROM tcurc INTO foreign_currency
-        WHERE waers = foreign_currency.
+    IF lv_result IS INITIAL.
+      TRANSLATE lv_foreign_currency TO UPPER CASE.
+      SELECT SINGLE waers FROM tcurc INTO lv_foreign_currency
+        WHERE waers = lv_foreign_currency.
       IF sy-subrc <> 0.
-        result = 'Target currency not found'(003).
+        lv_result = 'Target currency not found'(003).
       ENDIF.
     ENDIF.
 
-    IF result IS INITIAL.
+    IF lv_result IS INITIAL.
       CALL FUNCTION 'CONVERT_TO_FOREIGN_CURRENCY'
         EXPORTING
           date             = sy-datum
-          type_of_rate     = type_of_rate
-          foreign_currency = foreign_currency
-          local_amount     = local_amount
-          local_currency   = local_currency
+          type_of_rate     = lv_type_of_rate
+          foreign_currency = lv_foreign_currency
+          local_amount     = lv_local_amount
+          local_currency   = lv_local_currency
         IMPORTING
-          exchange_rate    = exchange_rate
-          foreign_amount   = foreign_amount
+          exchange_rate    = lv_exchange_rate
+          foreign_amount   = lv_foreign_amount
         EXCEPTIONS
           no_rate_found    = 1
           overflow         = 2
@@ -115,26 +115,26 @@ CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
           OTHERS           = 6.
       IF sy-subrc = 0.
         " Format result nicely
-        result = format_result( i_local_amount     = local_amount
-                                i_local_currency   = local_currency
-                                i_foreign_amount   = foreign_amount
-                                i_foreign_currency = foreign_currency
-                                i_exchange_rate    = exchange_rate ).
+        lv_result = format_result( iv_local_amount     = lv_local_amount
+                                   iv_local_currency   = lv_local_currency
+                                   iv_foreign_amount   = lv_foreign_amount
+                                   iv_foreign_currency = lv_foreign_currency
+                                   iv_exchange_rate    = lv_exchange_rate ).
 
-        icon = icon_convert.
+        lv_icon = icon_convert.
       ELSEIF sy-subrc BETWEEN 1 AND 5.
         MESSAGE ID sy-msgid TYPE 'I' NUMBER sy-msgno
-           WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO result.
+           WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO lv_result.
       ELSE.
-        result = 'Error in CONVERT_TO_FOREIGN_CURRENCY' ##NO_TEXT.
+        lv_result = 'Error in CONVERT_TO_FOREIGN_CURRENCY' ##NO_TEXT.
       ENDIF.
     ENDIF.
 
-    r_exit = /mbtools/cl_command_field=>show_result( i_command    = i_command
-                                                     i_parameters = i_parameters
-                                                     i_icon       = icon
-                                                     i_result     = result
-                                                     i_via_popup  = i_via_popup ).
+    rv_exit = /mbtools/cl_command_field=>show_result( iv_command    = iv_command
+                                                      iv_parameters = iv_parameters
+                                                      iv_icon       = lv_icon
+                                                      iv_result     = lv_result
+                                                      iv_via_popup  = iv_via_popup ).
 
   ENDMETHOD.
 
@@ -149,23 +149,23 @@ CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
   METHOD format_result.
 
     DATA:
-      input_amount  TYPE c LENGTH 50,
-      output_amount TYPE c LENGTH 50,
-      output_rate   TYPE c LENGTH 50.
+      lv_input_amount  TYPE c LENGTH 50,
+      lv_output_amount TYPE c LENGTH 50,
+      lv_output_rate   TYPE c LENGTH 50.
 
-    WRITE i_local_amount TO input_amount CURRENCY i_local_currency LEFT-JUSTIFIED.
+    WRITE iv_local_amount TO lv_input_amount CURRENCY iv_local_currency LEFT-JUSTIFIED.
 
-    CONCATENATE input_amount i_local_currency INTO input_amount SEPARATED BY space.
+    CONCATENATE lv_input_amount iv_local_currency INTO lv_input_amount SEPARATED BY space.
 
-    WRITE i_foreign_amount TO output_amount CURRENCY i_foreign_currency LEFT-JUSTIFIED.
+    WRITE iv_foreign_amount TO lv_output_amount CURRENCY iv_foreign_currency LEFT-JUSTIFIED.
 
-    CONCATENATE output_amount i_foreign_currency INTO output_amount SEPARATED BY space.
+    CONCATENATE lv_output_amount iv_foreign_currency INTO lv_output_amount SEPARATED BY space.
 
-    WRITE i_exchange_rate TO output_rate LEFT-JUSTIFIED.
+    WRITE iv_exchange_rate TO lv_output_rate LEFT-JUSTIFIED.
 
-    CONCATENATE '(' 'at'(004) output_rate ')' INTO output_rate SEPARATED BY space.
+    CONCATENATE '(' 'at'(004) lv_output_rate ')' INTO lv_output_rate SEPARATED BY space.
 
-    CONCATENATE input_amount '=' output_amount output_rate INTO r_result SEPARATED BY space.
+    CONCATENATE lv_input_amount '=' lv_output_amount lv_output_rate INTO rv_result SEPARATED BY space.
 
   ENDMETHOD.
 ENDCLASS.

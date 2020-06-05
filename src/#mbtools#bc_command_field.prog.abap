@@ -13,16 +13,17 @@ FORM callback_eval
   CHANGING e_value    TYPE f
            e_subrc    TYPE any ##CALLED.
 
-  DATA: l_subrc TYPE sy-subrc.
+  DATA:
+    lv_subrc TYPE sy-subrc.
 
   CALL METHOD /mbtools/cl_utilities=>get_property
     EXPORTING
-      i_property    = i_variable
+      iv_property    = i_variable
     IMPORTING
-      e_value_float = e_value
-      e_subrc       = l_subrc.
+      ev_value_float = e_value
+      ev_subrc       = lv_subrc.
 
-  e_subrc = l_subrc.
+  e_subrc = lv_subrc.
 
 ENDFORM.                    "callback_eval
 

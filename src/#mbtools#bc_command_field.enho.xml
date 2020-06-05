@@ -37,13 +37,13 @@
       <item/>
       <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
-      <item>mbt_exit = /mbtools/cl_command_field=&gt;popup_command( i_input = mbt_command ).</item>
+      <item>mbt_exit = /mbtools/cl_command_field=&gt;popup_command( iv_input = mbt_command ).</item>
       <item/>
       <item>ELSEIF help_infos-call = &apos;H&apos;.</item>
       <item/>
       <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
-      <item>mbt_exit = /mbtools/cl_command_field=&gt;execute_command( i_input = mbt_command ).</item>
+      <item>mbt_exit = /mbtools/cl_command_field=&gt;execute_command( iv_input = mbt_command ).</item>
       <item/>
       <item>ENDIF.</item>
       <item/>

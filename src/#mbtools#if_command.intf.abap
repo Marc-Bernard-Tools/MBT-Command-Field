@@ -4,17 +4,16 @@
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-interface /MBTOOLS/IF_COMMAND
-  public .
+INTERFACE /mbtools/if_command
+  PUBLIC .
 
+  DATA mo_command TYPE REF TO /mbtools/cl_command .
 
-  data COMMAND type ref to /MBTOOLS/CL_COMMAND .
-
-  methods EXECUTE
-    importing
-      !I_COMMAND type STRING optional
-      !I_PARAMETERS type STRING
-      !I_VIA_POPUP type ABAP_BOOL optional
-    returning
-      value(R_EXIT) type ABAP_BOOL .
-endinterface.
+  METHODS execute
+    IMPORTING
+      !iv_command    TYPE string OPTIONAL
+      !iv_parameters TYPE string
+      !iv_via_popup  TYPE abap_bool OPTIONAL
+    RETURNING
+      VALUE(rv_exit) TYPE abap_bool .
+ENDINTERFACE.
