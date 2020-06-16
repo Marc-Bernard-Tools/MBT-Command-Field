@@ -16,24 +16,6 @@
    <TPOOL>
     <item>
      <ID>I</ID>
-     <KEY>000</KEY>
-     <ENTRY>Enhancement for SAP GUI Command Field</ENTRY>
-     <LENGTH>100</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Enter commands longer than 20 characters in popup</ENTRY>
-     <LENGTH>50</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>002</KEY>
-     <ENTRY>Navigation not available</ENTRY>
-     <LENGTH>50</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
      <KEY>040</KEY>
      <ENTRY>Command</ENTRY>
      <LENGTH>20</LENGTH>

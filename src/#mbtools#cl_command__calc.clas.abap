@@ -192,7 +192,7 @@ CLASS /MBTOOLS/CL_COMMAND__CALC IMPLEMENTATION.
 
     " Format result nicely like a calculator
     lv_p14 = abs( frac( iv_value ) ).
-    IF lv_p14 < '0.0000000001'.
+    IF lv_p14 < '0.0000000001' ##LITERAL.
       IF iv_value BETWEEN mv_min_p0 AND mv_max_p0. " no decimals
         lv_p0 = iv_value.
         WRITE lv_p0 TO lv_pretty_result.

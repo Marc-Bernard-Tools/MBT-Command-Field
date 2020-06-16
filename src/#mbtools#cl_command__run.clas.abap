@@ -24,6 +24,11 @@ CLASS /mbtools/cl_command__run DEFINITION
     ALIASES command
       FOR /mbtools/if_command~mo_command .
 
+    METHODS run_mbt
+      IMPORTING
+        !iv_obj_name   TYPE string
+      RETURNING
+        VALUE(rv_exit) TYPE abap_bool .
     METHODS run_listcube
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
@@ -85,6 +90,14 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
       EXPORTING
         iv_object   = lv_object
         iv_obj_name = lv_object_name ).
+
+    " Check if command is a Marc Bernard Tools
+    IF lv_object CS /mbtools/if_command_field=>c_objects_exec-tran.
+      rv_exit = run_mbt( iv_obj_name = lv_object_name ).
+      IF rv_exit = abap_true.
+        EXIT.
+      ENDIF.
+    ENDIF.
 
     " Filter table types to ones that work in SE16
     command->filter_tabl( ).
@@ -189,6 +202,26 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
         AND RETURN.
 
       rv_exit = abap_true.
+    ELSE.
+      MESSAGE i001(00) WITH 'No authorization for LISTCUBE'(001).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD run_mbt.
+
+    DATA:
+      ls_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key.
+
+    ls_tadir_key-pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr.
+    ls_tadir_key-object   = /mbtools/if_command_field=>c_objects_exec-tran.
+    ls_tadir_key-obj_name = '/MBTOOLS/' && iv_obj_name.
+
+    SELECT SINGLE tcode FROM tstc INTO ls_tadir_key-obj_name
+      WHERE tcode = ls_tadir_key-obj_name.
+    IF sy-subrc = 0.
+      rv_exit = run_tran( is_tadir_key = ls_tadir_key ).
     ENDIF.
 
   ENDMETHOD.
@@ -196,33 +229,9 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
   METHOD run_prog.
 
-    DATA:
-      ls_trdir_entry TYPE trdir.
-
     CHECK is_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-prog.
 
-    " Check if executable program exists
-    SELECT SINGLE * FROM trdir INTO ls_trdir_entry
-      WHERE name = is_tadir_key-obj_name AND subc = '1'.
-    IF sy-subrc = 0.
-      " Run program with authorization check
-      CALL FUNCTION 'SUBMIT_REPORT'
-        EXPORTING
-          report           = ls_trdir_entry-name
-          rdir             = ls_trdir_entry
-          ret_via_leave    = abap_true
-        EXCEPTIONS
-          just_via_variant = 1
-          no_submit_auth   = 2
-          OTHERS           = 3.
-      IF sy-subrc = 0.
-        rv_exit = abap_true.
-      ELSEIF sy-subrc = 2.
-        MESSAGE i149(00) WITH ls_trdir_entry-name.
-      ENDIF.
-    ELSE.
-      MESSAGE i541(00) WITH ls_trdir_entry-name.
-    ENDIF.
+    rv_exit = /mbtools/cl_sap=>run_program( is_tadir_key-obj_name ).
 
   ENDMETHOD.
 
@@ -237,7 +246,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
     " For tables we check if there's any data to avoid pointless SE16 selection
     SELECT SINGLE * FROM dd02l INTO ls_dd02l
-      WHERE tabname = is_tadir_key-obj_name AND as4local = 'A'.
+      WHERE tabname = is_tadir_key-obj_name AND as4local = 'A' ##WARN_OK.
     IF sy-subrc = 0.
       CALL FUNCTION 'DD_EXISTS_DATA'
         EXPORTING
@@ -283,33 +292,9 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
   METHOD run_tran.
 
-    DATA:
-      lv_tcode TYPE sy-tcode.
-
     CHECK is_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-tran.
 
-    " Check if transaction exists
-    SELECT SINGLE tcode FROM tstc INTO lv_tcode
-      WHERE tcode = is_tadir_key-obj_name.
-    IF sy-subrc = 0.
-      " Run transaction with authorization check
-      CALL FUNCTION 'AUTHORITY_CHECK_TCODE'
-        EXPORTING
-          tcode  = lv_tcode
-        EXCEPTIONS
-          ok     = 0
-          not_ok = 2
-          OTHERS = 3.
-      IF sy-subrc = 0.
-        CALL TRANSACTION lv_tcode.                       "#EC CI_CALLTA
-
-        rv_exit = abap_true.
-      ELSE.
-        MESSAGE i172(00) WITH lv_tcode.
-      ENDIF.
-    ELSE.
-      MESSAGE i031(00) WITH lv_tcode.
-    ENDIF.
+    rv_exit = /mbtools/cl_sap=>run_transaction( is_tadir_key-obj_name ).
 
   ENDMETHOD.
 ENDCLASS.

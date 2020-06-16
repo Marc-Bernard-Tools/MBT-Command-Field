@@ -7,6 +7,10 @@
 
 REPORT /mbtools/bc_command_field.
 
+START-OF-SELECTION.
+
+  MESSAGE s003(/mbtools/bc).
+
 * Callback routine for command field calculator
 FORM callback_eval
   USING    i_variable TYPE clike

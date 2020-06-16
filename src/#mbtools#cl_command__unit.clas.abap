@@ -45,7 +45,6 @@ CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      lv_object         TYPE string,
       lv_input_quantity TYPE c LENGTH 50,
       lv_input_unit     TYPE msehi,
       lv_output_unit    TYPE msehi,

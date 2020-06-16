@@ -19,6 +19,7 @@ CLASS /mbtools/cl_command_field DEFINITION
       c_version     TYPE string VALUE '1.0.0' ##NO_TEXT,
       c_title       TYPE string VALUE 'MBT Command Field' ##NO_TEXT,
       c_description TYPE string VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
+      c_bundle_id   TYPE i VALUE 1,
       c_download_id TYPE i VALUE 4409.
 
     METHODS constructor .
@@ -105,7 +106,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
     " If checked_input is longer than standard ok-code
     IF strlen( lv_checked_input ) > 18 AND iv_via_popup = abap_false.
-      MESSAGE s002 WITH 20 132.
+      MESSAGE s002 WITH 20.
       rv_exit = popup_command( lv_checked_input ).
       RETURN.
     ENDIF.
@@ -270,15 +271,15 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
-        no_value_check    = abap_true
-        popup_title       = c_title
+        no_value_check  = abap_true
+        popup_title     = c_title
       IMPORTING
-        returncode        = lv_answer
+        returncode      = lv_answer
       TABLES
-        lt_field          = lt_field
+        fields          = lt_field
       EXCEPTIONS
-        error_in_lt_field = 1
-        OTHERS            = 2.
+        error_in_fields = 1
+        OTHERS          = 2.
     IF sy-subrc <> 0.
       MESSAGE e000 WITH 'Error in POPUP_GET_VALUES' ##NO_TEXT.
       RETURN.
