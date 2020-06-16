@@ -12,7 +12,7 @@ CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC SECTION.
     TYPE-POOLS icon .
 
-    INTERFACES if_apack_manifest .
+    INTERFACES if_apack_manifest.
     INTERFACES /mbtools/if_manifest .
 
     CONSTANTS:
