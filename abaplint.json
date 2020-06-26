@@ -34,7 +34,11 @@
       ]
     },
     "abapdoc": false,
-    "allowed_object_naming": true,
+    "allowed_object_naming": {
+      "exclude": [
+        "#mbtools#"
+      ]
+    },
     "allowed_object_types": {
       "allowed": [
         "CLAS",
@@ -70,7 +74,7 @@
     "check_ddic": true,
     "check_include": {
       "exclude": [
-        "#mbtools#bc_screen_pbo_pai.prog.abap"
+        "#mbtools#"
       ]
     },
     "chain_mainly_declarations": true,
@@ -136,7 +140,7 @@
         "^flag$", "^sydatum$", "^syindex$", "^sytabix$", "^syuzeit$"]
     },
     "form_no_dash": true,
-    "form_tables_obsolete": false,
+    "form_tables_obsolete": true,
     "fully_type_constants": true,
     "functional_writing":  {
       "exclude": [
@@ -206,7 +210,7 @@
     },
     "main_file_contents": true,
     "max_one_statement": true,
-    "message_exists": false,
+    "message_exists": true,
     "method_length": {
       "exclude": [
         "#mbtools#"
@@ -217,7 +221,7 @@
     },
     "method_parameter_names": {
       "exclude": [
-        "#mbtools#cl_registry.clas.abap"
+        "#mbtools#"
       ],
       "ignoreExceptions": true,
       "importing": "^I._.*$",
@@ -234,7 +238,7 @@
       ],
       "depth": 5
     },
-    "newline_between_methods": false,
+    "newline_between_methods": true,
     "no_public_attributes": false,
     "object_naming": {
       "clas": "^/MBTOOLS/C(L|X)\\_",
