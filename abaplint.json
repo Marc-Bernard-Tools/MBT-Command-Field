@@ -16,12 +16,14 @@
     "version": "v702",
     "errorNamespace": "^(/MBTOOLS/|LT?CL_|LIF_)",
     "globalConstants": [
+      "apack_manifest",
       "icon_message_error_small",
       "icon_equal",
       "icon_convert",
       "icon_bw_convert_unit",
       "icon_greater",
-      "icon_space"
+      "icon_space",
+      "mbt_manifest"
     ],
     "globalMacros": []
   },
