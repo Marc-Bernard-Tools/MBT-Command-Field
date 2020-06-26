@@ -14,7 +14,7 @@ CLASS /mbtools/cl_command DEFINITION
 
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/BC_COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_alv TYPE slis_formname VALUE 'CALLBACK_ALV' ##NO_TEXT.
-    CONSTANTS c_tabix TYPE char30 VALUE '/MBTOOLS/BC_CF_TABIX' ##NO_TEXT.
+    CONSTANTS c_tabix TYPE fieldname VALUE '/MBTOOLS/BC_CF_TABIX' ##NO_TEXT.
 
     METHODS select
       IMPORTING
@@ -68,7 +68,7 @@ CLASS /mbtools/cl_command DEFINITION
         !iv_object      TYPE string
       RETURNING
         VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_object_range .
-    METHODS rangev_derive
+    METHODS range_derive
       IMPORTING
         !iv_input      TYPE csequence
         !iv_upper_case TYPE abap_bool DEFAULT abap_true
@@ -184,7 +184,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       LOOP AT lt_obj_name INTO lv_obj_name.
         APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-        rangev_derive(
+        range_derive(
           EXPORTING
             iv_input  = lv_obj_name
           IMPORTING
@@ -199,7 +199,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ELSE.
       APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-      rangev_derive(
+      range_derive(
         EXPORTING
           iv_input  = iv_obj_name
         IMPORTING
@@ -234,7 +234,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       LOOP AT lt_object INTO lv_object.
         APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-        rangev_derive(
+        range_derive(
           EXPORTING
             iv_input  = lv_object
           IMPORTING
@@ -246,7 +246,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ELSE.
       APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
-      rangev_derive(
+      range_derive(
         EXPORTING
           iv_input  = iv_object
         IMPORTING
@@ -342,7 +342,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD rangev_derive.
+  METHOD range_derive.
 
     CHECK NOT iv_input IS INITIAL.
 
@@ -363,14 +363,12 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
         ev_option = 'BT'.
         SPLIT iv_input AT c_split-low_high INTO ev_low ev_high.
       ENDIF.
+    ELSEIF iv_input(1) = '!'.
+      ev_option = 'NE'.
+      ev_low    = iv_input+1.
     ELSE.
-      IF iv_input(1) = '!'.
-        ev_option = 'NE'.
-        ev_low    = iv_input+1.
-      ELSE.
-        ev_option = 'EQ'.
-        ev_low    = iv_input.
-      ENDIF.
+      ev_option = 'EQ'.
+      ev_low    = iv_input.
     ENDIF.
 
     SHIFT ev_low  LEFT DELETING LEADING space.
@@ -556,7 +554,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       ELSE.
         rv_result = abap_true.
       ENDIF.
-    ELSEIF select_object( iv_object = iv_object iv_sel_objects = iv_sel_objects ) = abap_true.
+    ELSEIF select_object( iv_object      = iv_object
+                          iv_sel_objects = iv_sel_objects ) = abap_true.
       rv_result = abap_true.
     ELSE.
       rv_result = abap_false.
