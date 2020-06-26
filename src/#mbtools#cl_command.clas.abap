@@ -556,7 +556,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       ELSE.
         rv_result = abap_true.
       ENDIF.
-    ELSEIF select_object( iv_object = iv_object iv_sel_objects = iv_sel_objects ).
+    ELSEIF select_object( iv_object = iv_object iv_sel_objects = iv_sel_objects ) = abap_true.
       rv_result = abap_true.
     ELSE.
       rv_result = abap_false.

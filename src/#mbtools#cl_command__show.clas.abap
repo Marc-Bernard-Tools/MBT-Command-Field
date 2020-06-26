@@ -59,9 +59,8 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
 
     " Find objects
     command->select(
-      EXPORTING
-        iv_object   = lv_object
-        iv_obj_name = lv_object_name ).
+      iv_object   = lv_object
+      iv_obj_name = lv_object_name ).
 
     " Add object texts
     command->text( ).
@@ -132,10 +131,9 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
     ELSE.
 
       rv_exit = /mbtools/cl_sap=>show_object(
-        EXPORTING
-          iv_pgmid    = is_tadir_key-pgmid
-          iv_object   = is_tadir_key-object
-          iv_obj_name = is_tadir_key-obj_name ).
+        iv_pgmid    = is_tadir_key-pgmid
+        iv_object   = is_tadir_key-object
+        iv_obj_name = is_tadir_key-obj_name ).
 
     ENDIF.
 

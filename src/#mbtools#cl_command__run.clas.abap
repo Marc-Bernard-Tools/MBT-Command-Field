@@ -87,9 +87,8 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
     " Select objects
     command->select(
-      EXPORTING
-        iv_object   = lv_object
-        iv_obj_name = lv_object_name ).
+      iv_object   = lv_object
+      iv_obj_name = lv_object_name ).
 
     " Check if command is a Marc Bernard Tools
     IF lv_object CS /mbtools/if_command_field=>c_objects_exec-tran.

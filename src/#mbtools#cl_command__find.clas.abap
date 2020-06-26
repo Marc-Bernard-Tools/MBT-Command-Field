@@ -55,7 +55,7 @@ CLASS /MBTOOLS/CL_COMMAND__FIND IMPLEMENTATION.
     lv_url_domain = c_support_launchpad.
 
     " SAP Notes
-    IF /mbtools/cl_sap=>is_sap_note( lv_object ).
+    IF /mbtools/cl_sap=>is_sap_note( lv_object ) = abap_true.
       lv_application = 'NOTE'.
     ENDIF.
 
