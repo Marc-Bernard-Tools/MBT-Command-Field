@@ -501,7 +501,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     CHECK select_check( iv_object       = /mbtools/if_command_field=>c_objects_bw-all
                         iv_sel_objects  = iv_sel_objects
                         iv_sel_names    = iv_sel_names
-                        iv_if_requested = abap_true ).
+                        iv_if_requested = abap_true ) = abap_true.
 
     CREATE OBJECT lo_search.
 
@@ -585,7 +585,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-func
                         iv_sel_objects = iv_sel_objects
-                        iv_sel_names   = iv_sel_names ).
+                        iv_sel_names   = iv_sel_names ) = abap_true.
 
     SELECT funcname FROM tfdir INTO TABLE lt_names
       UP TO c_max_hits ROWS
@@ -623,7 +623,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_limu-mess
                         iv_sel_objects = iv_sel_objects
-                        iv_sel_names   = iv_sel_names ).
+                        iv_sel_names   = iv_sel_names ) = abap_true.
 
     " Convert <messagev_area><messagev_number> into separate selections
     LOOP AT iv_sel_names ASSIGNING <lr_names>.
@@ -698,7 +698,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     CHECK select_check( iv_object       = /mbtools/if_command_field=>c_objects_abap-meth
                         iv_sel_objects  = iv_sel_objects
                         iv_sel_names    = iv_sel_names
-                        iv_if_requested = abap_true ).
+                        iv_if_requested = abap_true ) = abap_true.
 
     SELECT cmpname FROM seocompodf INTO TABLE lt_names
       UP TO c_max_hits ROWS
@@ -745,7 +745,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-reps
                         iv_sel_objects = iv_sel_objects
-                        iv_sel_names   = iv_sel_names ).
+                        iv_sel_names   = iv_sel_names ) = abap_true.
 
     SELECT name FROM trdir INTO TABLE lt_names
       UP TO c_max_hits ROWS
