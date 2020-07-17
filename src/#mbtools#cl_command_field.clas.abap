@@ -12,17 +12,6 @@ CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC SECTION.
     TYPE-POOLS icon .
 
-    INTERFACES if_apack_manifest.
-    INTERFACES /mbtools/if_manifest .
-
-    CONSTANTS:
-      c_version     TYPE string VALUE '1.0.0' ##NO_TEXT,
-      c_title       TYPE string VALUE 'MBT Command Field' ##NO_TEXT,
-      c_description TYPE string VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
-      c_bundle_id   TYPE i VALUE 1,
-      c_download_id TYPE i VALUE 4409.
-
-    METHODS constructor .
     CLASS-METHODS execute_command
       IMPORTING
         !iv_input      TYPE csequence
@@ -49,17 +38,10 @@ CLASS /mbtools/cl_command_field DEFINITION
 
   PRIVATE SECTION.
 
-    ALIASES apack_manifest
-      FOR if_apack_manifest~descriptor .
-    ALIASES mbt_manifest
-      FOR /mbtools/if_manifest~descriptor .
-
     CONSTANTS c_break_chars TYPE string VALUE '=+*/; ' ##NO_TEXT.
     CONSTANTS c_max_len_msg TYPE i VALUE 50 ##NO_TEXT.
     CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
     CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
-
-    DATA: mo_tool TYPE REF TO /mbtools/cl_tools.
 
     CLASS-METHODS input_check
       IMPORTING
@@ -79,14 +61,6 @@ ENDCLASS.
 CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
 
-  METHOD constructor.
-    CREATE OBJECT mo_tool EXPORTING io_tool = me.
-
-    apack_manifest = mo_tool->apack_manifest.
-    mbt_manifest   = mo_tool->mbt_manifest.
-  ENDMETHOD.
-
-
   METHOD execute_command.
 
     DATA:
@@ -101,7 +75,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
     CHECK NOT lv_checked_input IS INITIAL.
 
     LOG-POINT ID /mbtools/bc
-      SUBKEY c_title
+      SUBKEY /mbtools/cl_tool_bc_cl=>c_tool-title
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
@@ -272,7 +246,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
         no_value_check  = abap_true
-        popup_title     = c_title
+        popup_title     = /mbtools/cl_tool_bc_cl=>c_tool-title
       IMPORTING
         returncode      = lv_answer
       TABLES
