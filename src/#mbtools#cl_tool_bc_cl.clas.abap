@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_TOOL_BC_CL
-* MBT Command Field
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_tool_bc_cl DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command Field
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
 

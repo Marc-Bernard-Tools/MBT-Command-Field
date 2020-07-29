@@ -1,11 +1,10 @@
+INTERFACE /mbtools/if_command_field
+  PUBLIC .
 ************************************************************************
-* /MBTOOLS/IF_COMMAND_OBJECT
 * MBT Command Field
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-INTERFACE /mbtools/if_command_field
-  PUBLIC .
 
   CONSTANTS:
     BEGIN OF c_commands,

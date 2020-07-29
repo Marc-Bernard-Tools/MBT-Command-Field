@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_COMMAND_FIELD
-* MBT Command Field
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command Field
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
     TYPE-POOLS icon .

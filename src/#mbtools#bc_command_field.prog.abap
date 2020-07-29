@@ -1,11 +1,9 @@
+REPORT /mbtools/bc_command_field.
 ************************************************************************
-* /MBTOOLS/BC_COMMAND_FIELD
 * MBT Command Field
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-
-REPORT /mbtools/bc_command_field.
 
 START-OF-SELECTION.
 

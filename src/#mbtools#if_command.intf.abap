@@ -1,11 +1,10 @@
+INTERFACE /mbtools/if_command
+  PUBLIC .
 ************************************************************************
-* /MBTOOLS/IF_COMMAND
 * MBT Command Interface
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-INTERFACE /mbtools/if_command
-  PUBLIC .
 
   DATA mo_command TYPE REF TO /mbtools/cl_command .
 

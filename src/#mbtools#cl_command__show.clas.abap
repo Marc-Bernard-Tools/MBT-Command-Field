@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_COMMAND_SHOW
-* MBT Command - Show
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_command__show DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command - Show
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
 

@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_COMMAND_FIND
-* MBT Command - Find
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_command__find DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command - Find
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
 

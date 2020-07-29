@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_COMMAND_OBJECT
-* MBT Command - Object
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_command DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command - Object
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
     TYPE-POOLS icon .

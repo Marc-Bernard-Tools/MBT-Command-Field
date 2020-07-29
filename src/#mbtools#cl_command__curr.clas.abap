@@ -1,13 +1,12 @@
-************************************************************************
-* /MBTOOLS/CL_COMMAND_CURR
-* MBT Command - Currency Conversion
-*
-* (c) MBT 2020 https://marcbernardtools.com/
-************************************************************************
 CLASS /mbtools/cl_command__curr DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+************************************************************************
+* MBT Command - Currency Conversion
+*
+* (c) MBT 2020 https://marcbernardtools.com/
+************************************************************************
 
   PUBLIC SECTION.
 
