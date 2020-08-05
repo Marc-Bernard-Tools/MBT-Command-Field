@@ -29,7 +29,6 @@ CLASS /mbtools/cl_tool_bc_cl DEFINITION
     METHODS constructor .
 
   PROTECTED SECTION.
-
   PRIVATE SECTION.
 
     DATA mo_tool TYPE REF TO /mbtools/cl_tools .
