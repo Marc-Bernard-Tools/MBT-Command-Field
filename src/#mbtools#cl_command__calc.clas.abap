@@ -30,9 +30,8 @@ CLASS /mbtools/cl_command__calc DEFINITION
     TYPES:
       ty_p14 TYPE p LENGTH 16 DECIMALS 14 .
 
-    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/BC_COMMAND_FIELD' ##NO_TEXT.
+    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_eval TYPE slis_formname VALUE 'CALLBACK_EVAL' ##NO_TEXT.
-
     CLASS-DATA mv_max_p0 TYPE ty_p0 .
     CLASS-DATA mv_min_p0 TYPE ty_p0 .
     CLASS-DATA mv_max_p7 TYPE ty_p7 .

@@ -24,11 +24,15 @@ CLASS /mbtools/cl_tool_bc_cl DEFINITION
         download_id TYPE i VALUE 4409,
         description TYPE string
         VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
+        has_launch  TYPE abap_bool VALUE abap_true,
       END OF c_tool.
 
     METHODS constructor .
 
+    METHODS launch.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 
     DATA mo_tool TYPE REF TO /mbtools/cl_tools .
@@ -43,5 +47,10 @@ CLASS /MBTOOLS/CL_TOOL_BC_CL IMPLEMENTATION.
   METHOD constructor.
     CREATE OBJECT mo_tool EXPORTING io_tool = me.
     mbt_manifest   = mo_tool->mbt_manifest.
+  ENDMETHOD.
+
+
+  METHOD launch.
+    /mbtools/cl_sap=>run_program( '/MBTOOLS/COMMAND_FIELD_TESTER' ).
   ENDMETHOD.
 ENDCLASS.

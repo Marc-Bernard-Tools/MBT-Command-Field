@@ -11,7 +11,7 @@ CLASS /mbtools/cl_command DEFINITION
   PUBLIC SECTION.
     TYPE-POOLS icon .
 
-    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/BC_COMMAND_FIELD' ##NO_TEXT.
+    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_alv TYPE slis_formname VALUE 'CALLBACK_ALV' ##NO_TEXT.
     CONSTANTS c_tabix TYPE fieldname VALUE '/MBTOOLS/BC_CF_TABIX' ##NO_TEXT.
 

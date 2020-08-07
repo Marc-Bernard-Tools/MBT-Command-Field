@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>/MBTOOLS/BC_COMMAND_FIELD</NAME>
+    <NAME>/MBTOOLS/COMMAND_FIELD_TESTER</NAME>
     <SUBC>1</SUBC>
     <APPL>S</APPL>
     <RSTAT>K</RSTAT>
@@ -11,19 +11,29 @@
     <FIXPT>X</FIXPT>
     <UCCHECK>X</UCCHECK>
    </PROGDIR>
-   <CUA>
-    <TIT>
-     <RSMPE_TITT>
-      <CODE>OBJECT_SELECTION</CODE>
-      <TEXT>MBT Command Field - Object Selection</TEXT>
-     </RSMPE_TITT>
-    </TIT>
-   </CUA>
    <TPOOL>
     <item>
      <ID>R</ID>
      <ENTRY>MBT Command Field</ENTRY>
      <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_CMD</KEY>
+     <ENTRY>Command</ENTRY>
+     <LENGTH>15</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_EXEC</KEY>
+     <ENTRY>Execute Directly</ENTRY>
+     <LENGTH>24</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_POPUP</KEY>
+     <ENTRY>Execute via Popup</ENTRY>
+     <LENGTH>25</LENGTH>
     </item>
    </TPOOL>
   </asx:values>

@@ -1,4 +1,4 @@
-REPORT /mbtools/bc_command_field.
+REPORT /mbtools/command_field.
 ************************************************************************
 * MBT Command Field
 *
