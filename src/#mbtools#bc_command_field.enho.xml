@@ -25,79 +25,67 @@
       <item>* (c) MBT 2020 https://marcbernardtools.com/</item>
       <item>************************************************************************</item>
       <item/>
-      <item>DATA:</item>
-      <item>mbt_exit    TYPE abap_bool,</item>
-      <item>mbt_command TYPE string.</item>
+      <item>  DATA:</item>
+      <item>    mbt_exit    TYPE abap_bool,</item>
+      <item>    mbt_command TYPE string.</item>
       <item/>
-      <item>IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_tool_bc_cl=&gt;c_tool-title ) = abap_true.</item>
+      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_tool_bc_cl=&gt;c_tool-title ) = abap_true.</item>
       <item/>
-      <item>mbt_command = help_infos-menufunct.</item>
+      <item>    mbt_command = help_infos-menufunct.</item>
       <item/>
-      <item>IF help_infos-call = &apos;D&apos; AND help_infos-docuid = &apos;OK&apos;.</item>
+      <item>    IF help_infos-call = &apos;D&apos; AND help_infos-docuid = &apos;OK&apos;.</item>
       <item/>
-      <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
+      <item>      SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
-      <item>mbt_exit = /mbtools/cl_command_field=&gt;popup_command( iv_input = mbt_command ).</item>
+      <item>      mbt_exit = /mbtools/cl_command_field=&gt;popup_command( iv_input = mbt_command ).</item>
       <item/>
-      <item>ELSEIF help_infos-call = &apos;H&apos;.</item>
+      <item>    ELSEIF help_infos-call = &apos;H&apos;.</item>
       <item/>
-      <item>SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
+      <item>      SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
       <item/>
-      <item>mbt_exit = /mbtools/cl_command_field=&gt;execute_command( iv_input = mbt_command ).</item>
+      <item>      mbt_exit = /mbtools/cl_command_field=&gt;execute_command( iv_input = mbt_command ).</item>
       <item/>
-      <item>ENDIF.</item>
+      <item>    ENDIF.</item>
       <item/>
-      <item>IF mbt_exit = abap_true.</item>
-      <item>RETURN.</item>
-      <item>ENDIF.</item>
+      <item>    IF mbt_exit = abap_true.</item>
+      <item>      RETURN.</item>
+      <item>    ENDIF.</item>
       <item/>
-      <item>ENDIF.</item>
+      <item>  ENDIF.</item>
       <item/>
      </SOURCE>
     </ENH_HOOK_IMPL>
    </ENHANCEMENTS>
-   <SPACES>
+   <SOTR>
     <item>
-     <FULL_NAME>\FU:HELP_START\SE:BEGIN\EI</FULL_NAME>
-     <SPACES>
-      <item>0</item>
-      <item>0</item>
-      <item>0</item>
-      <item>0</item>
-      <item>0</item>
-      <item>0</item>
-      <item>0</item>
-      <item>2</item>
-      <item>4</item>
-      <item>4</item>
-      <item>0</item>
-      <item>2</item>
-      <item>0</item>
-      <item>4</item>
-      <item>0</item>
-      <item>4</item>
-      <item>0</item>
-      <item>6</item>
-      <item>0</item>
-      <item>6</item>
-      <item>0</item>
-      <item>4</item>
-      <item>0</item>
-      <item>6</item>
-      <item>0</item>
-      <item>6</item>
-      <item>0</item>
-      <item>4</item>
-      <item>0</item>
-      <item>4</item>
-      <item>6</item>
-      <item>4</item>
-      <item>0</item>
-      <item>2</item>
-      <item>0</item>
-     </SPACES>
+     <HEADER>
+      <CONCEPT>000D3A8FA0651EEA97E245FDDFEC682A</CONCEPT>
+      <CREA_LAN>E</CREA_LAN>
+      <TRALA_TYPE>1</TRALA_TYPE>
+      <OBJID_VEC>AAI=</OBJID_VEC>
+     </HEADER>
+     <ENTRIES>
+      <SOTR_TEXT>
+       <CONCEPT>000D3A8FA0651EEA97E245FDDFEC682A</CONCEPT>
+       <LANGU>E</LANGU>
+       <LFD_NUM>0001</LFD_NUM>
+       <FLAG_CNTXT>X</FLAG_CNTXT>
+       <STATUS>R</STATUS>
+       <LENGTH>027</LENGTH>
+       <TEXT>MBT Command Field</TEXT>
+      </SOTR_TEXT>
+     </ENTRIES>
     </item>
-   </SPACES>
+   </SOTR>
+   <SOTR_USE>
+    <SOTR_USE>
+     <PGMID>R3TR</PGMID>
+     <OBJECT>ENHO</OBJECT>
+     <OBJ_NAME>/MBTOOLS/BC_COMMAND_FIELD</OBJ_NAME>
+     <CONCEPT>000D3A8FA0651EEA97E245FDDFEC682A</CONCEPT>
+     <LFD_NUM>0001</LFD_NUM>
+    </SOTR_USE>
+   </SOTR_USE>
   </asx:values>
  </asx:abap>
 </abapGit>
