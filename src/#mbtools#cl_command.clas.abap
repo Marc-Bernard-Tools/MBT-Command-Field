@@ -276,6 +276,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ev_count = lines( mt_object_list ).
 
     IF ev_count = 0.
+      MESSAGE 'No object found'(001) TYPE 'S'.
       " Nothing...
     ELSEIF ev_count = 1.
       " Exactly one object...
@@ -385,7 +386,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     DATA:
       lr_objects TYPE /mbtools/if_definitions=>ty_object_range,
-      lr_names   TYPE /mbtools/if_definitions=>ty_name_range.
+      lr_names   TYPE /mbtools/if_definitions=>ty_name_range,
+      lv_msg     TYPE string.
 
     " Object type selection
     lr_objects = object_split( iv_object ).
@@ -448,7 +450,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     " Too many hits
     IF lines( mt_tadir_list ) > c_max_hits.
       DELETE mt_tadir_list FROM c_max_hits.
-      MESSAGE |'Selection limited to { c_max_hits } objects'| TYPE 'S'.
+      lv_msg = |'Selection limited to { c_max_hits } objects'|.
+      MESSAGE lv_msg TYPE 'S'.
     ENDIF.
 
   ENDMETHOD.
@@ -804,38 +807,47 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CLEAR mt_object_list.
 
-    TRY.
-        " Fill icon and description via MBT Transport Request Enhancement (if installed)
-        GET BADI lo_badi TYPE (c_badi_class).
+    " Check if MBT Transport Request is installed and active
+    IF /mbtools/cl_switches=>is_active( 'MBT Transfer Request' ) = abap_false.
+      " Default is program id, object and object name only
+      LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+        MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
+        INSERT ls_object INTO TABLE mt_object_list.
+      ENDLOOP.
+    ELSE.
+      TRY.
+          " Fill icon and description via MBT Transport Request Enhancement (if installed)
+          GET BADI lo_badi TYPE (c_badi_class).
 
-        IF lo_badi IS BOUND.
+          IF lo_badi IS BOUND.
+            LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+              MOVE-CORRESPONDING <ls_tadir_key> TO ls_e071.
+              INSERT ls_e071 INTO TABLE lt_e071.
+            ENDLOOP.
+
+            CREATE DATA lo_data TYPE STANDARD TABLE OF (c_badi_type).
+            ASSIGN lo_data->* TO <lt_txt>.
+
+            CALL BADI lo_badi->(c_badi_method)
+              EXPORTING
+                it_e071     = lt_e071
+              CHANGING
+                ct_e071_txt = <lt_txt>.
+
+            LOOP AT <lt_txt> ASSIGNING <ls_txt>.
+              MOVE-CORRESPONDING <ls_txt> TO ls_object.
+              INSERT ls_object INTO TABLE mt_object_list.
+            ENDLOOP.
+          ENDIF.
+
+        CATCH cx_root.
+          " Fallback to program id, object and object name only
           LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
-            MOVE-CORRESPONDING <ls_tadir_key> TO ls_e071.
-            INSERT ls_e071 INTO TABLE lt_e071.
-          ENDLOOP.
-
-          CREATE DATA lo_data TYPE STANDARD TABLE OF (c_badi_type).
-          ASSIGN lo_data->* TO <lt_txt>.
-
-          CALL BADI lo_badi->(c_badi_method)
-            EXPORTING
-              it_e071     = lt_e071
-            CHANGING
-              ct_e071_txt = <lt_txt>.
-
-          LOOP AT <lt_txt> ASSIGNING <ls_txt>.
-            MOVE-CORRESPONDING <ls_txt> TO ls_object.
+            MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
             INSERT ls_object INTO TABLE mt_object_list.
           ENDLOOP.
-        ENDIF.
-
-      CATCH cx_root.
-        " Fallback to program id, object and object name only
-        LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
-          MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
-          INSERT ls_object INTO TABLE mt_object_list.
-        ENDLOOP.
-    ENDTRY.
+      ENDTRY.
+    ENDIF.
 
     SORT mt_object_list BY object obj_name.
 

@@ -78,7 +78,7 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
-    IF strlen( lv_checked_input ) > 18 AND iv_via_popup = abap_false.
+    IF strlen( lv_checked_input ) > 19 AND iv_via_popup = abap_false.
       MESSAGE s002 WITH 20.
       rv_exit = popup_command( lv_checked_input ).
       RETURN.

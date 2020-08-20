@@ -13,9 +13,27 @@
    </PROGDIR>
    <TPOOL>
     <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Command</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>200</KEY>
+     <ENTRY>Enter a command in the field below (w/o leading &quot;?&quot;) and</ENTRY>
+     <LENGTH>80</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>201</KEY>
+     <ENTRY>select how you want to simulate the execution</ENTRY>
+     <LENGTH>80</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
-     <ENTRY>MBT Command Field</ENTRY>
-     <LENGTH>17</LENGTH>
+     <ENTRY>MBT Command Field - Tester</ENTRY>
+     <LENGTH>26</LENGTH>
     </item>
     <item>
      <ID>S</ID>

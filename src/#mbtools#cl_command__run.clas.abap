@@ -201,7 +201,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
       rv_exit = abap_true.
     ELSE.
-      MESSAGE i001(00) WITH 'No authorization for LISTCUBE'(001).
+      MESSAGE 'No authorization for LISTCUBE'(001) TYPE 'I'.
     ENDIF.
 
   ENDMETHOD.

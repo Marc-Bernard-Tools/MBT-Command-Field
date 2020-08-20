@@ -1,6 +1,6 @@
 REPORT /mbtools/command_field_tester.
 ************************************************************************
-* MBT Command Field Tester
+* MBT Command Field - Tester
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
@@ -60,7 +60,7 @@ SELECTION-SCREEN:
     COMMENT /3(77) scr_t001,
     SKIP,
   END OF BLOCK scr_header,
-  BEGIN OF TABBED BLOCK scr_tab FOR 23 LINES,
+  BEGIN OF TABBED BLOCK scr_tab FOR 20 LINES,
     TAB (40) scr_tab2 USER-COMMAND scr_push2 DEFAULT SCREEN 0200,
     TAB (40) scr_tab9 USER-COMMAND scr_push9 DEFAULT SCREEN 0900,
   END OF BLOCK scr_tab.
@@ -72,7 +72,6 @@ CONSTANTS:
 
 DATA:
   gv_exit   TYPE abap_bool,
-  go_tool   TYPE REF TO /mbtools/cl_tools,
   go_screen TYPE REF TO /mbtools/cl_screen.
 
 *-----------------------------------------------------------------------
@@ -84,7 +83,6 @@ INITIALIZATION.
     RETURN.
   ENDIF.
 
-  go_tool   = /mbtools/cl_tools=>factory( c_title ).
   go_screen = /mbtools/cl_screen=>factory( c_title ).
 
   go_screen->init(

@@ -12,26 +12,6 @@
     <UNICODE>X</UNICODE>
     <RSTAT>K</RSTAT>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>040</KEY>
-     <ENTRY>Command</ENTRY>
-     <LENGTH>20</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>041</KEY>
-     <ENTRY>Result</ENTRY>
-     <LENGTH>20</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>042</KEY>
-     <ENTRY>Error</ENTRY>
-     <LENGTH>20</LENGTH>
-    </item>
-   </TPOOL>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
      <CLSNAME>/MBTOOLS/CL_TOOL_BC_CL</CLSNAME>

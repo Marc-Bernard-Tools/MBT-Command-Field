@@ -23,7 +23,7 @@ CLASS /mbtools/cl_command__find DEFINITION
     ALIASES command
       FOR /mbtools/if_command~mo_command .
 
-    CONSTANTS c_support_launchpad TYPE string VALUE 'https://launchpad.support.sap.com/' ##NO_TEXT.
+    CONSTANTS c_support_launchpad TYPE string VALUE 'https://launchpad.support.sap.com/#' ##NO_TEXT.
     CONSTANTS c_support_apps TYPE string VALUE 'https://apps.support.sap.com/' ##NO_TEXT.
 ENDCLASS.
 
@@ -102,7 +102,7 @@ CLASS /MBTOOLS/CL_COMMAND__FIND IMPLEMENTATION.
         " Product Availability Matrix
         lv_url_domain = c_support_apps.
         lv_url_path = '/sap/support/pam/pam.html' ##NO_TEXT.
-        lv_url_path = lv_url_path && '?ts=1&o=most_viewed%7Cdesc&st=l&rpp=20&page=1&s=' ##NO_TEXT.
+        lv_url_path = lv_url_path && '#ts=1&o=most_viewed%7Cdesc&st=l&rpp=20&page=1&s=' ##NO_TEXT.
       WHEN OTHERS.
         " Default Cross-Search
         lv_url_path = '/solutions/notesv2/?q=' ##NO_TEXT.
@@ -110,7 +110,7 @@ CLASS /MBTOOLS/CL_COMMAND__FIND IMPLEMENTATION.
 
     lv_url_term = cl_http_utility=>escape_url( unescaped = lv_object ).
 
-    CONCATENATE lv_url_domain '#' lv_url_path lv_url_term INTO lv_url.
+    CONCATENATE lv_url_domain lv_url_path lv_url_term INTO lv_url.
 
     /mbtools/cl_utilities=>call_browser( lv_url ).
 
