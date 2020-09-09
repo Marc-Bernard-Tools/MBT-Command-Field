@@ -125,6 +125,11 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
         CREATE OBJECT lo_command TYPE /mbtools/cl_command__unit.
 
+      WHEN /mbtools/if_command_field=>c_commands-trace OR
+           /mbtools/if_command_field=>c_command_shortcuts-trace.
+
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__trace.
+
       WHEN OTHERS. " Invalid Command
         IF iv_via_popup = abap_true.
           MESSAGE w001.
