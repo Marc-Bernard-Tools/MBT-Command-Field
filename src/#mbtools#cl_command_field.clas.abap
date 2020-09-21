@@ -62,6 +62,8 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
 
   METHOD execute_command.
 
+    CONSTANTS: lc_max_len TYPE i VALUE 20.
+
     DATA:
       lv_checked_input TYPE string,
       lv_command       TYPE string,
@@ -78,8 +80,8 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
       FIELDS sy-datum sy-uzeit sy-uname.
 
     " If checked_input is longer than standard ok-code
-    IF strlen( lv_checked_input ) > 19 AND iv_via_popup = abap_false.
-      MESSAGE s002 WITH 20.
+    IF strlen( lv_checked_input ) > ( lc_max_len - 1 ) AND iv_via_popup = abap_false.
+      MESSAGE s002 WITH lc_max_len.
       rv_exit = popup_command( lv_checked_input ).
       RETURN.
     ENDIF.

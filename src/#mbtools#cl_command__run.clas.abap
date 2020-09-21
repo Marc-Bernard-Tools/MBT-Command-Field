@@ -93,7 +93,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
     IF lv_object CS /mbtools/if_command_field=>c_objects_exec-tran.
       rv_exit = run_mbt( iv_obj_name = lv_object_name ).
       IF rv_exit = abap_true.
-        EXIT.
+        RETURN.
       ENDIF.
     ENDIF.
 
@@ -172,7 +172,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
     ENDIF.
 
     " Authorization check on S_DEVELOP happens in function RS_TESTFRAME_CALL
-    SUBMIT rs_testframe_call WITH funcn = lv_funcname AND RETURN.
+    SUBMIT rs_testframe_call WITH funcn = lv_funcname AND RETURN. "#EC CI_SUBMIT
 
     rv_exit = abap_true.
 
@@ -197,7 +197,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
         WITH p_dbagg = abap_true
         WITH p_dta   = is_tadir_key-obj_name
         WITH p_tlogo = is_tadir_key-object
-        AND RETURN.
+        AND RETURN.                                      "#EC CI_SUBMIT
 
       rv_exit = abap_true.
     ELSE.
@@ -236,14 +236,21 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
   METHOD run_tabl.
 
+    TYPES:
+      BEGIN OF ty_dd02l,
+        tabname  TYPE dd02l-tabname,
+        tabclass TYPE dd02l-tabclass,
+        sqltab   TYPE dd02l-sqltab,
+      END OF ty_dd02l.
+
     DATA:
-      ls_dd02l TYPE dd02l,
+      ls_dd02l TYPE ty_dd02l,
       lv_subrc TYPE sy-subrc.
 
     CHECK /mbtools/if_command_field=>c_objects_db CS is_tadir_key-object.
 
     " For tables we check if there's any data to avoid pointless SE16 selection
-    SELECT SINGLE * FROM dd02l INTO ls_dd02l
+    SELECT SINGLE tabname tabclass sqltab FROM dd02l INTO ls_dd02l
       WHERE tabname = is_tadir_key-obj_name AND as4local = 'A' ##WARN_OK.
     IF sy-subrc = 0.
       CALL FUNCTION 'DD_EXISTS_DATA'

@@ -2,12 +2,12 @@ CLASS /mbtools/cl_command DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+
 ************************************************************************
 * MBT Command - Object
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-
   PUBLIC SECTION.
     TYPE-POOLS icon .
 
@@ -17,8 +17,8 @@ CLASS /mbtools/cl_command DEFINITION
 
     METHODS select
       IMPORTING
-        VALUE(iv_object)   TYPE string OPTIONAL
-        VALUE(iv_obj_name) TYPE string .
+        !iv_object   TYPE string OPTIONAL
+        !iv_obj_name TYPE string .
     METHODS filter_tabl .
     METHODS text .
     METHODS pick
@@ -273,6 +273,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     FIELD-SYMBOLS:
       <ls_fieldcat> TYPE slis_fieldcat_alv.
 
+    CLEAR: es_tadir_key, ev_count.
+
     ev_count = lines( mt_object_list ).
 
     IF ev_count = 0.
@@ -344,6 +346,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD range_derive.
 
+    CLEAR: ev_sign, ev_option, ev_low, ev_high.
+
     CHECK NOT iv_input IS INITIAL.
 
     ev_sign = 'I'.
@@ -405,7 +409,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       WHERE pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
         AND object   IN lr_objects
         AND obj_name IN lr_names
-        AND delflag  = abap_false.
+        AND delflag  = abap_false.                      "#EC CI_GENBUFF
 
     " Select reports (includes)
     IF lines( mt_tadir_list ) < c_max_hits.
@@ -590,7 +594,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     SELECT funcname FROM tfdir INTO TABLE lt_names
       UP TO c_max_hits ROWS
-      WHERE funcname IN iv_sel_names.
+      WHERE funcname IN iv_sel_names.                   "#EC CI_GENBUFF
 
     IF sy-subrc = 0.
       select_add(
@@ -674,7 +678,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     SELECT arbgb msgnr FROM t100 INTO TABLE lt_mess
       UP TO c_max_hits ROWS
-      WHERE arbgb IN lr_msgid AND msgnr IN lr_msgno AND sprsl = sy-langu.
+      WHERE arbgb IN lr_msgid AND msgnr IN lr_msgno AND sprsl = sy-langu. "#EC CI_GENBUFF
 
     IF sy-subrc = 0.
       LOOP AT lt_mess INTO ls_mess.
@@ -703,7 +707,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     SELECT cmpname FROM seocompodf INTO TABLE lt_names
       UP TO c_max_hits ROWS
-      WHERE cmpname IN iv_sel_names.
+      WHERE cmpname IN iv_sel_names.                    "#EC CI_NOFIRST
 
     IF sy-subrc = 0.
       select_add(
@@ -764,6 +768,8 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD split.
 
+    CLEAR: ev_operator, ev_operand.
+
     " Get command operator and operand (similar to Google search operators)
     IF iv_parameters CS c_split-operator.
       SPLIT iv_parameters AT c_split-operator INTO ev_operator ev_operand.
@@ -779,8 +785,9 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
   METHOD split_message.
 
-    DATA:
-      lv_len TYPE i.
+    DATA lv_len TYPE i.
+
+    CLEAR: ev_msgid, ev_msgno.
 
     lv_len = strlen( iv_message ) - 3.
     IF lv_len > 0.
