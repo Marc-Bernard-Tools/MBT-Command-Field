@@ -2,12 +2,12 @@ CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
+
 ************************************************************************
 * MBT Command Field
 *
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
-
   PUBLIC SECTION.
     TYPE-POOLS icon .
 
@@ -33,6 +33,12 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_via_popup  TYPE abap_bool
       RETURNING
         VALUE(rv_exit) TYPE abap_bool .
+    CLASS-METHODS set_infos
+      IMPORTING
+        !is_infos TYPE help_info .
+    CLASS-METHODS get_infos
+      RETURNING
+        VALUE(rs_infos) TYPE help_info .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -41,6 +47,7 @@ CLASS /mbtools/cl_command_field DEFINITION
     CONSTANTS c_max_len_msg TYPE i VALUE 50 ##NO_TEXT.
     CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
     CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
+    CLASS-DATA gs_infos TYPE help_info .
 
     CLASS-METHODS input_check
       IMPORTING
@@ -57,7 +64,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
+CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
 
   METHOD execute_command.
@@ -146,6 +153,11 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
                                    iv_parameters = lv_parameters
                                    iv_via_popup  = iv_via_popup ).
 
+  ENDMETHOD.
+
+
+  METHOD get_infos.
+    rs_infos = gs_infos.
   ENDMETHOD.
 
 
@@ -273,6 +285,11 @@ CLASS /MBTOOLS/CL_COMMAND_FIELD IMPLEMENTATION.
     execute_command( iv_input     = <lv_field>-value
                      iv_via_popup = abap_true ).
 
+  ENDMETHOD.
+
+
+  METHOD set_infos.
+    gs_infos = is_infos.
   ENDMETHOD.
 
 
