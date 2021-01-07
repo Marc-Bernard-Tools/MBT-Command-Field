@@ -24,6 +24,17 @@
     <DESCRIPTION>The World&apos;s First Enhancement for the SAP GUI Command Field</DESCRIPTION>
     <GIT_URL>https://github.com/mbtools/MBT_Command_Field</GIT_URL>
     <TARGET_PACKAGE>/MBTOOLS/BC_CL</TARGET_PACKAGE>
+    <DEPENDENCIES>
+     <item>
+      <NAME>mbtools/mbt-base</NAME>
+      <VERSION>1.0.0</VERSION>
+      <SEM_VERSION>
+       <MAJOR>1</MAJOR>
+      </SEM_VERSION>
+      <GIT_URL>https://github.com/mbtools/Marc_Bernard_Tools</GIT_URL>
+      <TARGET_PACKAGE>/MBTOOLS/BC</TARGET_PACKAGE>
+     </item>
+    </DEPENDENCIES>
    </PACKAGING>
   </DATA>
  </asx:values>
