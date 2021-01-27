@@ -29,7 +29,7 @@
       <item>    mbt_exit    TYPE abap_bool,</item>
       <item>    mbt_command TYPE string.</item>
       <item/>
-      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_tool_bc_cl=&gt;c_tool-title ) = abap_true.</item>
+      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_switches=&gt;c_tool-mbt_command_field ) = abap_true.</item>
       <item/>
       <item>    mbt_command = help_infos-menufunct.</item>
       <item/>
@@ -73,7 +73,7 @@
       <item>    mbt_dynpselect   TYPE TABLE OF dselc,</item>
       <item>    mbt_dynpvaluetab TYPE TABLE OF dval.</item>
       <item/>
-      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_tool_bc_cl=&gt;c_tool-title ) = abap_true.</item>
+      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_switches=&gt;c_tool-mbt_command_field ) = abap_true.</item>
       <item/>
       <item>    mbt_infos = /mbtools/cl_command_field=&gt;get_infos( ).</item>
       <item/>

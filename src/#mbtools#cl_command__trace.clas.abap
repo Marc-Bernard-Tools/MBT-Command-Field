@@ -37,7 +37,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__TRACE IMPLEMENTATION.
+CLASS /mbtools/cl_command__trace IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -47,7 +47,7 @@ CLASS /MBTOOLS/CL_COMMAND__TRACE IMPLEMENTATION.
       lv_operand  TYPE string,
       lv_switch   TYPE abap_bool.
 
-    " Split parameters into object and object name
+    " Split parameters into operator and operand
     command->split(
       EXPORTING
         iv_parameters = iv_parameters

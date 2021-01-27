@@ -104,6 +104,11 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     CHECK NOT lv_command IS INITIAL AND NOT lv_parameters IS INITIAL.
 
     CASE lv_command.
+      WHEN /mbtools/if_command_field=>c_commands-mbt OR
+           /mbtools/if_command_field=>c_command_shortcuts-mbt.
+
+        CREATE OBJECT lo_command TYPE /mbtools/cl_command__mbt.
+
       WHEN /mbtools/if_command_field=>c_commands-find OR
            /mbtools/if_command_field=>c_command_shortcuts-find.
 
