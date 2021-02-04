@@ -7,28 +7,6 @@ INTERFACE /mbtools/if_command_field
 ************************************************************************
 
   CONSTANTS:
-    BEGIN OF c_commands,
-      mbt   TYPE string VALUE 'FIND',
-      find  TYPE string VALUE 'FIND',
-      run   TYPE string VALUE 'RUN',
-      show  TYPE string VALUE 'SHOW',
-      calc  TYPE string VALUE 'CALC',
-      curr  TYPE string VALUE 'CURR',
-      unit  TYPE string VALUE 'UNIT',
-      trace TYPE string VALUE 'TRACE',
-    END OF c_commands .
-  CONSTANTS:
-    BEGIN OF c_command_shortcuts,
-      mbt   TYPE c VALUE '/',
-      find  TYPE c VALUE '?',
-      run   TYPE c VALUE '!',
-      show  TYPE c VALUE '#',
-      calc  TYPE c VALUE '=',
-      curr  TYPE c VALUE '$',
-      unit  TYPE c VALUE '%',
-      trace TYPE c VALUE '^',
-    END OF c_command_shortcuts .
-  CONSTANTS:
     BEGIN OF c_pgmid,
       r3tr TYPE pgmid VALUE 'R3TR',
       limu TYPE pgmid VALUE 'LIMU',

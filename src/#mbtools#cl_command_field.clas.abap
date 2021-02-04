@@ -75,6 +75,8 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       lv_checked_input TYPE string,
       lv_command       TYPE string,
       lv_parameters    TYPE string,
+      ls_cmds          TYPE /mbtools/cmds,
+      ls_clskey        TYPE seoclskey,
       lo_command       TYPE REF TO /mbtools/if_command.
 
     " Check if command is valid
@@ -101,62 +103,47 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
         ev_command    = lv_command
         ev_parameters = lv_parameters ).
 
-    CHECK NOT lv_command IS INITIAL AND NOT lv_parameters IS INITIAL.
+    IF lv_command IS INITIAL.
+      RETURN.
+    ENDIF.
 
-    CASE lv_command.
-      WHEN /mbtools/if_command_field=>c_commands-mbt OR
-           /mbtools/if_command_field=>c_command_shortcuts-mbt.
+    SELECT SINGLE * FROM /mbtools/cmds INTO ls_cmds
+      WHERE command = lv_command OR shortcut = lv_command.
+    IF sy-subrc <> 0.
+      " Invalid Command
+      IF iv_via_popup = abap_true.
+        MESSAGE w001.
+        rv_exit = abap_true.
+      ELSE.
+        rv_exit = abap_false.
+      ENDIF.
 
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__mbt.
+      RETURN.
+    ENDIF.
 
-      WHEN /mbtools/if_command_field=>c_commands-find OR
-           /mbtools/if_command_field=>c_command_shortcuts-find.
+    ls_clskey-clsname = ls_cmds-clsname.
 
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__find.
+    CALL FUNCTION 'SEO_CLASS_EXISTENCE_CHECK'
+      EXPORTING
+        clskey        = ls_clskey
+      EXCEPTIONS
+        not_specified = 1
+        not_existing  = 2
+        is_interface  = 3
+        no_text       = 4
+        inconsistent  = 5
+        OTHERS        = 6.
+    IF sy-subrc <> 0.
+      MESSAGE e005 WITH ls_cmds-clsname ls_cmds-command.
+      RETURN.
+    ENDIF.
 
-      WHEN /mbtools/if_command_field=>c_commands-show OR
-           /mbtools/if_command_field=>c_command_shortcuts-show.
+    CREATE OBJECT lo_command TYPE (ls_cmds-clsname).
 
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__show.
-
-      WHEN /mbtools/if_command_field=>c_commands-run OR
-           /mbtools/if_command_field=>c_command_shortcuts-run.
-
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__run.
-
-      WHEN /mbtools/if_command_field=>c_commands-calc OR
-           /mbtools/if_command_field=>c_command_shortcuts-calc.
-
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__calc.
-
-      WHEN /mbtools/if_command_field=>c_commands-curr OR
-           /mbtools/if_command_field=>c_command_shortcuts-curr.
-
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__curr.
-
-      WHEN /mbtools/if_command_field=>c_commands-unit OR
-           /mbtools/if_command_field=>c_command_shortcuts-unit.
-
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__unit.
-
-      WHEN /mbtools/if_command_field=>c_commands-trace OR
-           /mbtools/if_command_field=>c_command_shortcuts-trace.
-
-        CREATE OBJECT lo_command TYPE /mbtools/cl_command__trace.
-
-      WHEN OTHERS. " Invalid Command
-        IF iv_via_popup = abap_true.
-          MESSAGE w001.
-          rv_exit = abap_true.
-        ELSE.
-          rv_exit = abap_false.
-        ENDIF.
-        RETURN.
-    ENDCASE.
-
-    rv_exit = lo_command->execute( iv_command    = lv_command
-                                   iv_parameters = lv_parameters
-                                   iv_via_popup  = iv_via_popup ).
+    rv_exit = lo_command->execute(
+      iv_command    = lv_command
+      iv_parameters = lv_parameters
+      iv_via_popup  = iv_via_popup ).
 
   ENDMETHOD.
 
@@ -186,15 +173,18 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD input_split.
 
+    DATA ls_cmds TYPE /mbtools/cmds.
+
     " Command shortcut or command word
-    IF iv_input(1) CA /mbtools/if_command_field=>c_command_shortcuts.
+    SELECT SINGLE * FROM /mbtools/cmds INTO ls_cmds WHERE shortcut = iv_input(1).
+    IF sy-subrc = 0.
       ev_command    = iv_input(1).
       ev_parameters = iv_input+1(*).
     ELSE.
       SPLIT iv_input AT space INTO ev_command ev_parameters.
-      TRANSLATE ev_command TO UPPER CASE.
     ENDIF.
 
+    TRANSLATE ev_command TO UPPER CASE.
     SHIFT ev_parameters LEFT DELETING LEADING space.
 
   ENDMETHOD.

@@ -44,6 +44,12 @@
      <MSGNR>005</MSGNR>
      <TEXT>Table &amp;1 does not contain any data</TEXT>
     </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/MBTOOLS/BC_CL</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Class &amp;1 does not exist for command &amp;2</TEXT>
+    </T100>
    </T100>
    <LONGTEXTS>
     <item>

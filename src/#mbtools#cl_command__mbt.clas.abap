@@ -32,41 +32,47 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      lv_operator TYPE string,
-      lv_operand  TYPE string,
-      lv_switch   TYPE abap_bool.
+      lv_operand TYPE string,
+      lv_found   TYPE abap_bool,
+      lo_tool    TYPE REF TO /mbtools/cl_tools,
+      ls_tool    TYPE /mbtools/tool_with_text,
+      lt_tools   TYPE TABLE OF /mbtools/tool_with_text.
 
     " Split parameters into operator and operand
     command->split(
       EXPORTING
         iv_parameters = iv_parameters
       IMPORTING
-        ev_operator   = lv_operator
         ev_operand    = lv_operand ).
 
-    CASE to_upper( lv_operand ).
-      WHEN '' OR 'BASE' OR 'MBT'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT' ).
-      WHEN 'INST'.
+    lv_operand = to_upper( lv_operand ).
+
+    " Commands from registered tools
+    lt_tools = /mbtools/cl_tools=>get_tools( ).
+
+    LOOP AT lt_tools INTO ls_tool.
+      lo_tool = /mbtools/cl_tools=>factory( ls_tool-name ).
+
+      IF lv_operand = lo_tool->get_command( ) OR lv_operand = lo_tool->get_shortcut( ).
+        lo_tool->launch( ).
+        lv_found = abap_true.
+        EXIT.
+      ENDIF.
+    ENDLOOP.
+
+    " Additional commands from MBT Base
+    CASE lv_operand.
+      WHEN 'INST' OR 'INSTALL'.
         /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_INSTALLER' ).
-      WHEN 'SUPP'.
+        lv_found = abap_true.
+      WHEN 'SUPP' OR 'SUPPORT'.
         /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_SUPPORT' ).
-      WHEN 'LOL'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/TLOGO_LISTER' ).
-      WHEN 'ICON'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/ICON_BROWSER' ).
-      WHEN 'CL'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/COMMAND_FIELD_TESTER' ).
-      WHEN 'CTS'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/CTS_REQ_TESTER' ).
-      WHEN 'NOTE'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/NOTE_DISPLAY' ).
-      WHEN 'SYSMON'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/SYSTEM_MONITOR' ).
-      WHEN OTHERS.
-        MESSAGE 'Unknown tool.' TYPE 'S' DISPLAY LIKE 'E'.
-        RETURN.
+        lv_found = abap_true.
     ENDCASE.
+
+    IF lv_found IS INITIAL.
+      MESSAGE 'Unknown tool.' TYPE 'S' DISPLAY LIKE 'E'.
+    ENDIF.
 
   ENDMETHOD.
 
