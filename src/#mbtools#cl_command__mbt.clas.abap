@@ -62,6 +62,9 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
 
     " Additional commands from MBT Base
     CASE lv_operand.
+      WHEN ''.
+        /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT' ).
+        lv_found = abap_true.
       WHEN 'INST' OR 'INSTALL'.
         /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_INSTALLER' ).
         lv_found = abap_true.
