@@ -17,6 +17,7 @@
 		"skipGeneratedFunctionGroups": true,
 		"skipGeneratedGatewayClasses": true,
 		"skipGeneratedPersistentClasses": true,
+		"skipIncludesWithoutMain": false,
 		"useApackDependencies": false
 	},
 	"rules": {
@@ -35,26 +36,15 @@
 		},
 		"allowed_object_types": {
 			"allowed": [
-				"ACID",
-				"AVAR",
 				"CLAS",
-				"DSYS",
 				"DTEL",
 				"DEVC",
 				"DOMA",
 				"ENHO",
-				"ENHS",
-				"ENQU",
-				"FUGR",
 				"INTF",
 				"MSAG",
-				"NSPC",
-				"PARA",
 				"PROG",
-				"SOTS",
 				"TABL",
-				"TRAN",
-				"TTYP",
 				"W3MI"
 			],
 			"exclude": [],
@@ -66,23 +56,22 @@
 		},
 		"avoid_use": {
 			"break": true,
-			"communication": true,
 			"defaultKey": false,
 			"define": true,
 			"describeLines": true,
-			"endselect": false,
 			"exclude": [],
-			"execSQL": true,
-			"kernelCall": true,
 			"severity": "Error",
-			"statics": true,
-			"systemCall": true
+			"statics": true
 		},
 		"begin_end_names": {
 			"exclude": [],
 			"severity": "Error"
 		},
 		"begin_single_include": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"call_transaction_authority_check": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -131,6 +120,7 @@
 			"openDataset": true,
 			"readTable": true,
 			"selectSingle": false,
+			"selectTable": true,			
 			"severity": "Error",
 			"updateDatabase": true
 		},
@@ -186,10 +176,27 @@
 			"max": 20,
 			"severity": "Error"
 		},
+		"dangerous_statement": {
+			"deleteDynpro": true,
+			"deleteReport": true,
+			"deleteTextpool": true,
+			"exclude": [],
+			"execSQL": true,
+			"generateDynpro": true,
+			"generateReport": true,
+			"generateSubroutine": true,
+			"importDynpro": true,
+			"insertReport": true,
+			"kernelCall": true,
+			"severity": "Error",
+			"systemCall": true
+		},
+		"db_operation_in_loop": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"definitions_top": {
-			"exclude": [
-				"#mbtools#.*_ajson.*"
-			],
+			"exclude": [],
 			"severity": "Error"
 		},
 		"description_empty": {
@@ -275,6 +282,11 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"function_module_recommendations": {
+			"exclude": [".*"],
+			"recommendations": [],
+			"severity": "Error"
+		},
 		"functional_writing": {
 			"exclude": [],
 			"ignoreExceptions": true,
@@ -285,6 +297,10 @@
 			"severity": "Error"
 		},
 		"identical_conditions": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"identical_contents": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -315,6 +331,10 @@
 			"severity": "Error"
 		},
 		"inline_data_old_versions": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"intf_referencing_clas": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -381,11 +401,23 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"many_parenthesis": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"max_one_method_parameter_per_line": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"max_one_statement": {
 			"exclude": [],
 			"severity": "Error"
 		},
 		"message_exists": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"method_implemented_twice": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -396,14 +428,16 @@
 			"severity": "Warning",
 			"statements": 100
 		},
+		"method_overwrites_builtin": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"method_parameter_names": {
 			"changing": "^C._.+$",
 			"exclude": [],
 			"exporting": "^E._.+$",
 			"ignoreExceptions": true,
-			"ignoreNames": [
-				"P_TASK"
-			],
+			"ignoreNames": [],
 			"ignorePatterns": [],
 			"importing": "^I._.+$",
 			"patternKind": "required",
@@ -465,6 +499,7 @@
 		},
 		"obsolete_statement": {
 			"add": true,
+			"communication": true,
 			"compute": true,
 			"divide": true,
 			"exclude": [],
@@ -473,6 +508,8 @@
 			"move": true,
 			"multiply": true,
 			"occurs": true,
+			"parameter": true,
+			"ranges": true,
 			"refresh": true,
 			"requested": true,
 			"setExtended": true,
@@ -480,6 +517,18 @@
 			"subtract": true,
 			"typePools": true,
 			"withHeaderLine": true
+		},
+		"omit_parameter_name": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"omit_receiving": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"parser_702_chaining": {
+			"exclude": [],
+			"severity": "Error"
 		},
 		"parser_error": {
 			"exclude": [],
@@ -497,7 +546,15 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"prefer_raise_exception_new": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"prefer_returning_to_exporting": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"prefer_xsdbool": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -535,6 +592,12 @@
 		},
 		"rfc_error_handling": {
 			"exclude": [],
+			"severity": "Error"
+		},
+		"select_performance": {
+			"endSelect": true,
+			"exclude": [".*"],
+			"selectStar": true,
 			"severity": "Error"
 		},
 		"selection_screen_naming": {
@@ -583,6 +646,10 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"sy_modification": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"tabl_enhancement_category": {
 			"exclude": [],
 			"severity": "Error"
@@ -600,11 +667,19 @@
 			"pattern": "^TY_.+$",
 			"severity": "Error"
 		},
+		"uncaught_exception": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"unknown_types": {
 			"exclude": [],
 			"severity": "Error"
 		},
 		"unreachable_code": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"unused_methods": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -619,6 +694,10 @@
 			"skipNames": []
 		},
 		"use_bool_expression": {
+			"exclude": [],
+			"severity": "Error"
+		},
+		"use_class_based_exceptions": {
 			"exclude": [],
 			"severity": "Error"
 		},
