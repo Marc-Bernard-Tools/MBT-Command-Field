@@ -54,6 +54,7 @@
 				"PROG",
 				"SOTS",
 				"TABL",
+				"TOBJ",
 				"TRAN",
 				"TTYP",
 				"W3MI"
@@ -736,9 +737,12 @@
 	"syntax": {
 		"errorNamespace": "^(/MBTOOLS/|LCL_|LIF_|Y|Z)",
 		"globalConstants": [
+			"icon_bw_convert_unit",
 			"icon_convert",
 			"icon_equal",
-			"icon_message_error_small"
+			"icon_greater",
+			"icon_message_error_small",
+			"icon_space"
 		],
 		"globalMacros": [],
 		"version": "v702"
