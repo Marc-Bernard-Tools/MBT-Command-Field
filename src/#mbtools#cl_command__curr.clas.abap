@@ -36,7 +36,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
+CLASS /mbtools/cl_command__curr IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -51,6 +51,7 @@ CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
       lv_foreign_currency TYPE fcurr_curr,
       lv_exchange_rate    TYPE ukurs_curr,
       lv_icon             TYPE icon_d,
+      lv_rest             TYPE string ##NEEDED,
       lv_result           TYPE string.
 
     lv_icon = icon_message_error_small.
@@ -68,12 +69,12 @@ CLASS /MBTOOLS/CL_COMMAND__CURR IMPLEMENTATION.
     ENDIF.
 
     " 100 EUR in USD
-    SPLIT lv_object AT space INTO lv_input_amount lv_local_currency sy-lisel lv_foreign_currency.
+    SPLIT lv_object AT space INTO lv_input_amount lv_local_currency lv_rest lv_foreign_currency.
 
     TRY.
         lv_local_amount = lv_input_amount.
       CATCH cx_root.
-        lv_result =  'Amount not numeric'(001).
+        lv_result = 'Amount not numeric'(001).
     ENDTRY.
 
     IF lv_result IS INITIAL.

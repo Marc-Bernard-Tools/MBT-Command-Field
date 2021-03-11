@@ -37,7 +37,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
+CLASS /mbtools/cl_command__show IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -66,19 +66,17 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
 
     DO.
       " Pick exactly one object
-      command->pick(
-        IMPORTING
-          es_tadir_key = ls_tadir_key
-          ev_count     = lv_tadir_count
-        EXCEPTIONS
-          cancelled   = 1
-          OTHERS      = 2 ).
-      IF sy-subrc <> 0.
-        EXIT.
-      ENDIF.
+      TRY.
+          command->pick(
+            IMPORTING
+              es_tadir_key = ls_tadir_key
+              ev_count     = lv_tadir_count ).
+        CATCH /mbtools/cx_exception.
+          EXIT.
+      ENDTRY.
 
       " Show object definition
-      rv_exit = show_tool( is_tadir_key = ls_tadir_key ).
+      rv_exit = show_tool( ls_tadir_key ).
 
       IF lv_tadir_count = 1.
         EXIT.
@@ -108,7 +106,7 @@ CLASS /MBTOOLS/CL_COMMAND__SHOW IMPLEMENTATION.
         ev_msgid   = lv_msgid
         ev_msgno   = lv_msgno ).
 
-    IF NOT lv_msgid IS INITIAL AND NOT lv_msgno IS INITIAL.
+    IF lv_msgid IS NOT INITIAL AND lv_msgno IS NOT INITIAL.
       " Display message with placeholders for parameters
       MESSAGE ID lv_msgid TYPE 'I' NUMBER lv_msgno
         WITH '&1' '&2' '&3' '&4'.

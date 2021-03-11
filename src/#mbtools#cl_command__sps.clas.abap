@@ -36,9 +36,7 @@ CLASS /mbtools/cl_command__sps IMPLEMENTATION.
         no_component_found = 1
         wrong_component    = 2
         internal_error     = 3
-        OTHERS             = 4.
-    IF sy-subrc <> 0.
-    ENDIF.
+        OTHERS             = 4 ##FM_SUBRC_OK.
 
   ENDMETHOD.
 

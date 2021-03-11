@@ -21,18 +21,18 @@ CLASS /mbtools/cl_command__trace DEFINITION
   PRIVATE SECTION.
 
     ALIASES command
-      FOR /mbtools/if_command~mo_command .
+      FOR /mbtools/if_command~mo_command.
 
     METHODS trace_sat
       IMPORTING
         !iv_switch     TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
     METHODS trace_sql
       IMPORTING
         !iv_switch     TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -95,11 +95,11 @@ CLASS /mbtools/cl_command__trace IMPLEMENTATION.
       lx_exc    TYPE REF TO cx_static_check.
 
     AUTHORITY-CHECK OBJECT 'S_DEVELOP'
-                    ID     'OBJTYPE'   FIELD 'SYST'
-                    ID     'DEVCLASS'  DUMMY
-                    ID     'P_GROUP'   DUMMY
-                    ID     'OBJNAME'   DUMMY
-                    ID     'ACTVT'     DUMMY.
+      ID 'OBJTYPE'  FIELD 'SYST'
+      ID 'DEVCLASS' DUMMY
+      ID 'P_GROUP' DUMMY
+      ID 'OBJNAME' DUMMY
+      ID 'ACTVT' DUMMY.
     IF sy-subrc <> 0.
       MESSAGE s011(s7) DISPLAY LIKE 'W'.
       RETURN.
@@ -133,7 +133,7 @@ CLASS /mbtools/cl_command__trace IMPLEMENTATION.
             MESSAGE lx_exc TYPE 'S' DISPLAY LIKE 'E'.
         ENDTRY.
 
-*        SET RUN TIME ANALYZER ON.
+*        SET RUN TIME ANALYZER ON
 
       WHEN abap_false.
 
@@ -144,7 +144,7 @@ CLASS /mbtools/cl_command__trace IMPLEMENTATION.
             MESSAGE lx_exc TYPE 'S' DISPLAY LIKE 'E'.
         ENDTRY.
 
-*        SET RUN TIME ANALYZER OFF.
+*        SET RUN TIME ANALYZER OFF
 
     ENDCASE.
 
@@ -153,6 +153,8 @@ CLASS /mbtools/cl_command__trace IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD trace_sql.
+  METHOD trace_sql ##TODO.
+    rv_exit = iv_switch.
+    rv_exit = abap_true.
   ENDMETHOD.
 ENDCLASS.

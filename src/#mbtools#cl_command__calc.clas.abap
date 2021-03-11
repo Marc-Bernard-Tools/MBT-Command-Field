@@ -32,12 +32,12 @@ CLASS /mbtools/cl_command__calc DEFINITION
 
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_eval TYPE slis_formname VALUE 'CALLBACK_EVAL' ##NO_TEXT.
-    CLASS-DATA mv_max_p0 TYPE ty_p0 .
-    CLASS-DATA mv_min_p0 TYPE ty_p0 .
-    CLASS-DATA mv_max_p7 TYPE ty_p7 .
-    CLASS-DATA mv_min_p7 TYPE ty_p7 .
-    CLASS-DATA mv_max_p14 TYPE ty_p14 .
-    CLASS-DATA mv_min_p14 TYPE ty_p14 .
+    CLASS-DATA gv_max_p0 TYPE ty_p0 .
+    CLASS-DATA gv_min_p0 TYPE ty_p0 .
+    CLASS-DATA gv_max_p7 TYPE ty_p7 .
+    CLASS-DATA gv_min_p7 TYPE ty_p7 .
+    CLASS-DATA gv_max_p14 TYPE ty_p14 .
+    CLASS-DATA gv_min_p14 TYPE ty_p14 .
 
     METHODS format_result
       IMPORTING
@@ -48,7 +48,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__CALC IMPLEMENTATION.
+CLASS /mbtools/cl_command__calc IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -155,24 +155,30 @@ CLASS /MBTOOLS/CL_COMMAND__CALC IMPLEMENTATION.
     FIELD-SYMBOLS:
       <lv_p> TYPE any.
 
-    lo_p = cl_abap_exceptional_values=>get_max_value( mv_max_p0 ).
+    lo_p = cl_abap_exceptional_values=>get_max_value( gv_max_p0 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_max_p0 = <lv_p>.
-    lo_p = cl_abap_exceptional_values=>get_min_value( mv_min_p0 ).
+    ASSERT sy-subrc = 0.
+    gv_max_p0 = <lv_p>.
+    lo_p = cl_abap_exceptional_values=>get_min_value( gv_min_p0 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_min_p0 = <lv_p>.
-    lo_p = cl_abap_exceptional_values=>get_max_value( mv_max_p7 ).
+    ASSERT sy-subrc = 0.
+    gv_min_p0 = <lv_p>.
+    lo_p = cl_abap_exceptional_values=>get_max_value( gv_max_p7 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_max_p7 = <lv_p>.
-    lo_p = cl_abap_exceptional_values=>get_min_value( mv_min_p7 ).
+    ASSERT sy-subrc = 0.
+    gv_max_p7 = <lv_p>.
+    lo_p = cl_abap_exceptional_values=>get_min_value( gv_min_p7 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_min_p7 = <lv_p>.
-    lo_p = cl_abap_exceptional_values=>get_max_value( mv_max_p14 ).
+    ASSERT sy-subrc = 0.
+    gv_min_p7 = <lv_p>.
+    lo_p = cl_abap_exceptional_values=>get_max_value( gv_max_p14 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_max_p14 = <lv_p>.
-    lo_p = cl_abap_exceptional_values=>get_min_value( mv_min_p14 ).
+    ASSERT sy-subrc = 0.
+    gv_max_p14 = <lv_p>.
+    lo_p = cl_abap_exceptional_values=>get_min_value( gv_min_p14 ).
     ASSIGN lo_p->* TO <lv_p>.
-    mv_min_p14 = <lv_p>.
+    ASSERT sy-subrc = 0.
+    gv_min_p14 = <lv_p>.
 
   ENDMETHOD.
 
@@ -191,16 +197,16 @@ CLASS /MBTOOLS/CL_COMMAND__CALC IMPLEMENTATION.
     " Format result nicely like a calculator
     lv_p14 = abs( frac( iv_value ) ).
     IF lv_p14 < '0.0000000001' ##LITERAL.
-      IF iv_value BETWEEN mv_min_p0 AND mv_max_p0. " no decimals
+      IF iv_value BETWEEN gv_min_p0 AND gv_max_p0. " no decimals
         lv_p0 = iv_value.
         WRITE lv_p0 TO lv_pretty_result.
       ELSE.
         WRITE iv_value TO lv_pretty_result.
       ENDIF.
-    ELSEIF iv_value BETWEEN mv_min_p14 AND mv_max_p14. " most decimals
+    ELSEIF iv_value BETWEEN gv_min_p14 AND gv_max_p14. " most decimals
       lv_p14 = iv_value.
       WRITE lv_p14 TO lv_pretty_result.
-    ELSEIF iv_value BETWEEN mv_min_p7 AND mv_max_p7. " compromise
+    ELSEIF iv_value BETWEEN gv_min_p7 AND gv_max_p7. " compromise
       lv_p7 = iv_value.
       WRITE lv_p7 TO lv_pretty_result.
     ELSE.

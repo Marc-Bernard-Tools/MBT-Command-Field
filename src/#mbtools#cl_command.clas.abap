@@ -9,8 +9,6 @@ CLASS /mbtools/cl_command DEFINITION
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
   PUBLIC SECTION.
-    TYPE-POOLS icon .
-
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_alv TYPE slis_formname VALUE 'CALLBACK_ALV' ##NO_TEXT.
     CONSTANTS c_tabix TYPE fieldname VALUE '/MBTOOLS/BC_CF_TABIX' ##NO_TEXT.
@@ -25,8 +23,8 @@ CLASS /mbtools/cl_command DEFINITION
       EXPORTING
         !es_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key
         !ev_count     TYPE i
-      EXCEPTIONS
-        cancelled .
+      RAISING
+        /mbtools/cx_exception.
     METHODS split
       IMPORTING
         !iv_parameters TYPE string
@@ -44,8 +42,8 @@ CLASS /mbtools/cl_command DEFINITION
   PRIVATE SECTION.
 
     CONSTANTS c_object_with_icon_text TYPE tabname VALUE '/MBTOOLS/OBJECT_WITH_ICON_TEXT' ##NO_TEXT.
-    CONSTANTS c_badi_class TYPE seoclsname VALUE '/MBTOOLS/BC_CTS_REQ_DISPLAY' ##NO_TEXT.
-    CONSTANTS c_badi_method TYPE seocmpname VALUE 'GET_OBJECT_DESCRIPTIONS' ##NO_TEXT.
+    CONSTANTS c_badi_class TYPE seoclsname VALUE '/MBTOOLS/BC_CTS_REQ_DISPLAY' ##NO_TEXT ##NEEDED.
+    CONSTANTS c_badi_method TYPE seocmpname VALUE 'GET_OBJECT_DESCRIPTIONS' ##NO_TEXT ##NEEDED.
     CONSTANTS c_badi_type TYPE tabname VALUE '/MBTOOLS/TRWBO_S_E071_TXT' ##NO_TEXT.
     CONSTANTS c_max_hits TYPE i VALUE 1000 ##NO_TEXT.
     CONSTANTS:
@@ -54,8 +52,8 @@ CLASS /mbtools/cl_command DEFINITION
         values   TYPE c VALUE ',',
         low_high TYPE c LENGTH 2 VALUE '..',
       END OF c_split .
-    CLASS-DATA mt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
-    CLASS-DATA mt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys .
+    CLASS-DATA gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
+    CLASS-DATA gt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys .
 
     METHODS name_split
       IMPORTING
@@ -121,7 +119,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
+CLASS /mbtools/cl_command IMPLEMENTATION.
 
 
   METHOD filter_tabl.
@@ -135,7 +133,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       <ls_tadir_key> TYPE adir_key.
 
     " Get all tabl objects
-    LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>
+    LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>
       WHERE object = /mbtools/if_command_field=>c_objects_db-tabl.
 
       APPEND INITIAL LINE TO lr_tabname ASSIGNING <lr_range>.
@@ -152,15 +150,16 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
         OR tabclass = /mbtools/if_command_field=>c_table_class-pool
         OR tabclass = /mbtools/if_command_field=>c_table_class-view )
       ORDER BY tabname.
+    ASSERT sy-subrc >= 0.
 
     " Reduce object list
-    LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>
+    LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>
       WHERE object = /mbtools/if_command_field=>c_objects_db-tabl.
 
       READ TABLE lt_names TRANSPORTING NO FIELDS
         WITH TABLE KEY table_line = <ls_tadir_key>-obj_name ##WARN_OK.
       IF sy-subrc <> 0.
-        DELETE mt_tadir_list.
+        DELETE gt_tadir_list.
       ENDIF.
     ENDLOOP.
 
@@ -176,7 +175,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     FIELD-SYMBOLS:
       <lr_range> LIKE LINE OF rr_range.
 
-    CHECK NOT iv_obj_name IS INITIAL.
+    CHECK iv_obj_name IS NOT INITIAL.
 
     IF iv_obj_name CS c_split-values.
       SPLIT iv_obj_name AT c_split-values INTO TABLE lt_obj_name.
@@ -226,7 +225,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     FIELD-SYMBOLS:
       <lr_range> LIKE LINE OF rr_range.
 
-    CHECK NOT iv_object IS INITIAL.
+    CHECK iv_object IS NOT INITIAL.
 
     IF iv_object CS c_split-values.
       SPLIT iv_object AT c_split-values INTO TABLE lt_object.
@@ -275,7 +274,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CLEAR: es_tadir_key, ev_count.
 
-    ev_count = lines( mt_object_list ).
+    ev_count = lines( gt_object_list ).
 
     IF ev_count = 0.
       MESSAGE 'No object found'(001) TYPE 'S'.
@@ -296,7 +295,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
           OTHERS                 = 3.
       ASSERT sy-subrc = 0.
 
-      READ TABLE mt_object_list INTO ls_object INDEX 1.
+      READ TABLE gt_object_list INTO ls_object INDEX 1.
       IF sy-subrc = 0 AND ls_object-icon IS INITIAL.
         " Hide icon and text columns if not filled
         LOOP AT lt_fieldcat ASSIGNING <ls_fieldcat>
@@ -315,7 +314,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
         IMPORTING
           e_exit_caused_by_caller = lv_exit_flag
         TABLES
-          t_outtab                = mt_object_list
+          t_outtab                = gt_object_list
         EXCEPTIONS
           program_error           = 1
           OTHERS                  = 2.
@@ -331,14 +330,14 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ENDIF.
 
     IF lv_tabindex BETWEEN 1 AND ev_count.
-      READ TABLE mt_object_list INTO ls_object INDEX lv_tabindex.
+      READ TABLE gt_object_list INTO ls_object INDEX lv_tabindex.
       ASSERT sy-subrc = 0.
 
       es_tadir_key-pgmid    = ls_object-pgmid.
       es_tadir_key-object   = ls_object-object.
       es_tadir_key-obj_name = ls_object-obj_name.
     ELSE.
-      RAISE cancelled.
+      /mbtools/cx_exception=>raise( 'Cancelled' ).
     ENDIF.
 
   ENDMETHOD.
@@ -348,7 +347,7 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     CLEAR: ev_sign, ev_option, ev_low, ev_high.
 
-    CHECK NOT iv_input IS INITIAL.
+    CHECK iv_input IS NOT INITIAL.
 
     ev_sign = 'I'.
     IF iv_input CA '?*'.
@@ -404,43 +403,43 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ENDIF.
 
     " Select objects in directory
-    SELECT pgmid object obj_name FROM tadir INTO TABLE mt_tadir_list
+    SELECT pgmid object obj_name FROM tadir INTO TABLE gt_tadir_list
       UP TO c_max_hits ROWS
       WHERE pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
         AND object   IN lr_objects
         AND obj_name IN lr_names
-        AND delflag  = abap_false.                      "#EC CI_GENBUFF
+        AND delflag  = abap_false.        "#EC CI_GENBUFF "#EC CI_SUBRC
 
     " Select reports (includes)
-    IF lines( mt_tadir_list ) < c_max_hits.
+    IF lines( gt_tadir_list ) < c_max_hits.
       select_reps(
         iv_sel_objects = lr_objects
         iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select function modules
-    IF lines( mt_tadir_list ) < c_max_hits.
+    IF lines( gt_tadir_list ) < c_max_hits.
       select_func(
         iv_sel_objects = lr_objects
         iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select class/interface methods (if requested)
-    IF lines( mt_tadir_list ) < c_max_hits.
+    IF lines( gt_tadir_list ) < c_max_hits.
       select_meth(
         iv_sel_objects = lr_objects
         iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select messages (if requested)
-    IF lines( mt_tadir_list ) < c_max_hits.
+    IF lines( gt_tadir_list ) < c_max_hits.
       select_mess(
         iv_sel_objects = lr_objects
         iv_sel_names   = lr_names ).
     ENDIF.
 
     " Select BW objects using search (if requested)
-    IF lines( mt_tadir_list ) < c_max_hits.
+    IF lines( gt_tadir_list ) < c_max_hits.
       select_bw(
         iv_sel_objects = lr_objects
         iv_sel_names   = lr_names
@@ -448,12 +447,12 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
     ENDIF.
 
     " Deduplicate
-    SORT mt_tadir_list.
-    DELETE ADJACENT DUPLICATES FROM mt_tadir_list.
+    SORT gt_tadir_list.
+    DELETE ADJACENT DUPLICATES FROM gt_tadir_list.
 
     " Too many hits
-    IF lines( mt_tadir_list ) > c_max_hits.
-      DELETE mt_tadir_list FROM c_max_hits.
+    IF lines( gt_tadir_list ) > c_max_hits.
+      DELETE gt_tadir_list FROM c_max_hits.
       lv_msg = |'Selection limited to { c_max_hits } objects'|.
       MESSAGE lv_msg TYPE 'S'.
     ENDIF.
@@ -472,12 +471,12 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
     lt_names = iv_sel_names.
 
-    IF NOT iv_sel_name IS INITIAL.
+    IF iv_sel_name IS NOT INITIAL.
       APPEND iv_sel_name TO lt_names.
     ENDIF.
 
     LOOP AT lt_names ASSIGNING <lv_name>.
-      APPEND INITIAL LINE TO mt_tadir_list ASSIGNING <ls_tadir_key>.
+      APPEND INITIAL LINE TO gt_tadir_list ASSIGNING <ls_tadir_key>.
       <ls_tadir_key>-pgmid    = iv_pgmid.
       <ls_tadir_key>-object   = iv_object.
       <ls_tadir_key>-obj_name = <lv_name>.
@@ -812,14 +811,14 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
       <ls_txt>       TYPE any,
       <lt_txt>       TYPE STANDARD TABLE.
 
-    CLEAR mt_object_list.
+    CLEAR gt_object_list.
 
     " Check if MBT Transport Request is installed and active
     IF /mbtools/cl_switches=>is_active( 'MBT Transport Request' ) = abap_false.
       " Default is program id, object and object name only
-      LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+      LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
         MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
-        INSERT ls_object INTO TABLE mt_object_list.
+        INSERT ls_object INTO TABLE gt_object_list.
       ENDLOOP.
     ELSE.
       TRY.
@@ -827,13 +826,14 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
           GET BADI lo_badi TYPE (c_badi_class).
 
           IF lo_badi IS BOUND.
-            LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+            LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
               MOVE-CORRESPONDING <ls_tadir_key> TO ls_e071.
               INSERT ls_e071 INTO TABLE lt_e071.
             ENDLOOP.
 
             CREATE DATA lo_data TYPE STANDARD TABLE OF (c_badi_type).
             ASSIGN lo_data->* TO <lt_txt>.
+            ASSERT sy-subrc = 0.
 
             CALL BADI lo_badi->(c_badi_method)
               EXPORTING
@@ -843,20 +843,20 @@ CLASS /MBTOOLS/CL_COMMAND IMPLEMENTATION.
 
             LOOP AT <lt_txt> ASSIGNING <ls_txt>.
               MOVE-CORRESPONDING <ls_txt> TO ls_object.
-              INSERT ls_object INTO TABLE mt_object_list.
+              INSERT ls_object INTO TABLE gt_object_list.
             ENDLOOP.
           ENDIF.
 
         CATCH cx_root.
           " Fallback to program id, object and object name only
-          LOOP AT mt_tadir_list ASSIGNING <ls_tadir_key>.
+          LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
             MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
-            INSERT ls_object INTO TABLE mt_object_list.
+            INSERT ls_object INTO TABLE gt_object_list.
           ENDLOOP.
       ENDTRY.
     ENDIF.
 
-    SORT mt_object_list BY object obj_name.
+    SORT gt_object_list BY object obj_name.
 
   ENDMETHOD.
 ENDCLASS.

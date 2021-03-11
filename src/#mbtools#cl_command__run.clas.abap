@@ -57,7 +57,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
+CLASS /mbtools/cl_command__run IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -91,7 +91,7 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
     " Check if command is a Marc Bernard Tools
     IF lv_object CS /mbtools/if_command_field=>c_objects_exec-tran.
-      rv_exit = run_mbt( iv_obj_name = lv_object_name ).
+      rv_exit = run_mbt( lv_object_name ).
       IF rv_exit = abap_true.
         RETURN.
       ENDIF.
@@ -105,39 +105,37 @@ CLASS /MBTOOLS/CL_COMMAND__RUN IMPLEMENTATION.
 
     DO.
       " Pick exactly one object
-      command->pick(
-        IMPORTING
-          es_tadir_key = ls_tadir_key
-          ev_count     = lv_tadir_count
-        EXCEPTIONS
-          cancelled   = 1
-          OTHERS      = 2 ).
-      IF sy-subrc <> 0.
-        EXIT.
-      ENDIF.
+      TRY.
+          command->pick(
+            IMPORTING
+              es_tadir_key = ls_tadir_key
+              ev_count     = lv_tadir_count ).
+        CATCH /mbtools/cx_exception.
+          EXIT.
+      ENDTRY.
 
       " Run object
       CASE ls_tadir_key-object.
         WHEN /mbtools/if_command_field=>c_objects_db-tabl OR
              /mbtools/if_command_field=>c_objects_db-view.
 
-          rv_exit = run_tabl( is_tadir_key = ls_tadir_key ).
+          rv_exit = run_tabl( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-prog.
 
-          rv_exit = run_prog( is_tadir_key = ls_tadir_key ).
+          rv_exit = run_prog( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-tran.
 
-          rv_exit = run_tran( is_tadir_key = ls_tadir_key ).
+          rv_exit = run_tran( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-func.
 
-          rv_exit = run_func( is_tadir_key = ls_tadir_key ).
+          rv_exit = run_func( ls_tadir_key ).
 
         WHEN OTHERS.
 
-          rv_exit = run_listcube( is_tadir_key = ls_tadir_key ).
+          rv_exit = run_listcube( ls_tadir_key ).
 
       ENDCASE.
 
