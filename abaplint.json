@@ -4,6 +4,11 @@
 			"url": "https://github.com/abaplint/deps",
 			"folder": "/deps",
 			"files": "/src/**/*.*"
+		},
+		{
+			"url": "https://github.com/mbtools/Marc_Bernard_Tools",
+			"folder": "/deps2",
+			"files": "/src/**/*.*"
 		}
 	],
 	"global": {
