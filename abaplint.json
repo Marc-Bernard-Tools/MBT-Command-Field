@@ -347,7 +347,9 @@
 			"severity": "Error"
 		},
 		"intf_referencing_clas": {
-			"exclude": [],
+			"exclude": [
+				"#mbtools#if_command.intf.abap"
+			],
 			"severity": "Error"
 		},
 		"keep_single_parameter_on_one_line": {
@@ -481,7 +483,9 @@
 		},
 		"no_public_attributes": {
 			"allowReadOnly": true,
-			"exclude": [],
+			"exclude": [
+				"#mbtools#if_command.intf.abap"
+			],
 			"severity": "Error"
 		},
 		"object_naming": {
