@@ -82,7 +82,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     " Check if command is valid
     lv_checked_input = input_check( iv_input ).
 
-    CHECK NOT lv_checked_input IS INITIAL.
+    CHECK lv_checked_input IS NOT INITIAL.
 
     LOG-POINT ID /mbtools/bc
       SUBKEY /mbtools/cl_tool_bc_cl=>c_tool-title
@@ -212,7 +212,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     <lv_field>-value      = iv_input.
 
     " If given, show lt_result of previous command
-    IF NOT iv_result IS INITIAL.
+    IF iv_result IS NOT INITIAL.
       CALL FUNCTION 'RSS_LINE_SPLIT'
         EXPORTING
           i_input                 = iv_result
@@ -326,10 +326,10 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
           no_break_position_found = 3
           OTHERS                  = 4.
       IF sy-subrc = 0.
-        READ TABLE lt_mess INTO lv_msgv1 INDEX 1.
-        READ TABLE lt_mess INTO lv_msgv2 INDEX 2.
-        READ TABLE lt_mess INTO lv_msgv3 INDEX 3.
-        READ TABLE lt_mess INTO lv_msgv4 INDEX 4.
+        READ TABLE lt_mess INTO lv_msgv1 INDEX 1.         "#EC CI_SUBRC
+        READ TABLE lt_mess INTO lv_msgv2 INDEX 2.         "#EC CI_SUBRC
+        READ TABLE lt_mess INTO lv_msgv3 INDEX 3.         "#EC CI_SUBRC
+        READ TABLE lt_mess INTO lv_msgv4 INDEX 4.         "#EC CI_SUBRC
       ELSE.
         lv_msgv1 = iv_result+0(*).
         IF lv_len > c_max_len_msg.

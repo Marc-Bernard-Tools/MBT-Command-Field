@@ -217,7 +217,7 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
     SELECT SINGLE tcode FROM tstc INTO ls_tadir_key-obj_name
       WHERE tcode = ls_tadir_key-obj_name.
     IF sy-subrc = 0.
-      rv_exit = run_tran( is_tadir_key = ls_tadir_key ).
+      rv_exit = run_tran( ls_tadir_key ).
     ENDIF.
 
   ENDMETHOD.

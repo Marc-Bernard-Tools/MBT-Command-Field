@@ -126,9 +126,9 @@ START-OF-SELECTION.
 
   DO.
     IF p_popup = abap_true.
-      gv_exit = /mbtools/cl_command_field=>popup_command( iv_input = p_cmd ).
+      gv_exit = /mbtools/cl_command_field=>popup_command( p_cmd ).
     ELSE.
-      gv_exit = /mbtools/cl_command_field=>execute_command( iv_input = p_cmd ).
+      gv_exit = /mbtools/cl_command_field=>execute_command( p_cmd ).
     ENDIF.
     IF gv_exit = abap_true.
       EXIT.

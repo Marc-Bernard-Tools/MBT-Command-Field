@@ -11,19 +11,21 @@ START-OF-SELECTION.
 
 * Callback routine for command field calculator
 FORM callback_eval
-  USING    i_variable TYPE clike
-  CHANGING e_value    TYPE f
-           e_subrc    TYPE any ##CALLED.
+  USING
+    i_variable TYPE clike
+  CHANGING
+    e_value    TYPE f
+    e_subrc    TYPE any ##CALLED.
 
   DATA:
     lv_subrc TYPE sy-subrc.
 
-  CALL METHOD /mbtools/cl_utilities=>get_property
+  /mbtools/cl_utilities=>get_property(
     EXPORTING
       iv_property    = i_variable
     IMPORTING
       ev_value_float = e_value
-      ev_subrc       = lv_subrc.
+      ev_subrc       = lv_subrc ).
 
   e_subrc = lv_subrc.
 
@@ -31,8 +33,9 @@ ENDFORM.                    "callback_eval
 
 * Callback routine for command field object selection
 FORM callback_alv
-  USING r_ucomm     TYPE sy-ucomm
-        rs_selfield TYPE slis_selfield ##CALLED.
+  USING
+    r_ucomm     TYPE sy-ucomm
+    rs_selfield TYPE slis_selfield ##CALLED.
 
   IF r_ucomm = '&IC1'. "double-click
 *   Remember selected row and exit

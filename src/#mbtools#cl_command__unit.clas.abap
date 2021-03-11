@@ -38,7 +38,7 @@ ENDCLASS.
 
 
 
-CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
+CLASS /mbtools/cl_command__unit IMPLEMENTATION.
 
 
   METHOD /mbtools/if_command~execute.
@@ -54,12 +54,13 @@ CLASS /MBTOOLS/CL_COMMAND__UNIT IMPLEMENTATION.
       lv_denominator    TYPE i,
       lv_numerator      TYPE i,
       lv_icon           TYPE icon_d,
+      lv_rest           TYPE string,
       lv_result         TYPE string.
 
     lv_icon = icon_message_error_small.
 
     " 100 M in Miles
-    SPLIT iv_parameters AT space INTO lv_input_quantity lv_input_unit sy-lisel lv_output_unit.
+    SPLIT iv_parameters AT space INTO lv_input_quantity lv_input_unit lv_rest lv_output_unit.
 
     " Some mapping for common cases
     CASE lv_input_unit.
