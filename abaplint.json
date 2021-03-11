@@ -22,9 +22,7 @@
 	},
 	"rules": {
 		"7bit_ascii": {
-			"exclude": [
-				"#mbtools#cl_command__unit.clas.abap"
-			],
+			"exclude": [],
 			"severity": "Error"
 		},
 		"abapdoc": {
