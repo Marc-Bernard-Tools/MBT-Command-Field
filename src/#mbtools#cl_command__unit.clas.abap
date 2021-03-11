@@ -65,18 +65,18 @@ CLASS /mbtools/cl_command__unit IMPLEMENTATION.
     " Some mapping for common cases
     CASE lv_input_unit.
       WHEN 'C'. "Degrees Celsius
-        lv_input_unit = '°C'.
+        lv_input_unit = /mbtools/if_special_chars=>c_degree && 'C'.
       WHEN 'F'. "Fahrenheit
-        lv_input_unit = '°F'.
+        lv_input_unit = /mbtools/if_special_chars=>c_degree && 'F'.
       WHEN 'FA'. "farad
         lv_input_unit = 'F'.
     ENDCASE.
 
     CASE lv_output_unit.
       WHEN 'C'. "Degrees Celsius
-        lv_output_unit = '°C'.
+        lv_output_unit = /mbtools/if_special_chars=>c_degree && 'C'.
       WHEN 'F'. "Fahrenheit
-        lv_output_unit = '°F'.
+        lv_output_unit = /mbtools/if_special_chars=>c_degree && 'F'.
       WHEN 'FA'. "farad
         lv_output_unit = 'F'.
     ENDCASE.
