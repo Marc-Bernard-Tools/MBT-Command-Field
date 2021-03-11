@@ -106,6 +106,8 @@ INITIALIZATION.
   scr_t200 = 'Enter a command in the field below (w/o leading "?") and'(200).
   scr_t201 = 'select how you want to simulate the execution'(201).
 
+  scr_tab-prog = sy-cprog. " abaplint #1291
+
 *-----------------------------------------------------------------------
 
 AT SELECTION-SCREEN.
@@ -127,7 +129,7 @@ START-OF-SELECTION.
   DO.
     IF p_popup = abap_true.
       gv_exit = /mbtools/cl_command_field=>popup_command( p_cmd ).
-    ELSE.
+    ELSEIF p_exec = abap_true.
       gv_exit = /mbtools/cl_command_field=>execute_command( p_cmd ).
     ENDIF.
     IF gv_exit = abap_true.

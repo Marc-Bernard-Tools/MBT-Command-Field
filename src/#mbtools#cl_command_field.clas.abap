@@ -9,7 +9,6 @@ CLASS /mbtools/cl_command_field DEFINITION
 * (c) MBT 2020 https://marcbernardtools.com/
 ************************************************************************
   PUBLIC SECTION.
-    TYPE-POOLS icon .
 
     CLASS-METHODS execute_command
       IMPORTING
