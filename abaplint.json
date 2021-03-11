@@ -733,7 +733,11 @@
 	},
 	"syntax": {
 		"errorNamespace": "^(/MBTOOLS/|LCL_|LIF_|Y|Z)",
-		"globalConstants": [],
+		"globalConstants": [
+			"icon_convert",
+			"icon_equal",
+			"icon_message_error_small"
+		],
 		"globalMacros": [],
 		"version": "v702"
 	}
