@@ -6,7 +6,7 @@
 			"files": "/src/**/*.*"
 		},
 		{
-			"url": "https://github.com/mbtools/Marc_Bernard_Tools",
+			"url": "https://github.com/Marc-Bernard-Tools/MBT-Base",
 			"folder": "/deps2",
 			"files": "/src/**/*.*"
 		}
