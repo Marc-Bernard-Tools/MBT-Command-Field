@@ -48,8 +48,8 @@ CLASS /mbtools/cl_command DEFINITION
     CONSTANTS c_max_hits TYPE i VALUE 1000 ##NO_TEXT.
     CONSTANTS:
       BEGIN OF c_split,
-        operator TYPE c VALUE ':',
-        values   TYPE c VALUE ',',
+        operator TYPE c LENGTH 1 VALUE ':',
+        values   TYPE c LENGTH 1 VALUE ',',
         low_high TYPE c LENGTH 2 VALUE '..',
       END OF c_split .
     CLASS-DATA gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
