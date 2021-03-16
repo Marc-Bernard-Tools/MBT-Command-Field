@@ -20,7 +20,7 @@ CLASS /mbtools/cl_tool_bc_cl DEFINITION
         bundle_id    TYPE i VALUE 1,
         download_id  TYPE i VALUE 4409,
         description  TYPE string
-        VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
+        VALUE 'The World''s First Enhancement for the SAP GUI Command Field' ##NO_TEXT,
         has_launch   TYPE abap_bool VALUE abap_true,
         mbt_command  TYPE string VALUE 'COMMAND',
         mbt_shortcut TYPE string VALUE 'CF',
