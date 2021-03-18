@@ -4,7 +4,7 @@
   <DATA>
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
    <STARTING_FOLDER>/src/</STARTING_FOLDER>
-   <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
+   <FOLDER_LOGIC>FULL</FOLDER_LOGIC>
    <REQUIREMENTS>
     <item>
      <COMPONENT>SAP_BASIS</COMPONENT>
@@ -15,27 +15,6 @@
      <MIN_RELEASE>731</MIN_RELEASE>
     </item>
    </REQUIREMENTS>
-   <PACKAGING>
-    <NAME>MBT-Command-Field</NAME>
-    <VERSION>1.0.0</VERSION>
-    <SEM_VERSION>
-     <MAJOR>1</MAJOR>
-    </SEM_VERSION>
-    <DESCRIPTION>The World&apos;s First Enhancement for the SAP GUI Command Field</DESCRIPTION>
-    <GIT_URL>https://github.com/Marc-Bernard-Tools/MBT-Command-Field</GIT_URL>
-    <TARGET_PACKAGE>/MBTOOLS/BC_CL</TARGET_PACKAGE>
-    <DEPENDENCIES>
-     <item>
-      <NAME>MBT-Base</NAME>
-      <VERSION>1.0.0</VERSION>
-      <SEM_VERSION>
-       <MAJOR>1</MAJOR>
-      </SEM_VERSION>
-      <GIT_URL>https://github.com/Marc-Bernard-Tools/MBT-Base</GIT_URL>
-      <TARGET_PACKAGE>/MBTOOLS/BC</TARGET_PACKAGE>
-     </item>
-    </DEPENDENCIES>
-   </PACKAGING>
   </DATA>
  </asx:values>
 </asx:abap>
