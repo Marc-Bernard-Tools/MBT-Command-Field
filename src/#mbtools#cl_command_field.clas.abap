@@ -325,10 +325,10 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
           no_break_position_found = 3
           OTHERS                  = 4.
       IF sy-subrc = 0.
-        READ TABLE lt_mess INTO lv_msgv1 INDEX 1.         "#EC CI_SUBRC
-        READ TABLE lt_mess INTO lv_msgv2 INDEX 2.         "#EC CI_SUBRC
-        READ TABLE lt_mess INTO lv_msgv3 INDEX 3.         "#EC CI_SUBRC
-        READ TABLE lt_mess INTO lv_msgv4 INDEX 4.         "#EC CI_SUBRC
+        READ TABLE lt_mess INTO lv_msgv1 INDEX 1 ##SUBRC_OK.
+        READ TABLE lt_mess INTO lv_msgv2 INDEX 2 ##SUBRC_OK.
+        READ TABLE lt_mess INTO lv_msgv3 INDEX 3 ##SUBRC_OK.
+        READ TABLE lt_mess INTO lv_msgv4 INDEX 4 ##SUBRC_OK.
       ELSE.
         lv_msgv1 = iv_result+0(*).
         IF lv_len > c_max_len_msg.

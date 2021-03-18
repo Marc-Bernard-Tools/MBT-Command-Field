@@ -408,7 +408,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       WHERE pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
         AND object   IN lr_objects
         AND obj_name IN lr_names
-        AND delflag  = abap_false.        "#EC CI_GENBUFF "#EC CI_SUBRC
+        AND delflag  = abap_false ##SUBRC_OK.           "#EC CI_GENBUFF
 
     " Select reports (includes)
     IF lines( gt_tadir_list ) < c_max_hits.
