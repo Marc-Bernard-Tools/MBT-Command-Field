@@ -17,22 +17,17 @@ CLASS /mbtools/cl_tool_bc_cl DEFINITION
       BEGIN OF c_tool,
         version      TYPE string VALUE '1.0.0' ##NO_TEXT,
         title        TYPE string VALUE 'MBT Command Field' ##NO_TEXT,
+        description  TYPE string
+        VALUE 'The world''s first enhancement for the SAP GUI command field' ##NO_TEXT,
         bundle_id    TYPE i VALUE 1,
         download_id  TYPE i VALUE 4409,
-        description  TYPE string
-        VALUE 'The World''s First Enhancement for the SAP GUI Command Field' ##NO_TEXT,
         has_launch   TYPE abap_bool VALUE abap_true,
         mbt_command  TYPE string VALUE 'COMMAND',
         mbt_shortcut TYPE string VALUE 'CF',
       END OF c_tool.
 
-    METHODS constructor.
-
   PROTECTED SECTION.
   PRIVATE SECTION.
-
-    DATA mo_tool TYPE REF TO /mbtools/cl_tools.
-
 ENDCLASS.
 
 
@@ -50,13 +45,17 @@ CLASS /mbtools/cl_tool_bc_cl IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD /mbtools/if_tool~uninstall.
-    RETURN.
+ METHOD /mbtools/if_tool~title.
+    rv_title = c_tool-title.
   ENDMETHOD.
 
 
-  METHOD constructor.
-    CREATE OBJECT mo_tool EXPORTING io_tool = me.
-    /mbtools/if_tool~ms_manifest = mo_tool->ms_manifest.
+  METHOD /mbtools/if_tool~tool.
+    MOVE-CORRESPONDING c_tool TO rs_tool.
+  ENDMETHOD.
+
+
+  METHOD /mbtools/if_tool~uninstall.
+    RETURN.
   ENDMETHOD.
 ENDCLASS.
