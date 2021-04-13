@@ -503,7 +503,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     TRY.
         CALL METHOD ('CL_RSOS_SEARCH_METADATA')=>factory
           RECEIVING
-            r_search_obj = lo_search.
+            r_r_search_metadata = lo_search.
       CATCH cx_root ##NO_HANDLER.
     ENDTRY.
 
@@ -605,7 +605,11 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       <ls_where_attributes>  LIKE LINE OF lt_where_attributes,
       <ls_search_attributes> LIKE LINE OF lt_search_attributes,
       <ls_sel_objects>       LIKE LINE OF iv_sel_objects,
-      <ls_sel_names>         LIKE LINE OF iv_sel_names.
+      <ls_sel_names>         LIKE LINE OF iv_sel_names,
+      <lt_results>           TYPE ANY TABLE,
+      <ls_results>           TYPE any,
+      <lv_object>            TYPE any,
+      <lv_sel_name>          TYPE any.
 
     APPEND INITIAL LINE TO lt_search_attributes ASSIGNING <ls_search_attributes>.
     <ls_search_attributes>-attributenm = 'TECHNAME'.
@@ -638,13 +642,21 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
         e_r_table_descr       = lr_table_descr
         e_subrc               = lv_subrc.
 
+    CHECK lv_subrc < 8.
 
-*    LOOP AT lt_search_results ASSIGNING <ls_search_result>.
-*      select_add(
-*        iv_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
-*        iv_object   = <ls_search_result>-r_awbobj->get_awbobj( )
-*        iv_sel_name = <ls_search_result>-r_awbobj->get_objnm( ) ).
-*    ENDLOOP.
+    ASSIGN lr_result->* TO <lt_results>.
+
+    LOOP AT <lt_results> ASSIGNING <ls_results>.
+      ASSIGN COMPONENT 'TLOGO' OF STRUCTURE <ls_results> TO <lv_object>.
+      ASSERT sy-subrc = 0.
+      ASSIGN COMPONENT 'TECHNAME' OF STRUCTURE <ls_results> TO <lv_sel_name>.
+      ASSERT sy-subrc = 0.
+
+      select_add(
+        iv_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
+        iv_object   = |{ <lv_object> }|
+        iv_sel_name = |{ <lv_sel_name> }| ).
+    ENDLOOP.
 
   ENDMETHOD.
 
