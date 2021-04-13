@@ -51,20 +51,20 @@ CLASS /mbtools/cl_command DEFINITION
         operator TYPE c LENGTH 1 VALUE ':',
         values   TYPE c LENGTH 1 VALUE ',',
         low_high TYPE c LENGTH 2 VALUE '..',
-      END OF c_split .
-    CLASS-DATA gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext .
-    CLASS-DATA gt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys .
+      END OF c_split.
+    CLASS-DATA gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext.
+    CLASS-DATA gt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys.
 
     METHODS name_split
       IMPORTING
         !iv_obj_name    TYPE string
       RETURNING
-        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_name_range .
+        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_name_range.
     METHODS object_split
       IMPORTING
         !iv_object      TYPE string
       RETURNING
-        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_object_range .
+        VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_object_range.
     METHODS range_derive
       IMPORTING
         !iv_input      TYPE csequence
@@ -73,7 +73,7 @@ CLASS /mbtools/cl_command DEFINITION
         !ev_sign       TYPE clike
         !ev_option     TYPE clike
         !ev_low        TYPE csequence
-        !ev_high       TYPE csequence .
+        !ev_high       TYPE csequence.
     METHODS select_check
       IMPORTING
         !iv_object       TYPE /mbtools/if_definitions=>ty_object
@@ -81,40 +81,51 @@ CLASS /mbtools/cl_command DEFINITION
         !iv_sel_names    TYPE /mbtools/if_definitions=>ty_name_range
         !iv_if_requested TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(rv_result) TYPE abap_bool .
+        VALUE(rv_result) TYPE abap_bool.
     METHODS select_object
       IMPORTING
         !iv_object       TYPE /mbtools/if_definitions=>ty_object
         !iv_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
       RETURNING
-        VALUE(rv_result) TYPE abap_bool .
+        VALUE(rv_result) TYPE abap_bool.
     METHODS select_add
       IMPORTING
         !iv_pgmid     TYPE /mbtools/if_definitions=>ty_pgmid
         !iv_object    TYPE /mbtools/if_definitions=>ty_object
         !iv_sel_name  TYPE /mbtools/if_definitions=>ty_name OPTIONAL
-        !iv_sel_names TYPE /mbtools/if_definitions=>ty_names OPTIONAL .
+        !iv_sel_names TYPE /mbtools/if_definitions=>ty_names OPTIONAL.
     METHODS select_bw
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
-        !iv_obj_name    TYPE string .
+        !iv_obj_name    TYPE string.
     METHODS select_func
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
     METHODS select_mess
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
     METHODS select_meth
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
     METHODS select_reps
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range .
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+    METHODS select_bw_classic
+      IMPORTING
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
+        !iv_obj_name    TYPE string.
+    METHODS select_bw_hana
+      IMPORTING
+        !io_search      TYPE REF TO object
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
+        !iv_obj_name    TYPE string.
 ENDCLASS.
 
 
@@ -487,10 +498,35 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_bw.
 
-    " Instead of using "BW Search" we will eventually replace it
-    " with a simple select on /MBTOOLS/BWDIR
+    DATA lo_search TYPE REF TO object.
+
+    TRY.
+        CALL METHOD ('CL_RSOS_SEARCH_METADATA')=>factory
+          RECEIVING
+            r_search_obj = lo_search.
+      CATCH cx_root ##NO_HANDLER.
+    ENDTRY.
+
+    IF sy-dbsys = 'HDB' AND lo_search IS BOUND.
+      select_bw_hana(
+        io_search      = lo_search
+        iv_sel_objects = iv_sel_objects
+        iv_sel_names   = iv_sel_names
+        iv_obj_name    = iv_obj_name ).
+    ELSE.
+      select_bw_classic(
+        iv_sel_objects = iv_sel_objects
+        iv_sel_names   = iv_sel_names
+        iv_obj_name    = iv_obj_name ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD select_bw_classic.
 
     DATA:
+      lv_trex_search    TYPE abap_bool,
       lo_search         TYPE REF TO cl_rsawbn_ser_search_general,
       lt_search_objs    TYPE cl_rsawbn_ser_search_obj=>ty_tr_search_obj,
       ls_search_param   TYPE cl_rsawbn_ser_search_general=>ty_s_search_param,
@@ -524,12 +560,18 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
     ENDLOOP.
 
+    TRY.
+        CALL METHOD ('CL_RSOS_META_INDEX')=>get_trex_engine_stat
+          RECEIVING
+            r_trex_engine_state = lv_trex_search.
+      CATCH cx_root ##NO_HANDLER.
+    ENDTRY.
     " Search technical names only (use TREX/HANA if available)
     ls_search_param-search_term        = iv_obj_name.
     ls_search_param-technm             = abap_true.
     ls_search_param-descr              = abap_false.
     ls_search_param-exact_search       = abap_true.
-    ls_search_param-trex_search        = cl_rsos_meta_index=>get_trex_engine_stat( ).
+    ls_search_param-trex_search        = lv_trex_search.
     ls_search_param-trex_detail_search = abap_false.
     ls_search_param-search_behaviaour  = cl_rsawbn_ser_search=>c_exact_search.
 
@@ -546,6 +588,63 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
         iv_object   = <ls_search_result>-r_awbobj->get_awbobj( )
         iv_sel_name = <ls_search_result>-r_awbobj->get_objnm( ) ).
     ENDLOOP.
+
+  ENDMETHOD.
+
+
+  METHOD select_bw_hana.
+
+    DATA:
+      lt_where_attributes  TYPE rsos_t_whereattribute,
+      lt_search_attributes TYPE rsos_t_search_attribute,
+      lv_subrc             TYPE sy-subrc,
+      lr_result            TYPE REF TO data,
+      lr_table_descr       TYPE REF TO cl_abap_tabledescr.
+
+    FIELD-SYMBOLS:
+      <ls_where_attributes>  LIKE LINE OF lt_where_attributes,
+      <ls_search_attributes> LIKE LINE OF lt_search_attributes,
+      <ls_sel_objects>       LIKE LINE OF iv_sel_objects,
+      <ls_sel_names>         LIKE LINE OF iv_sel_names.
+
+    APPEND INITIAL LINE TO lt_search_attributes ASSIGNING <ls_search_attributes>.
+    <ls_search_attributes>-attributenm = 'TECHNAME'.
+    <ls_search_attributes>-requested   = abap_true.
+
+    LOOP AT iv_sel_objects ASSIGNING <ls_sel_objects>.
+      APPEND INITIAL LINE TO lt_where_attributes ASSIGNING <ls_where_attributes>.
+      <ls_where_attributes>-attributenm = 'TLOGO'.
+      <ls_where_attributes>-sign        = <ls_sel_objects>-sign.
+      <ls_where_attributes>-option      = <ls_sel_objects>-option.
+      <ls_where_attributes>-low         = <ls_sel_objects>-low.
+    ENDLOOP.
+
+    APPEND INITIAL LINE TO lt_where_attributes ASSIGNING <ls_where_attributes>.
+    <ls_where_attributes>-attributenm = 'OBJVERS'.
+    <ls_where_attributes>-sign        = 'I'.
+    <ls_where_attributes>-option      = 'CP'.
+    <ls_where_attributes>-low         = 'A'.
+
+    CALL METHOD io_search->('SEARCH')
+      EXPORTING
+        i_search_term         = iv_obj_name
+        i_t_where_attributes  = lt_where_attributes
+        i_t_search_attributes = lt_search_attributes
+        i_severity            = 'S'
+        i_association_type    = '002'
+        i_with_icon           = abap_false
+      IMPORTING
+        e_r_result            = lr_result
+        e_r_table_descr       = lr_table_descr
+        e_subrc               = lv_subrc.
+
+
+*    LOOP AT lt_search_results ASSIGNING <ls_search_result>.
+*      select_add(
+*        iv_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
+*        iv_object   = <ls_search_result>-r_awbobj->get_awbobj( )
+*        iv_sel_name = <ls_search_result>-r_awbobj->get_objnm( ) ).
+*    ENDLOOP.
 
   ENDMETHOD.
 
