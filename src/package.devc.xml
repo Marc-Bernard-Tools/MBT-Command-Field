@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>Marc Bernard Tool for Command Field</CTEXT>
+    <CTEXT>MBT Command Field</CTEXT>
     <COMP_POSID>BC-DOC-HLP</COMP_POSID>
     <COMPONENT>HLB0006317</COMPONENT>
    </DEVC>
