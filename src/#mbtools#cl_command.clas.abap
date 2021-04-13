@@ -595,8 +595,8 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
   METHOD select_bw_hana.
 
     DATA:
-      lr_data   TYPE REF TO data,
-      lv_subrc  TYPE sy-subrc.
+      lr_data  TYPE REF TO data,
+      lv_subrc TYPE sy-subrc.
 
     FIELD-SYMBOLS:
       <lt_where_attributes>  TYPE ANY TABLE,
@@ -611,9 +611,9 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       <lv_object>            TYPE any,
       <lv_sel_name>          TYPE any.
 
-    CREATE DATA lr_data TYPE TABLE OF ('RSOS_S_SEARCH_ATTRIBUTE').
+    CREATE DATA lr_data TYPE ('RSOS_S_SEARCHATTRIBUTE').
     ASSIGN lr_data->* TO <ls_search_attributes>.
-    CREATE DATA lr_data TYPE TABLE OF ('RSOS_T_SEARCH_ATTRIBUTE').
+    CREATE DATA lr_data TYPE ('RSOS_T_SEARCH_ATTRIBUTE').
     ASSIGN lr_data->* TO <lt_search_attributes>.
 
     ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_search_attributes> TO <lv_field> ##SUBRC_OK.
@@ -622,16 +622,27 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     <lv_field> = abap_true.
     INSERT <ls_search_attributes> INTO TABLE <lt_search_attributes>.
 
-    CREATE DATA lr_data TYPE TABLE OF ('RSOS_S_WHEREATTRIBUTE').
+    CREATE DATA lr_data TYPE ('RSOS_S_WHEREATTRIBUTE').
     ASSIGN lr_data->* TO <ls_where_attributes>.
-    CREATE DATA lr_data TYPE TABLE OF ('RSOS_T_WHEREATTRIBUTE').
+    CREATE DATA lr_data TYPE ('RSOS_T_WHEREATTRIBUTE').
     ASSIGN lr_data->* TO <lt_where_attributes>.
 
     LOOP AT iv_sel_objects ASSIGNING <ls_sel_objects>.
       MOVE-CORRESPONDING <ls_sel_objects> TO <ls_where_attributes>.
       ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
       <lv_field> = 'TLOGO'.
+      INSERT <ls_where_attributes> INTO TABLE <lt_where_attributes>.
     ENDLOOP.
+
+    ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = 'OBJVERS'.
+    ASSIGN COMPONENT 'SIGN' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = 'I'.
+    ASSIGN COMPONENT 'OPTION' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = 'EQ'.
+    ASSIGN COMPONENT 'LOW' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = 'A'.
+    INSERT <ls_where_attributes> INTO TABLE <lt_where_attributes>.
 
     CALL METHOD io_search->('SEARCH')
       EXPORTING
