@@ -595,15 +595,15 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
   METHOD select_bw_hana.
 
     DATA:
-      lt_where_attributes  TYPE rsos_t_whereattribute,
-      lt_search_attributes TYPE rsos_t_search_attribute,
-      lv_subrc             TYPE sy-subrc,
-      lr_result            TYPE REF TO data,
-      lr_table_descr       TYPE REF TO cl_abap_tabledescr.
+      lr_data   TYPE REF TO data,
+      lv_subrc  TYPE sy-subrc.
 
     FIELD-SYMBOLS:
-      <ls_where_attributes>  LIKE LINE OF lt_where_attributes,
-      <ls_search_attributes> LIKE LINE OF lt_search_attributes,
+      <lt_where_attributes>  TYPE ANY TABLE,
+      <lt_search_attributes> TYPE ANY TABLE,
+      <ls_where_attributes>  TYPE any,
+      <ls_search_attributes> TYPE any,
+      <lv_field>             TYPE any,
       <ls_sel_objects>       LIKE LINE OF iv_sel_objects,
       <ls_sel_names>         LIKE LINE OF iv_sel_names,
       <lt_results>           TYPE ANY TABLE,
@@ -611,40 +611,43 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       <lv_object>            TYPE any,
       <lv_sel_name>          TYPE any.
 
-    APPEND INITIAL LINE TO lt_search_attributes ASSIGNING <ls_search_attributes>.
-    <ls_search_attributes>-attributenm = 'TECHNAME'.
-    <ls_search_attributes>-requested   = abap_true.
+    CREATE DATA lr_data TYPE TABLE OF ('RSOS_S_SEARCH_ATTRIBUTE').
+    ASSIGN lr_data->* TO <ls_search_attributes>.
+    CREATE DATA lr_data TYPE TABLE OF ('RSOS_T_SEARCH_ATTRIBUTE').
+    ASSIGN lr_data->* TO <lt_search_attributes>.
+
+    ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_search_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = 'TECHNAME'.
+    ASSIGN COMPONENT 'REQUESTED' OF STRUCTURE <ls_search_attributes> TO <lv_field> ##SUBRC_OK.
+    <lv_field> = abap_true.
+    INSERT <ls_search_attributes> INTO TABLE <lt_search_attributes>.
+
+    CREATE DATA lr_data TYPE TABLE OF ('RSOS_S_WHEREATTRIBUTE').
+    ASSIGN lr_data->* TO <ls_where_attributes>.
+    CREATE DATA lr_data TYPE TABLE OF ('RSOS_T_WHEREATTRIBUTE').
+    ASSIGN lr_data->* TO <lt_where_attributes>.
 
     LOOP AT iv_sel_objects ASSIGNING <ls_sel_objects>.
-      APPEND INITIAL LINE TO lt_where_attributes ASSIGNING <ls_where_attributes>.
-      <ls_where_attributes>-attributenm = 'TLOGO'.
-      <ls_where_attributes>-sign        = <ls_sel_objects>-sign.
-      <ls_where_attributes>-option      = <ls_sel_objects>-option.
-      <ls_where_attributes>-low         = <ls_sel_objects>-low.
+      MOVE-CORRESPONDING <ls_sel_objects> TO <ls_where_attributes>.
+      ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+      <lv_field> = 'TLOGO'.
     ENDLOOP.
-
-    APPEND INITIAL LINE TO lt_where_attributes ASSIGNING <ls_where_attributes>.
-    <ls_where_attributes>-attributenm = 'OBJVERS'.
-    <ls_where_attributes>-sign        = 'I'.
-    <ls_where_attributes>-option      = 'CP'.
-    <ls_where_attributes>-low         = 'A'.
 
     CALL METHOD io_search->('SEARCH')
       EXPORTING
         i_search_term         = iv_obj_name
-        i_t_where_attributes  = lt_where_attributes
-        i_t_search_attributes = lt_search_attributes
+        i_t_where_attributes  = <lt_where_attributes>
+        i_t_search_attributes = <lt_search_attributes>
         i_severity            = 'S'
         i_association_type    = '002'
         i_with_icon           = abap_false
       IMPORTING
-        e_r_result            = lr_result
-        e_r_table_descr       = lr_table_descr
+        e_r_result            = lr_data
         e_subrc               = lv_subrc.
 
     CHECK lv_subrc < 8.
 
-    ASSIGN lr_result->* TO <lt_results>.
+    ASSIGN lr_data->* TO <lt_results>.
 
     LOOP AT <lt_results> ASSIGNING <ls_results>.
       ASSIGN COMPONENT 'TLOGO' OF STRUCTURE <ls_results> TO <lv_object>.
