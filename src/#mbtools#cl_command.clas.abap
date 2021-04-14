@@ -124,8 +124,7 @@ CLASS /mbtools/cl_command DEFINITION
       IMPORTING
         !io_search      TYPE REF TO object
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
-        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
-        !iv_obj_name    TYPE string.
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
 ENDCLASS.
 
 
@@ -511,8 +510,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       select_bw_hana(
         io_search      = lo_search
         iv_sel_objects = iv_sel_objects
-        iv_sel_names   = iv_sel_names
-        iv_obj_name    = iv_obj_name ).
+        iv_sel_names   = iv_sel_names ).
     ELSE.
       select_bw_classic(
         iv_sel_objects = iv_sel_objects
@@ -594,6 +592,8 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_bw_hana.
 
+    " If any of the assigns fail, something in BW changed and this method must be adjusted accordingly
+
     DATA:
       lr_data  TYPE REF TO data,
       lv_subrc TYPE sy-subrc.
@@ -612,10 +612,11 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       <lv_sel_name>          TYPE any.
 
     CREATE DATA lr_data TYPE ('RSOS_S_SEARCHATTRIBUTE').
-    ASSIGN lr_data->* TO <ls_search_attributes>.
+    ASSIGN lr_data->* TO <ls_search_attributes> ##SUBRC_OK.
     CREATE DATA lr_data TYPE ('RSOS_T_SEARCH_ATTRIBUTE').
-    ASSIGN lr_data->* TO <lt_search_attributes>.
+    ASSIGN lr_data->* TO <lt_search_attributes> ##SUBRC_OK.
 
+    " Search technical name only
     ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_search_attributes> TO <lv_field> ##SUBRC_OK.
     <lv_field> = 'TECHNAME'.
     ASSIGN COMPONENT 'REQUESTED' OF STRUCTURE <ls_search_attributes> TO <lv_field> ##SUBRC_OK.
@@ -623,10 +624,11 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     INSERT <ls_search_attributes> INTO TABLE <lt_search_attributes>.
 
     CREATE DATA lr_data TYPE ('RSOS_S_WHEREATTRIBUTE').
-    ASSIGN lr_data->* TO <ls_where_attributes>.
+    ASSIGN lr_data->* TO <ls_where_attributes> ##SUBRC_OK.
     CREATE DATA lr_data TYPE ('RSOS_T_WHEREATTRIBUTE').
-    ASSIGN lr_data->* TO <lt_where_attributes>.
+    ASSIGN lr_data->* TO <lt_where_attributes> ##SUBRC_OK.
 
+    " Limit to list of object types
     LOOP AT iv_sel_objects ASSIGNING <ls_sel_objects>.
       MOVE-CORRESPONDING <ls_sel_objects> TO <ls_where_attributes>.
       ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
@@ -634,6 +636,15 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       INSERT <ls_where_attributes> INTO TABLE <lt_where_attributes>.
     ENDLOOP.
 
+    " Limit to list of object names
+    LOOP AT iv_sel_names ASSIGNING <ls_sel_names>.
+      MOVE-CORRESPONDING <ls_sel_names> TO <ls_where_attributes>.
+      ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
+      <lv_field> = 'TECHNAME'.
+      INSERT <ls_where_attributes> INTO TABLE <lt_where_attributes>.
+    ENDLOOP.
+
+    " Limit to active version of objects
     ASSIGN COMPONENT 'ATTRIBUTENM' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
     <lv_field> = 'OBJVERS'.
     ASSIGN COMPONENT 'SIGN' OF STRUCTURE <ls_where_attributes> TO <lv_field> ##SUBRC_OK.
@@ -646,7 +657,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
     CALL METHOD io_search->('SEARCH')
       EXPORTING
-        i_search_term         = iv_obj_name
+        i_search_term         = '*'
         i_t_where_attributes  = <lt_where_attributes>
         i_t_search_attributes = <lt_search_attributes>
         i_severity            = 'S'
@@ -658,13 +669,11 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
     CHECK lv_subrc < 8.
 
-    ASSIGN lr_data->* TO <lt_results>.
+    ASSIGN lr_data->* TO <lt_results> ##SUBRC_OK.
 
     LOOP AT <lt_results> ASSIGNING <ls_results>.
-      ASSIGN COMPONENT 'TLOGO' OF STRUCTURE <ls_results> TO <lv_object>.
-      ASSERT sy-subrc = 0.
-      ASSIGN COMPONENT 'TECHNAME' OF STRUCTURE <ls_results> TO <lv_sel_name>.
-      ASSERT sy-subrc = 0.
+      ASSIGN COMPONENT 'TLOGO' OF STRUCTURE <ls_results> TO <lv_object> ##SUBRC_OK.
+      ASSIGN COMPONENT 'TECHNAME' OF STRUCTURE <ls_results> TO <lv_sel_name> ##SUBRC_OK.
 
       select_add(
         iv_pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr
