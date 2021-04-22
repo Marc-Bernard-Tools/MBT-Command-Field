@@ -2,7 +2,7 @@
 
 # MBT Command Field
 
-The World''s First Enhancement for the SAP GUI Command Field
+The world's first enhancement for the SAP® GUI command field
 
 ### EVERYTHING IS VERY MUCH IN PROGRESS HERE 
 ### WE SUGGEST TO WAIT UNTIL THE OFFICIAL LAUNCH
