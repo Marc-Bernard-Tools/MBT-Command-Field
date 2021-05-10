@@ -34,9 +34,9 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
     DATA:
       lv_operand TYPE string,
       lv_found   TYPE abap_bool,
-      lo_tool    TYPE REF TO /mbtools/cl_tools,
-      ls_tool    TYPE /mbtools/cl_tools=>ty_manifest,
-      lt_tools   TYPE /mbtools/cl_tools=>ty_manifests.
+      lo_tool    TYPE REF TO /mbtools/cl_tool,
+      ls_tool    TYPE /mbtools/cl_tool_manager=>ty_manifest,
+      lt_tools   TYPE /mbtools/cl_tool_manager=>ty_manifests.
 
     " Split parameters into operator and operand
     command->split(
@@ -48,7 +48,7 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
     lv_operand = to_upper( lv_operand ).
 
     " Commands from registered tools
-    lt_tools = /mbtools/cl_tools=>select( ).
+    lt_tools = /mbtools/cl_tool_manager=>select( ).
 
     LOOP AT lt_tools INTO ls_tool.
       lo_tool = ls_tool-manager.
