@@ -627,7 +627,7 @@
 			"severity": "Error"
 		},
 		"select_add_order_by": {
-			"exclude": [],
+			"exclude": [".*"],
 			"severity": "Error"
 		},
 		"select_performance": {
