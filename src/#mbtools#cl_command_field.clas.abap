@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command Field
@@ -15,14 +15,14 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_input      TYPE csequence
         !iv_via_popup  TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
     CLASS-METHODS popup_command
       IMPORTING
         !iv_input      TYPE csequence
         !iv_icon       TYPE icon_d OPTIONAL
         !iv_result     TYPE string OPTIONAL
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
     CLASS-METHODS show_result
       IMPORTING
         !iv_command    TYPE csequence
@@ -31,13 +31,13 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_result     TYPE string
         !iv_via_popup  TYPE abap_bool
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
     CLASS-METHODS set_infos
       IMPORTING
-        !is_infos TYPE help_info .
+        !is_infos TYPE help_info.
     CLASS-METHODS get_infos
       RETURNING
-        VALUE(rs_infos) TYPE help_info .
+        VALUE(rs_infos) TYPE help_info.
   PROTECTED SECTION.
 
   PRIVATE SECTION.
