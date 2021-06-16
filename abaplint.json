@@ -635,7 +635,7 @@
 			"exclude": [],
 			"selectStar": true,
 			"severity": "Error",
-			"starOkayIfFewColumns": 10,
+			"starOkayIfFewColumns": 10
 		},
 		"selection_screen_naming": {
 			"exclude": [],
