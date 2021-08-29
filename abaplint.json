@@ -182,6 +182,11 @@
 			"severity": "Error",
 			"spaces": 1
 		},
+		"cyclic_oo": {
+			"exclude": [],
+			"severity": "Error",
+			"skip": []
+		},
 		"cyclomatic_complexity": {
 			"exclude": [],
 			"max": 20,
@@ -330,6 +335,7 @@
 			"severity": "Error"
 		},
 		"in_statement_indentation": {
+			"blockStatements": 2,
 			"exclude": [".*"],
 			"ignoreExceptions": true,
 			"severity": "Error"
@@ -377,6 +383,7 @@
 			"style": "upper"
 		},
 		"line_break_multiple_parameters": {
+			"count": 1,
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -422,7 +429,7 @@
 			"exclude": [],
 			"severity": "Error"
 		},
-		"many_parenthesis": {
+		"many_parentheses": {
 			"exclude": [],
 			"severity": "Error"
 		},
@@ -443,6 +450,7 @@
 			"severity": "Error"
 		},
 		"method_length": {
+			"checkForms": true,
 			"errorWhenEmpty": true,
 			"exclude": [],
 			"ignoreTestClasses": true,
@@ -533,6 +541,7 @@
 		},
 		"obsolete_statement": {
 			"add": true,
+			"callTransformation": true,
 			"communication": true,
 			"compute": true,
 			"divide": true,
@@ -552,6 +561,7 @@
 			"selectWithoutInto": true,
 			"setExtended": true,
 			"severity": "Error",
+			"sortByFS": true,
 			"subtract": true,
 			"typePools": true,
 			"withHeaderLine": true
@@ -726,6 +736,10 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"unused_ddic": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"unused_methods": {
 			"exclude": [],
 			"severity": "Error"
@@ -771,14 +785,7 @@
 	},
 	"syntax": {
 		"errorNamespace": "^(/MBTOOLS/|LCL_|LIF_|Y|Z)",
-		"globalConstants": [
-			"icon_bw_convert_unit",
-			"icon_convert",
-			"icon_equal",
-			"icon_greater",
-			"icon_message_error_small",
-			"icon_space"
-		],
+		"globalConstants": [],
 		"globalMacros": [],
 		"version": "v702"
 	}
