@@ -35,8 +35,8 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
       lv_operand TYPE string,
       lv_found   TYPE abap_bool,
       lo_tool    TYPE REF TO /mbtools/cl_tool,
-      ls_tool    TYPE /mbtools/cl_tool_manager=>ty_manifest,
-      lt_tools   TYPE /mbtools/cl_tool_manager=>ty_manifests.
+      ls_tool    TYPE /mbtools/if_tool=>ty_manifest,
+      lt_tools   TYPE /mbtools/if_tool=>ty_manifests.
 
     " Split parameters into operator and operand
     command->split(
