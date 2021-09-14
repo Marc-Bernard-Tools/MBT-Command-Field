@@ -18,42 +18,7 @@
      <ENHMODE>D</ENHMODE>
      <FULL_NAME>\FU:HELP_START\SE:BEGIN\EI</FULL_NAME>
      <SOURCE>
-      <item>************************************************************************</item>
-      <item>* /MBTOOLS/BC_COMMAND_FIELD</item>
-      <item>* MBT Command Field</item>
-      <item>*</item>
-      <item>* (c) MBT 2020 https://marcbernardtools.com/</item>
-      <item>************************************************************************</item>
-      <item/>
-      <item>  DATA:</item>
-      <item>    mbt_exit    TYPE abap_bool,</item>
-      <item>    mbt_command TYPE string.</item>
-      <item/>
-      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_switches=&gt;c_tool-mbt_command_field ) = abap_true.</item>
-      <item/>
-      <item>    mbt_command = help_infos-menufunct.</item>
-      <item/>
-      <item>    IF help_infos-call = &apos;D&apos; AND help_infos-docuid = &apos;OK&apos;.</item>
-      <item/>
-      <item>      IF /mbtools/cl_command_field=&gt;get_infos( ) IS INITIAL.</item>
-      <item>        /mbtools/cl_command_field=&gt;set_infos( help_infos ).</item>
-      <item>        SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
-      <item>        mbt_exit = /mbtools/cl_command_field=&gt;popup_command( iv_input = mbt_command ).</item>
-      <item>      ENDIF.</item>
-      <item/>
-      <item>    ELSEIF help_infos-call = &apos;H&apos;.</item>
-      <item/>
-      <item>      SET TITLEBAR &apos;OBJECT_SELECTION&apos; OF PROGRAM &apos;/MBTOOLS/BC_COMMAND_FIELD&apos;.</item>
-      <item>      mbt_exit = /mbtools/cl_command_field=&gt;execute_command( iv_input = mbt_command ).</item>
-      <item/>
-      <item>    ENDIF.</item>
-      <item/>
-      <item>    IF mbt_exit = abap_true.</item>
-      <item>      RETURN.</item>
-      <item>    ENDIF.</item>
-      <item/>
-      <item>  ENDIF.</item>
-      <item/>
+      <item>FILE:0001</item>
      </SOURCE>
     </ENH_HOOK_IMPL>
     <ENH_HOOK_IMPL>
@@ -61,39 +26,7 @@
      <ENHMODE>D</ENHMODE>
      <FULL_NAME>\FU:HELP_OBJECT_SHOW_FOR_FIELD\SE:BEGIN\EI</FULL_NAME>
      <SOURCE>
-      <item>************************************************************************</item>
-      <item>* /MBTOOLS/BC_COMMAND_FIELD</item>
-      <item>* MBT Command Field</item>
-      <item>*</item>
-      <item>* (c) MBT 2020 https://marcbernardtools.com/</item>
-      <item>************************************************************************</item>
-      <item/>
-      <item>  DATA:</item>
-      <item>    mbt_infos        TYPE help_info,</item>
-      <item>    mbt_dynpselect   TYPE TABLE OF dselc,</item>
-      <item>    mbt_dynpvaluetab TYPE TABLE OF dval.</item>
-      <item/>
-      <item>  IF /mbtools/cl_switches=&gt;is_active( /mbtools/cl_switches=&gt;c_tool-mbt_command_field ) = abap_true.</item>
-      <item/>
-      <item>    mbt_infos = /mbtools/cl_command_field=&gt;get_infos( ).</item>
-      <item/>
-      <item>    IF called_for_tab = &apos;/MBTOOLS/BC_COMMAND&apos; AND mbt_infos IS NOT INITIAL.</item>
-      <item/>
-      <item>      CALL FUNCTION &apos;HELP_START&apos;</item>
-      <item>        EXPORTING</item>
-      <item>          help_infos   = mbt_infos</item>
-      <item>        TABLES</item>
-      <item>          dynpselect   = mbt_dynpselect</item>
-      <item>          dynpvaluetab = mbt_dynpvaluetab.</item>
-      <item/>
-      <item>      CLEAR mbt_infos.</item>
-      <item>      /mbtools/cl_command_field=&gt;set_infos( mbt_infos ).</item>
-      <item>      RETURN.</item>
-      <item/>
-      <item>    ENDIF.</item>
-      <item/>
-      <item>  ENDIF.</item>
-      <item/>
+      <item>FILE:0002</item>
      </SOURCE>
     </ENH_HOOK_IMPL>
    </ENHANCEMENTS>

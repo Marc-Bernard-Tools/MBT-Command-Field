@@ -2,7 +2,8 @@ REPORT /mbtools/command_field.
 ************************************************************************
 * MBT Command Field
 *
-* (c) MBT 2020 https://marcbernardtools.com/
+* Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
+* SPDX-License-Identifier: GPL-3.0-or-later
 ************************************************************************
 
 START-OF-SELECTION.

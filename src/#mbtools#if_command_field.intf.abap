@@ -1,11 +1,12 @@
 INTERFACE /mbtools/if_command_field
   PUBLIC .
+
 ************************************************************************
 * MBT Command Field
 *
-* (c) MBT 2020 https://marcbernardtools.com/
+* Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
+* SPDX-License-Identifier: GPL-3.0-or-later
 ************************************************************************
-
   CONSTANTS:
     BEGIN OF c_pgmid,
       r3tr TYPE pgmid VALUE 'R3TR',

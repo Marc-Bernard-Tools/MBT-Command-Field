@@ -1,6 +1,12 @@
 * regenerated at 2021-01-28 19:33:43
-FUNCTION-POOL /MBTOOLS/BC_CL             MESSAGE-ID SV.
+FUNCTION-POOL /mbtools/bc_cl             MESSAGE-ID sv.
 
-* INCLUDE /MBTOOLS/LBC_CLD...                " Local class definition
-  INCLUDE LSVIMDAT                                . "general data decl.
-  INCLUDE /MBTOOLS/LBC_CLT00                      . "view rel. data dcl.
+************************************************************************
+* MBT Command Field
+*
+* Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
+* SPDX-License-Identifier: GPL-3.0-or-later
+************************************************************************
+
+INCLUDE lsvimdat                                . "general data decl.
+INCLUDE /mbtools/lbc_clt00                      . "view rel. data dcl.

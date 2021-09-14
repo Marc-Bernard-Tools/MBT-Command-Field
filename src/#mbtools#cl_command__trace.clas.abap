@@ -4,9 +4,10 @@ CLASS /mbtools/cl_command__trace DEFINITION
   CREATE PUBLIC .
 
 ************************************************************************
-* MBT Command - Show
+* MBT Command - Trace
 *
-* (c) MBT 2020 https://marcbernardtools.com/
+* Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
+* SPDX-License-Identifier: GPL-3.0-or-later
 ************************************************************************
   PUBLIC SECTION.
 
