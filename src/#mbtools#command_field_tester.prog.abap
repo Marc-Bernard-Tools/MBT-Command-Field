@@ -6,9 +6,7 @@ REPORT /mbtools/command_field_tester.
 * SPDX-License-Identifier: GPL-3.0-or-later
 ************************************************************************
 
-TABLES:
-  sscrfields,
-  /mbtools/bc_command.
+TABLES: sscrfields.
 
 *-----------------------------------------------------------------------
 
