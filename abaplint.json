@@ -747,7 +747,9 @@
 			"severity": "Error"
 		},
 		"unused_ddic": {
-			"exclude": ["/mbtools/bc_command.tabl"],
+			"exclude": [
+				"#mbtools#bc_command.tabl.xml"
+			],
 			"severity": "Error"
 		},
 		"unused_methods": {
