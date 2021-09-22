@@ -1,4 +1,4 @@
-"NAME:\FU:HELP_START\SE:BEGIN\EI
+"Name: \FU:HELP_START\SE:BEGIN\EI
 ENHANCEMENT 0 /MBTOOLS/BC_COMMAND_FIELD.
 ************************************************************************
 * MBT Command Field

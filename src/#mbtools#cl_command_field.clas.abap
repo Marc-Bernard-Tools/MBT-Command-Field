@@ -192,6 +192,9 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD popup_command.
 
+    CONSTANTS:
+      lc_command TYPE tabname VALUE '/MBTOOLS/BC_COMMAND'.
+
     DATA:
       lt_field  TYPE TABLE OF sval,
       lt_result TYPE TABLE OF sval-value,
@@ -200,13 +203,13 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
     FIELD-SYMBOLS:
       <lv_field>  TYPE sval,
-      <lv_result> TYPE any.
+      <lv_result> LIKE LINE OF lt_result.
 
     " Always exit command field, for commands processed via popup
     rv_exit = abap_true.
 
     APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-    <lv_field>-tabname    = '/MBTOOLS/BC_COMMAND'.
+    <lv_field>-tabname    = lc_command.
     <lv_field>-fieldname  = 'COMMAND'.
     <lv_field>-fieldtext  = icon_greater && 'Command'(040).
     <lv_field>-value      = iv_input.
@@ -236,7 +239,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       LOOP AT lt_result ASSIGNING <lv_result> TO c_max_lines_result.
         lv_tabix = sy-tabix.
         APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-        <lv_field>-tabname   = '/MBTOOLS/BC_COMMAND'.
+        <lv_field>-tabname   = lc_command.
         <lv_field>-fieldname = 'RESULT_' && lv_tabix.
         IF lv_tabix = 1.
           IF iv_icon = icon_message_error_small.

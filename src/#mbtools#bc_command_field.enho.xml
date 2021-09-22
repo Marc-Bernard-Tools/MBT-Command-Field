@@ -17,19 +17,23 @@
      <PROGRAMNAME>SAPLSHL2</PROGRAMNAME>
      <ENHMODE>D</ENHMODE>
      <FULL_NAME>\FU:HELP_START\SE:BEGIN\EI</FULL_NAME>
-     <SOURCE>
-      <item>FILE:0001</item>
-     </SOURCE>
     </ENH_HOOK_IMPL>
     <ENH_HOOK_IMPL>
      <PROGRAMNAME>SAPLSHL2</PROGRAMNAME>
      <ENHMODE>D</ENHMODE>
      <FULL_NAME>\FU:HELP_OBJECT_SHOW_FOR_FIELD\SE:BEGIN\EI</FULL_NAME>
-     <SOURCE>
-      <item>FILE:0002</item>
-     </SOURCE>
     </ENH_HOOK_IMPL>
    </ENHANCEMENTS>
+   <FILES>
+    <item>
+     <NAME>\FU:HELP_START\SE:BEGIN\EI</NAME>
+     <FILE>aa919ab9</FILE>
+    </item>
+    <item>
+     <NAME>\FU:HELP_OBJECT_SHOW_FOR_FIELD\SE:BEGIN\EI</NAME>
+     <FILE>a4f1da6a</FILE>
+    </item>
+   </FILES>
    <SOTR>
     <item>
      <HEADER>
