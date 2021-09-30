@@ -14,21 +14,14 @@
    <PACKAGING>
     <NAME>MBT-Command-Field</NAME>
     <VERSION>1.1.0</VERSION>
-    <SEM_VERSION>
-     <MAJOR>1</MAJOR>
-     <MINOR>1</MINOR>
-    </SEM_VERSION>
     <DESCRIPTION>The world&apos;s first enhancement for the SAP GUI command field</DESCRIPTION>
     <GIT_URL>https://github.com/Marc-Bernard-Tools/MBT-Command-Field</GIT_URL>
-    <TARGET_PACKAGE>/MBTOOLS/BC_CL</TARGET_PACKAGE>
+    <TARGET_PACKAGE>/MBTOOLS/BC-CL</TARGET_PACKAGE>
+    <LOGO>/MBTOOLS/MBT_COMMAND_FIELD_TN</LOGO>
     <DEPENDENCIES>
      <item>
       <NAME>MBT-Base</NAME>
       <VERSION>1.1.0</VERSION>
-      <SEM_VERSION>
-       <MAJOR>1</MAJOR>
-       <MINOR>1</MINOR>
-      </SEM_VERSION>
       <GIT_URL>https://github.com/Marc-Bernard-Tools/MBT-Base</GIT_URL>
       <TARGET_PACKAGE>/MBTOOLS/BC</TARGET_PACKAGE>
      </item>
