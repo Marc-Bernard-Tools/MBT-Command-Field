@@ -474,6 +474,7 @@
        <CONT_NAME>TCTRL_/MBTOOLS/CMDS</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>/MBTOOLS/CMDS-SHORTCUT</NAME>
+       <TEXT>___</TEXT>
        <LINE>001</LINE>
        <COLUMN>002</COLUMN>
        <LENGTH>003</LENGTH>
@@ -490,6 +491,7 @@
        <CONT_NAME>TCTRL_/MBTOOLS/CMDS</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>/MBTOOLS/CMDS-CLSNAME</NAME>
+       <TEXT>______________________________</TEXT>
        <LINE>001</LINE>
        <COLUMN>003</COLUMN>
        <LENGTH>030</LENGTH>
@@ -507,6 +509,7 @@
        <CONT_NAME>TCTRL_/MBTOOLS/CMDS</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>/MBTOOLS/CMDS-DESCRIPTION</NAME>
+       <TEXT>____________________________________________________________________________________________________________________________________</TEXT>
        <ROLLING>X</ROLLING>
        <LINE>001</LINE>
        <COLUMN>004</COLUMN>
