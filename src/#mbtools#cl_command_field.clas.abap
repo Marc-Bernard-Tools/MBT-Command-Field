@@ -198,6 +198,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     DATA:
       lt_field  TYPE TABLE OF sval,
       lt_result TYPE TABLE OF sval-value,
+      lv_start  TYPE i,
       lv_tabix  TYPE n LENGTH 2,
       lv_answer TYPE c LENGTH 1.
 
@@ -259,10 +260,14 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    lv_start = ( sy-scols - 110 ) / 2.
+
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
         no_value_check  = abap_true
         popup_title     = /mbtools/cl_tool_bc_cl=>c_tool-title
+        start_column    = lv_start
+        start_row       = 2
       IMPORTING
         returncode      = lv_answer
       TABLES
