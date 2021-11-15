@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command__show DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command - Show
@@ -11,29 +11,34 @@ CLASS /mbtools/cl_command__show DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES /mbtools/if_command .
+    INTERFACES /mbtools/if_command.
 
     ALIASES execute
-      FOR /mbtools/if_command~execute .
+      FOR /mbtools/if_command~execute.
 
-    METHODS constructor .
+    METHODS constructor.
   PROTECTED SECTION.
 
   PRIVATE SECTION.
 
     ALIASES command
-      FOR /mbtools/if_command~mo_command .
+      FOR /mbtools/if_command~mo_command.
 
     METHODS show_tool
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
     METHODS show_message
       IMPORTING
         !iv_message    TYPE /mbtools/if_definitions=>ty_name
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
+    METHODS show_parameter
+      IMPORTING
+        !iv_parameter  TYPE string
+      RETURNING
+        VALUE(rv_exit) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -44,45 +49,56 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
+      lv_subrc       TYPE sy-subrc,
+      lv_value       TYPE string,
       lv_object      TYPE string,
       lv_object_name TYPE string,
       lv_tadir_count TYPE i,
       ls_tadir_key   TYPE /mbtools/if_definitions=>ty_tadir_key.
 
-    " Split parameters into object and object name
-    command->split(
-      EXPORTING
-        iv_parameters = iv_parameters
-      IMPORTING
-        ev_operator   = lv_object
-        ev_operand    = lv_object_name ).
+    " First, check if it's just a property
+    lv_value = /mbtools/cl_utilities=>get_profile_parameter( iv_parameters ).
 
-    " Find objects
-    command->select(
-      iv_object   = lv_object
-      iv_obj_name = lv_object_name ).
+    IF lv_value <> /mbtools/cl_utilities=>c_unknown.
+      rv_exit = show_parameter( /mbtools/cl_utilities=>get_profile_parameter_name( iv_parameters ) ).
+    ELSE.
 
-    " Add object texts
-    command->text( ).
+      " Split parameters into object and object name
+      command->split(
+        EXPORTING
+          iv_parameters = iv_parameters
+        IMPORTING
+          ev_operator   = lv_object
+          ev_operand    = lv_object_name ).
 
-    DO.
-      " Pick exactly one object
-      TRY.
-          command->pick(
-            IMPORTING
-              es_tadir_key = ls_tadir_key
-              ev_count     = lv_tadir_count ).
-        CATCH /mbtools/cx_exception.
+      " Find objects
+      command->select(
+        iv_object   = lv_object
+        iv_obj_name = lv_object_name ).
+
+      " Add object texts
+      command->text( ).
+
+      DO.
+        " Pick exactly one object
+        TRY.
+            command->pick(
+              IMPORTING
+                es_tadir_key = ls_tadir_key
+                ev_count     = lv_tadir_count ).
+          CATCH /mbtools/cx_exception.
+            EXIT.
+        ENDTRY.
+
+        " Show object definition
+        rv_exit = show_tool( ls_tadir_key ).
+
+        IF lv_tadir_count = 1.
           EXIT.
-      ENDTRY.
+        ENDIF.
+      ENDDO.
 
-      " Show object definition
-      rv_exit = show_tool( ls_tadir_key ).
-
-      IF lv_tadir_count = 1.
-        EXIT.
-      ENDIF.
-    ENDDO.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -114,6 +130,41 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
 
       rv_exit = abap_true.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD show_parameter.
+
+    DATA lt_bdcdata TYPE TABLE OF bdcdata.
+
+    FIELD-SYMBOLS <ls_bdcdata> LIKE LINE OF lt_bdcdata.
+
+    APPEND INITIAL LINE TO lt_bdcdata ASSIGNING <ls_bdcdata>.
+    <ls_bdcdata>-program  = 'RSPFLDOC'.
+    <ls_bdcdata>-dynpro   = '1000'.
+    <ls_bdcdata>-dynbegin = abap_true.
+
+    APPEND INITIAL LINE TO lt_bdcdata ASSIGNING <ls_bdcdata>.
+    <ls_bdcdata>-fnam = 'BDC_CURSOR'.
+    <ls_bdcdata>-fval = 'TPFYSTRUCT-NAME'.
+
+    APPEND INITIAL LINE TO lt_bdcdata ASSIGNING <ls_bdcdata>.
+    <ls_bdcdata>-fnam = 'TPFYSTRUCT-NAME'.
+    <ls_bdcdata>-fval = iv_parameter.
+
+    APPEND INITIAL LINE TO lt_bdcdata ASSIGNING <ls_bdcdata>.
+    <ls_bdcdata>-fnam = 'BDC_OKCODE'.
+    <ls_bdcdata>-fval = '=PDIS'.
+
+    CALL FUNCTION 'ABAP4_CALL_TRANSACTION'
+      EXPORTING
+        tcode     = 'RZ11'
+        mode_val  = 'E'
+      TABLES
+        using_tab = lt_bdcdata
+      EXCEPTIONS
+        OTHERS    = 1.
 
   ENDMETHOD.
 
