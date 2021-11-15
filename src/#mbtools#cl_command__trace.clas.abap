@@ -115,7 +115,7 @@ CLASS /mbtools/cl_command__trace IMPLEMENTATION.
               p_type  = 'R'
               p_vname = 'DEFAULT'
               p_vuser = sy-uname
-              p_comm  = 'MBT Performance Trace' ).
+              p_comm  = 'Performance Trace' ).
 *               p_vref  = CL_ABAP_TRACE=>DEFAULT_VARIANT
 *                p_particular_units  = abap_false
 *               p_x_resolution_low  = ' '
