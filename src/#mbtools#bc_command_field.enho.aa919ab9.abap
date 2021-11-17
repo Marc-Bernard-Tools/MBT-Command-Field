@@ -31,6 +31,8 @@ ENHANCEMENT 0 /MBTOOLS/BC_COMMAND_FIELD.
     ENDIF.
 
     IF mbt_exit = abap_true.
+      CLEAR help_infos.
+      /mbtools/cl_command_field=>set_infos( help_infos ).
       RETURN.
     ENDIF.
 

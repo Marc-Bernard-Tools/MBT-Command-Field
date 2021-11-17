@@ -49,7 +49,6 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
   METHOD /mbtools/if_command~execute.
 
     DATA:
-      lv_subrc       TYPE sy-subrc,
       lv_value       TYPE string,
       lv_object      TYPE string,
       lv_object_name TYPE string,
@@ -159,12 +158,19 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
 
     CALL FUNCTION 'ABAP4_CALL_TRANSACTION'
       EXPORTING
-        tcode     = 'RZ11'
-        mode_val  = 'E'
+        tcode                   = 'RZ11'
+        mode_val                = 'E'
       TABLES
-        using_tab = lt_bdcdata
+        using_tab               = lt_bdcdata
       EXCEPTIONS
-        OTHERS    = 1.
+        call_transaction_denied = 1
+        tcode_invalid           = 2
+        OTHERS                  = 3.
+    IF sy-subrc = 0.
+      rv_exit = abap_true.
+    ELSE.
+      MESSAGE s000 WITH 'Navigation not available'(001).
+    ENDIF.
 
   ENDMETHOD.
 

@@ -260,7 +260,12 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    " Center perfectly if screen is a list
     lv_start = ( sy-scols - 110 ) / 2.
+    IF lv_start < 50.
+      " Just a guess
+      lv_start = 40.
+    ENDIF.
 
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
