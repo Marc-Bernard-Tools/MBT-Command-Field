@@ -25,7 +25,7 @@ CLASS /mbtools/cl_command__find DEFINITION
       FOR /mbtools/if_command~mo_command .
 
     CONSTANTS c_support_launchpad TYPE string VALUE 'https://launchpad.support.sap.com/#' ##NO_TEXT.
-    CONSTANTS c_support_apps TYPE string VALUE 'https://apps.support.sap.com/' ##NO_TEXT.
+    CONSTANTS c_support_apps TYPE string VALUE 'https://userapps.support.sap.com/' ##NO_TEXT.
 ENDCLASS.
 
 
