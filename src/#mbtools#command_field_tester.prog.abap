@@ -73,8 +73,9 @@ CONSTANTS:
   c_title TYPE string VALUE /mbtools/cl_tool_bc_cl=>c_tool-title.
 
 DATA:
-  gv_exit   TYPE abap_bool,
-  go_screen TYPE REF TO /mbtools/cl_screen.
+  gs_help_infos TYPE help_info,
+  gv_exit       TYPE abap_bool,
+  go_screen     TYPE REF TO /mbtools/cl_screen.
 
 *-----------------------------------------------------------------------
 
@@ -128,9 +129,14 @@ START-OF-SELECTION.
 
   DO.
     IF p_popup = abap_true.
-      gv_exit = /mbtools/cl_command_field=>popup_command( p_cmd ).
+      gs_help_infos-menufunct = p_cmd.
+      gs_help_infos-call      = 'D'.
+      gs_help_infos-docuid    = 'OK'.
+      gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
     ELSEIF p_exec = abap_true.
-      gv_exit = /mbtools/cl_command_field=>execute_command( p_cmd ).
+      gs_help_infos-menufunct = p_cmd.
+      gs_help_infos-call      = 'H'.
+      gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
     ENDIF.
     IF gv_exit = abap_true.
       EXIT.
