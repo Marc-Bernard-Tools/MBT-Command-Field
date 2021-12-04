@@ -17,6 +17,12 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Run command</DESCRIPT>
     </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/MBTOOLS/IF_COMMAND</CLSNAME>
+     <CMPNAME>GET_COMMANDS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Return commands</DESCRIPT>
+    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>

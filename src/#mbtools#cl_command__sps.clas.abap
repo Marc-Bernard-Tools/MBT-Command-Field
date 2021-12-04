@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command__sps DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command - SPS
@@ -11,18 +11,10 @@ CLASS /mbtools/cl_command__sps DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES /mbtools/if_command .
+    INTERFACES /mbtools/if_command.
 
-    ALIASES execute
-      FOR /mbtools/if_command~execute .
-
-    METHODS constructor .
   PROTECTED SECTION.
-
   PRIVATE SECTION.
-
-    ALIASES command
-      FOR /mbtools/if_command~mo_command .
 ENDCLASS.
 
 
@@ -37,14 +29,21 @@ CLASS /mbtools/cl_command__sps IMPLEMENTATION.
         no_component_found = 1
         wrong_component    = 2
         internal_error     = 3
-        OTHERS             = 4 ##FM_SUBRC_OK.
+        OTHERS             = 4.
+
+    cv_exit = boolc( sy-subrc = 0 ).
 
   ENDMETHOD.
 
 
-  METHOD constructor.
+  METHOD /mbtools/if_command~get_commands.
 
-    CREATE OBJECT command.
+    FIELD-SYMBOLS <ls_command> LIKE LINE OF ct_commands.
+
+    APPEND INITIAL LINE TO ct_commands ASSIGNING <ls_command>.
+    <ls_command>-command     = 'SPS'.
+    <ls_command>-shortcut    = ''.
+    <ls_command>-description = 'Installed Software Components and Product Versions'.
 
   ENDMETHOD.
 ENDCLASS.

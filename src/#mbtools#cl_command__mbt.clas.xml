@@ -13,14 +13,6 @@
     <RSTAT>K</RSTAT>
     <MSG_ID>/MBTOOLS/BC_CL</MSG_ID>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CLSNAME>/MBTOOLS/CL_COMMAND__MBT</CLSNAME>
-     <CMPNAME>CONSTRUCTOR</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Initialize variables</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

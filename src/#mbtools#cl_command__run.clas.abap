@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command__run DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command - Run
@@ -11,49 +11,46 @@ CLASS /mbtools/cl_command__run DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES /mbtools/if_command .
+    INTERFACES /mbtools/if_command.
 
-    ALIASES execute
-      FOR /mbtools/if_command~execute .
+    CLASS-METHODS class_constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
-
   PRIVATE SECTION.
 
-    ALIASES command
-      FOR /mbtools/if_command~mo_command .
+    CLASS-DATA go_command TYPE REF TO /mbtools/cl_command.
 
-    METHODS run_mbt
+    CLASS-METHODS run_mbt
       IMPORTING
         !iv_obj_name   TYPE string
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
-    METHODS run_listcube
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS run_listcube
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
-    METHODS run_tabl
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS run_tabl
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
-    METHODS run_func
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS run_func
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
-    METHODS run_prog
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS run_prog
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
-    METHODS run_tran
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS run_tran
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
-        VALUE(rv_exit) TYPE abap_bool .
+        VALUE(rv_exit) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -70,7 +67,7 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
       ls_tadir_key   TYPE /mbtools/if_definitions=>ty_tadir_key.
 
     " Split parameters into object and object name
-    command->split(
+    go_command->split(
       EXPORTING
         iv_parameters = iv_parameters
       IMPORTING
@@ -86,28 +83,28 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
     ENDIF.
 
     " Select objects
-    command->select(
+    go_command->select(
       iv_object   = lv_object
       iv_obj_name = lv_object_name ).
 
     " Check if command is a Marc Bernard Tools
     IF lv_object CS /mbtools/if_command_field=>c_objects_exec-tran.
-      rv_exit = run_mbt( lv_object_name ).
-      IF rv_exit = abap_true.
+      cv_exit = run_mbt( lv_object_name ).
+      IF cv_exit = abap_true.
         RETURN.
       ENDIF.
     ENDIF.
 
     " Filter table types to ones that work in SE16
-    command->filter_tabl( ).
+    go_command->filter_tabl( ).
 
     " Add object texts
-    command->text( ).
+    go_command->text( ).
 
     DO.
       " Pick exactly one object
       TRY.
-          command->pick(
+          go_command->pick(
             IMPORTING
               es_tadir_key = ls_tadir_key
               ev_count     = lv_tadir_count ).
@@ -120,23 +117,23 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
         WHEN /mbtools/if_command_field=>c_objects_db-tabl OR
              /mbtools/if_command_field=>c_objects_db-view.
 
-          rv_exit = run_tabl( ls_tadir_key ).
+          cv_exit = run_tabl( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-prog.
 
-          rv_exit = run_prog( ls_tadir_key ).
+          cv_exit = run_prog( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-tran.
 
-          rv_exit = run_tran( ls_tadir_key ).
+          cv_exit = run_tran( ls_tadir_key ).
 
         WHEN /mbtools/if_command_field=>c_objects_exec-func.
 
-          rv_exit = run_func( ls_tadir_key ).
+          cv_exit = run_func( ls_tadir_key ).
 
         WHEN OTHERS.
 
-          rv_exit = run_listcube( ls_tadir_key ).
+          cv_exit = run_listcube( ls_tadir_key ).
 
       ENDCASE.
 
@@ -148,9 +145,21 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD constructor.
+  METHOD /mbtools/if_command~get_commands.
 
-    CREATE OBJECT command.
+    FIELD-SYMBOLS <ls_command> LIKE LINE OF ct_commands.
+
+    APPEND INITIAL LINE TO ct_commands ASSIGNING <ls_command>.
+    <ls_command>-command     = 'RUN'.
+    <ls_command>-shortcut    = '!'.
+    <ls_command>-description = 'Run'.
+
+  ENDMETHOD.
+
+
+  METHOD class_constructor.
+
+    CREATE OBJECT go_command.
 
   ENDMETHOD.
 

@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command__calc DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command - Calculator
@@ -11,40 +11,36 @@ CLASS /mbtools/cl_command__calc DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES /mbtools/if_command .
+    INTERFACES /mbtools/if_command.
 
-    ALIASES execute
-      FOR /mbtools/if_command~execute .
+    CLASS-METHODS class_constructor.
 
-    CLASS-METHODS class_constructor .
   PROTECTED SECTION.
-
   PRIVATE SECTION.
 
-    ALIASES command
-      FOR /mbtools/if_command~mo_command .
-
     TYPES:
-      ty_p0  TYPE p LENGTH 16 DECIMALS 0 .
+      ty_p0  TYPE p LENGTH 16 DECIMALS 0.
     TYPES:
-      ty_p7  TYPE p LENGTH 16 DECIMALS 7 .
+      ty_p7  TYPE p LENGTH 16 DECIMALS 7.
     TYPES:
-      ty_p14 TYPE p LENGTH 16 DECIMALS 14 .
+      ty_p14 TYPE p LENGTH 16 DECIMALS 14.
 
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
     CONSTANTS c_callback_eval TYPE slis_formname VALUE 'CALLBACK_EVAL' ##NO_TEXT.
-    CLASS-DATA gv_max_p0 TYPE ty_p0 .
-    CLASS-DATA gv_min_p0 TYPE ty_p0 .
-    CLASS-DATA gv_max_p7 TYPE ty_p7 .
-    CLASS-DATA gv_min_p7 TYPE ty_p7 .
-    CLASS-DATA gv_max_p14 TYPE ty_p14 .
-    CLASS-DATA gv_min_p14 TYPE ty_p14 .
 
-    METHODS format_result
+    CLASS-DATA gv_max_p0 TYPE ty_p0.
+    CLASS-DATA gv_min_p0 TYPE ty_p0.
+    CLASS-DATA gv_max_p7 TYPE ty_p7.
+    CLASS-DATA gv_min_p7 TYPE ty_p7.
+    CLASS-DATA gv_max_p14 TYPE ty_p14.
+    CLASS-DATA gv_min_p14 TYPE ty_p14.
+
+    CLASS-METHODS format_result
       IMPORTING
         !iv_value        TYPE f
       RETURNING
-        VALUE(rv_result) TYPE string .
+        VALUE(rv_result) TYPE string.
+
 ENDCLASS.
 
 
@@ -139,11 +135,23 @@ CLASS /mbtools/cl_command__calc IMPLEMENTATION.
 
     CONCATENATE lv_formula '=' lv_result INTO lv_result SEPARATED BY space.
 
-    rv_exit = /mbtools/cl_command_field=>show_result( iv_command    = iv_command
+    cv_exit = /mbtools/cl_command_field=>show_result( iv_command    = iv_command
                                                       iv_parameters = iv_parameters
                                                       iv_icon       = lv_icon
                                                       iv_result     = lv_result
                                                       iv_via_popup  = iv_via_popup ).
+
+  ENDMETHOD.
+
+
+  METHOD /mbtools/if_command~get_commands.
+
+    FIELD-SYMBOLS <ls_command> LIKE LINE OF ct_commands.
+
+    APPEND INITIAL LINE TO ct_commands ASSIGNING <ls_command>.
+    <ls_command>-command     = 'CALC'.
+    <ls_command>-shortcut    = '='.
+    <ls_command>-description = 'Calculate'.
 
   ENDMETHOD.
 

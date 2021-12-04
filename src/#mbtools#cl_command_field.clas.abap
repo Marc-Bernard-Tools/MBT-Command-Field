@@ -11,6 +11,28 @@ CLASS /mbtools/cl_command_field DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    CLASS-METHODS class_constructor.
+    CLASS-METHODS do_command
+      IMPORTING
+        !is_help_infos TYPE help_info
+      RETURNING
+        VALUE(rv_exit) TYPE abap_bool.
+    CLASS-METHODS do_help_start
+      IMPORTING
+        !iv_called_for_tab TYPE help_info-tabname
+      RETURNING
+        VALUE(rv_exit)     TYPE abap_bool.
+    CLASS-METHODS show_result
+      IMPORTING
+        !iv_command    TYPE csequence
+        !iv_parameters TYPE csequence
+        !iv_icon       TYPE icon_d
+        !iv_result     TYPE string
+        !iv_via_popup  TYPE abap_bool
+      RETURNING
+        VALUE(rv_exit) TYPE abap_bool.
+  PROTECTED SECTION.
+
     CLASS-METHODS execute_command
       IMPORTING
         !iv_input      TYPE csequence
@@ -24,47 +46,106 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_result     TYPE string OPTIONAL
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
-    CLASS-METHODS show_result
-      IMPORTING
-        !iv_command    TYPE csequence
-        !iv_parameters TYPE csequence
-        !iv_icon       TYPE icon_d
-        !iv_result     TYPE string
-        !iv_via_popup  TYPE abap_bool
-      RETURNING
-        VALUE(rv_exit) TYPE abap_bool.
-    CLASS-METHODS set_infos
-      IMPORTING
-        !is_infos TYPE help_info.
-    CLASS-METHODS get_infos
-      RETURNING
-        VALUE(rs_infos) TYPE help_info.
-  PROTECTED SECTION.
 
   PRIVATE SECTION.
 
+    CONSTANTS c_command_result TYPE tabname VALUE '/MBTOOLS/COMMAND_RESULT'.
     CONSTANTS c_break_chars TYPE string VALUE '=+*/; ' ##NO_TEXT.
     CONSTANTS c_max_len_msg TYPE i VALUE 50 ##NO_TEXT.
     CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
     CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
-    CLASS-DATA gs_infos TYPE help_info .
+
+    CLASS-DATA gt_commands TYPE /mbtools/if_command=>ty_commands.
+    CLASS-DATA gs_infos TYPE help_info.
 
     CLASS-METHODS input_check
       IMPORTING
         !iv_input         TYPE csequence
       RETURNING
-        VALUE(rv_command) TYPE string .
+        VALUE(rv_command) TYPE string.
     CLASS-METHODS input_split
       IMPORTING
         !iv_input      TYPE csequence
       EXPORTING
         !ev_command    TYPE string
-        !ev_parameters TYPE string .
+        !ev_parameters TYPE string.
 ENDCLASS.
 
 
 
 CLASS /mbtools/cl_command_field IMPLEMENTATION.
+
+
+  METHOD class_constructor.
+
+    CONSTANTS lc_command_init TYPE c LENGTH 40 VALUE 'INIT'.
+
+    DATA li_badi TYPE REF TO /mbtools/bc_command_badi.
+
+    " INIT needs to be defined as filter for all command implementations
+    GET BADI li_badi
+      FILTERS
+        command = lc_command_init.
+
+    ASSERT li_badi IS BOUND.
+
+    CALL BADI li_badi->get_commands
+      CHANGING
+        ct_commands = gt_commands.
+
+  ENDMETHOD.
+
+
+  METHOD do_command.
+
+    IF is_help_infos-call = 'D' AND is_help_infos-docuid = 'OK'.
+
+      IF gs_infos IS INITIAL.
+        gs_infos = is_help_infos.
+
+        SET TITLEBAR 'OBJECT_SELECTION' OF PROGRAM '/MBTOOLS/BC_COMMAND_FIELD'.
+        rv_exit = popup_command( iv_input = is_help_infos-menufunct ).
+      ENDIF.
+
+    ELSEIF is_help_infos-call = 'H'.
+
+      SET TITLEBAR 'OBJECT_SELECTION' OF PROGRAM '/MBTOOLS/BC_COMMAND_FIELD'.
+      rv_exit = execute_command( iv_input = is_help_infos-menufunct ).
+
+    ENDIF.
+
+    IF rv_exit = abap_true.
+      CLEAR gs_infos.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD do_help_start.
+
+    DATA:
+      lt_dynpselect   TYPE TABLE OF dselc,
+      lt_dynpvaluetab TYPE TABLE OF dval.
+
+    IF iv_called_for_tab = c_command_result AND gs_infos IS NOT INITIAL.
+
+      CALL FUNCTION 'HELP_START'
+        EXPORTING
+          help_infos   = gs_infos
+        TABLES
+          dynpselect   = lt_dynpselect
+          dynpvaluetab = lt_dynpvaluetab
+        EXCEPTIONS
+          OTHERS       = 1.
+
+      IF sy-subrc = 0.
+        CLEAR gs_infos.
+        rv_exit = abap_true.
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD.
 
 
   METHOD execute_command.
@@ -75,9 +156,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       lv_checked_input TYPE string,
       lv_command       TYPE string,
       lv_parameters    TYPE string,
-      ls_cmds          TYPE /mbtools/cmds,
-      ls_clskey        TYPE seoclskey,
-      lo_command       TYPE REF TO /mbtools/if_command.
+      li_command       TYPE REF TO /mbtools/bc_command_badi.
 
     " Check if command is valid
     lv_checked_input = input_check( iv_input ).
@@ -107,49 +186,20 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    SELECT SINGLE * FROM /mbtools/cmds INTO ls_cmds
-      WHERE command = lv_command OR shortcut = lv_command.
-    IF sy-subrc <> 0.
-      " Invalid Command
-      IF iv_via_popup = abap_true.
-        MESSAGE w001.
-        rv_exit = abap_true.
-      ELSE.
-        rv_exit = abap_false.
-      ENDIF.
+    GET BADI li_command
+      FILTERS
+        command = lv_command.
 
-      RETURN.
+    IF li_command IS BOUND.
+      CALL BADI li_command->execute
+        EXPORTING
+          iv_command    = lv_command
+          iv_parameters = lv_parameters
+          iv_via_popup  = iv_via_popup
+        CHANGING
+          cv_exit       = rv_exit.
     ENDIF.
 
-    ls_clskey-clsname = ls_cmds-clsname.
-
-    CALL FUNCTION 'SEO_CLASS_EXISTENCE_CHECK'
-      EXPORTING
-        clskey        = ls_clskey
-      EXCEPTIONS
-        not_specified = 1
-        not_existing  = 2
-        is_interface  = 3
-        no_text       = 4
-        inconsistent  = 5
-        OTHERS        = 6.
-    IF sy-subrc <> 0.
-      MESSAGE e005 WITH ls_cmds-clsname ls_cmds-command.
-      RETURN.
-    ENDIF.
-
-    CREATE OBJECT lo_command TYPE (ls_cmds-clsname).
-
-    rv_exit = lo_command->execute(
-      iv_command    = lv_command
-      iv_parameters = lv_parameters
-      iv_via_popup  = iv_via_popup ).
-
-  ENDMETHOD.
-
-
-  METHOD get_infos.
-    rs_infos = gs_infos.
   ENDMETHOD.
 
 
@@ -173,14 +223,15 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD input_split.
 
-    DATA ls_cmds TYPE /mbtools/cmds.
-
     " Command shortcut or command word
-    SELECT SINGLE * FROM /mbtools/cmds INTO ls_cmds WHERE shortcut = iv_input(1).
+    READ TABLE gt_commands TRANSPORTING NO FIELDS
+      WITH KEY shortcut = iv_input(1).
     IF sy-subrc = 0.
+      " Command shortcuts can be followed by parameters immediatly
       ev_command    = iv_input(1).
       ev_parameters = iv_input+1(*).
     ELSE.
+      " Command words are separated from parameters by a space
       SPLIT iv_input AT space INTO ev_command ev_parameters.
     ENDIF.
 
@@ -192,15 +243,13 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD popup_command.
 
-    CONSTANTS:
-      lc_command TYPE tabname VALUE '/MBTOOLS/BC_COMMAND'.
-
     DATA:
-      lt_field  TYPE TABLE OF sval,
-      lt_result TYPE TABLE OF sval-value,
-      lv_start  TYPE i,
-      lv_tabix  TYPE n LENGTH 2,
-      lv_answer TYPE c LENGTH 1.
+      lt_field     TYPE TABLE OF sval,
+      lt_result    TYPE TABLE OF sval-value,
+      lv_start_col TYPE i,
+      lv_start_row TYPE i VALUE 2,
+      lv_tabix     TYPE n LENGTH 2,
+      lv_answer    TYPE c LENGTH 1.
 
     FIELD-SYMBOLS:
       <lv_field>  TYPE sval,
@@ -210,7 +259,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     rv_exit = abap_true.
 
     APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-    <lv_field>-tabname    = lc_command.
+    <lv_field>-tabname    = c_command_result.
     <lv_field>-fieldname  = 'COMMAND'.
     <lv_field>-fieldtext  = icon_greater && 'Command'(040).
     <lv_field>-value      = iv_input.
@@ -240,7 +289,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       LOOP AT lt_result ASSIGNING <lv_result> TO c_max_lines_result.
         lv_tabix = sy-tabix.
         APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-        <lv_field>-tabname   = lc_command.
+        <lv_field>-tabname   = c_command_result.
         <lv_field>-fieldname = 'RESULT_' && lv_tabix.
         IF lv_tabix = 1.
           IF iv_icon = icon_message_error_small.
@@ -260,19 +309,20 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    " Center perfectly if screen is a list
-    lv_start = ( sy-scols - 110 ) / 2.
-    IF lv_start < 50.
-      " Just a guess
-      lv_start = 40.
+    " Center perfectly, if screen is a list
+    lv_start_col = ( sy-scols - 110 ) / 2.
+    IF lv_start_col < 50.
+      " If not, we take a guess since there does not seem to be a way to get the
+      " width of the SAPGUI window
+      lv_start_col = 40.
     ENDIF.
 
     CALL FUNCTION 'POPUP_GET_VALUES'
       EXPORTING
         no_value_check  = abap_true
         popup_title     = /mbtools/cl_tool_bc_cl=>c_tool-title
-        start_column    = lv_start
-        start_row       = 2
+        start_column    = lv_start_col
+        start_row       = lv_start_row
       IMPORTING
         returncode      = lv_answer
       TABLES
@@ -290,14 +340,10 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
     READ TABLE lt_field INDEX 1 ASSIGNING <lv_field>.
     ASSERT sy-subrc = 0.
 
-    execute_command( iv_input     = <lv_field>-value
-                     iv_via_popup = abap_true ).
+    execute_command(
+      iv_input     = <lv_field>-value
+      iv_via_popup = abap_true ).
 
-  ENDMETHOD.
-
-
-  METHOD set_infos.
-    gs_infos = is_infos.
   ENDMETHOD.
 
 

@@ -1,7 +1,7 @@
 CLASS /mbtools/cl_command__mbt DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
 ************************************************************************
 * MBT Command - MBT
@@ -11,18 +11,15 @@ CLASS /mbtools/cl_command__mbt DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES /mbtools/if_command .
+    INTERFACES /mbtools/if_command.
 
-    ALIASES execute
-      FOR /mbtools/if_command~execute .
+    CLASS-METHODS class_constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
-
   PRIVATE SECTION.
 
-    ALIASES command
-      FOR /mbtools/if_command~mo_command .
+    CLASS-DATA go_command TYPE REF TO /mbtools/cl_command.
+
 ENDCLASS.
 
 
@@ -40,7 +37,7 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
       lt_tools   TYPE /mbtools/if_tool=>ty_manifests.
 
     " Split parameters into operator and operand
-    command->split(
+    go_command->split(
       EXPORTING
         iv_parameters = iv_parameters
       IMPORTING
@@ -76,14 +73,28 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
 
     IF lv_found IS INITIAL.
       MESSAGE 'Unknown tool.' TYPE 'S' DISPLAY LIKE 'E'.
+    ELSE.
+      cv_exit = abap_true.
     ENDIF.
 
   ENDMETHOD.
 
 
-  METHOD constructor.
+  METHOD /mbtools/if_command~get_commands.
 
-    CREATE OBJECT command.
+    FIELD-SYMBOLS <ls_command> LIKE LINE OF ct_commands.
+
+    APPEND INITIAL LINE TO ct_commands ASSIGNING <ls_command>.
+    <ls_command>-command     = 'MBT'.
+    <ls_command>-shortcut    = '/'.
+    <ls_command>-description = 'Launch Marc Bernard Tools'.
+
+  ENDMETHOD.
+
+
+  METHOD class_constructor.
+
+    CREATE OBJECT go_command.
 
   ENDMETHOD.
 ENDCLASS.

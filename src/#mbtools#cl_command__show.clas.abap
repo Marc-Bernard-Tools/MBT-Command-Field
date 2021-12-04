@@ -13,28 +13,24 @@ CLASS /mbtools/cl_command__show DEFINITION
 
     INTERFACES /mbtools/if_command.
 
-    ALIASES execute
-      FOR /mbtools/if_command~execute.
+    CLASS-METHODS class_constructor.
 
-    METHODS constructor.
   PROTECTED SECTION.
-
   PRIVATE SECTION.
 
-    ALIASES command
-      FOR /mbtools/if_command~mo_command.
+    CLASS-DATA go_command TYPE REF TO /mbtools/cl_command.
 
-    METHODS show_tool
+    CLASS-METHODS show_tool
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
-    METHODS show_message
+    CLASS-METHODS show_message
       IMPORTING
         !iv_message    TYPE /mbtools/if_definitions=>ty_name
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
-    METHODS show_parameter
+    CLASS-METHODS show_parameter
       IMPORTING
         !iv_parameter  TYPE string
       RETURNING
@@ -59,11 +55,11 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
     lv_value = /mbtools/cl_utilities=>get_profile_parameter( iv_parameters ).
 
     IF lv_value <> /mbtools/cl_utilities=>c_unknown.
-      rv_exit = show_parameter( /mbtools/cl_utilities=>get_profile_parameter_name( iv_parameters ) ).
+      cv_exit = show_parameter( /mbtools/cl_utilities=>get_profile_parameter_name( iv_parameters ) ).
     ELSE.
 
       " Split parameters into object and object name
-      command->split(
+      go_command->split(
         EXPORTING
           iv_parameters = iv_parameters
         IMPORTING
@@ -71,17 +67,17 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
           ev_operand    = lv_object_name ).
 
       " Find objects
-      command->select(
+      go_command->select(
         iv_object   = lv_object
         iv_obj_name = lv_object_name ).
 
       " Add object texts
-      command->text( ).
+      go_command->text( ).
 
       DO.
         " Pick exactly one object
         TRY.
-            command->pick(
+            go_command->pick(
               IMPORTING
                 es_tadir_key = ls_tadir_key
                 ev_count     = lv_tadir_count ).
@@ -90,7 +86,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
         ENDTRY.
 
         " Show object definition
-        rv_exit = show_tool( ls_tadir_key ).
+        cv_exit = show_tool( ls_tadir_key ).
 
         IF lv_tadir_count = 1.
           EXIT.
@@ -102,9 +98,21 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD constructor.
+  METHOD /mbtools/if_command~get_commands.
 
-    CREATE OBJECT command.
+    FIELD-SYMBOLS <ls_command> LIKE LINE OF ct_commands.
+
+    APPEND INITIAL LINE TO ct_commands ASSIGNING <ls_command>.
+    <ls_command>-command     = 'SHOW'.
+    <ls_command>-shortcut    = '#'.
+    <ls_command>-description = 'Show'.
+
+  ENDMETHOD.
+
+
+  METHOD class_constructor.
+
+    CREATE OBJECT go_command.
 
   ENDMETHOD.
 
@@ -115,7 +123,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       lv_msgid TYPE sy-msgid,
       lv_msgno TYPE sy-msgno.
 
-    command->split_message(
+    go_command->split_message(
       EXPORTING
         iv_message = iv_message
       IMPORTING
