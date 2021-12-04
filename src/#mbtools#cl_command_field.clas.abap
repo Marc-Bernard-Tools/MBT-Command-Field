@@ -78,7 +78,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD class_constructor.
 
-    CONSTANTS lc_command_init TYPE c LENGTH 40 VALUE 'INIT'.
+    CONSTANTS lc_command_init TYPE c LENGTH 40 VALUE 'INIT' ##NEEDED.
 
     DATA li_badi TYPE REF TO /mbtools/bc_command_badi.
 
@@ -104,13 +104,13 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
         gs_infos = is_help_infos.
 
         SET TITLEBAR 'OBJECT_SELECTION' OF PROGRAM '/MBTOOLS/BC_COMMAND_FIELD'.
-        rv_exit = popup_command( iv_input = is_help_infos-menufunct ).
+        rv_exit = popup_command( is_help_infos-menufunct ).
       ENDIF.
 
     ELSEIF is_help_infos-call = 'H'.
 
       SET TITLEBAR 'OBJECT_SELECTION' OF PROGRAM '/MBTOOLS/BC_COMMAND_FIELD'.
-      rv_exit = execute_command( iv_input = is_help_infos-menufunct ).
+      rv_exit = execute_command( is_help_infos-menufunct ).
 
     ENDIF.
 

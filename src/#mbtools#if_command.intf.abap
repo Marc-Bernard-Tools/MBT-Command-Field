@@ -12,7 +12,7 @@ INTERFACE /mbtools/if_command
 
   TYPES:
     BEGIN OF ty_command,
-      command	    TYPE c LENGTH 40,
+      command     TYPE c LENGTH 40,
       shortcut    TYPE c LENGTH 3,
       description TYPE string,
     END OF ty_command,
