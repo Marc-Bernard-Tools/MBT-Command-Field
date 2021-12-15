@@ -1,3 +1,7 @@
+[![license](https://img.shields.io/github/license/Marc-Bernard-Tools/MBT-Command-Field)](LICENSE)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![REUSE](https://api.reuse.software/badge/github.com/Marc-Bernard-Tools/MBT-Command-Field)](https://api.reuse.software/info/github.com/Marc-Bernard-Tools/MBT-Command-Field)
+![abaplint](https://github.com/sbcgua/ajson/workflows/abaplint/badge.svg)
 ![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/Marc-Bernard-Tools/Marc-Bernard-Tools-Versions/.apack-manifest.xml/dependencies/github.com/Marc-Bernard-Tools/MBT-Command-Field&label=version&color=darkgray)
 
 # MBT Command Field
