@@ -1,14 +1,25 @@
-[![license](https://img.shields.io/github/license/Marc-Bernard-Tools/MBT-Command-Field)](LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
-[![REUSE](https://api.reuse.software/badge/github.com/Marc-Bernard-Tools/MBT-Command-Field)](https://api.reuse.software/info/github.com/Marc-Bernard-Tools/MBT-Command-Field)
+![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/Marc-Bernard-Tools/Marc-Bernard-Tools-Versions/.apack-manifest.xml/dependencies/github.com/Marc-Bernard-Tools/MBT-Command-Field&label=version&color=blue)
 ![abaplint](https://github.com/sbcgua/ajson/workflows/abaplint/badge.svg)
-![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/Marc-Bernard-Tools/Marc-Bernard-Tools-Versions/.apack-manifest.xml/dependencies/github.com/Marc-Bernard-Tools/MBT-Command-Field&label=version&color=darkgray)
+
+[![license](https://img.shields.io/github/license/Marc-Bernard-Tools/MBT-Command-Field?color=green)](LICENSE)
+[![REUSE Status](https://api.reuse.software/badge/github.com/Marc-Bernard-Tools/MBT-Command-Field)](https://api.reuse.software/info/github.com/Marc-Bernard-Tools/MBT-Command-Field)
+[![ClearlyDefined Score](https://img.shields.io/clearlydefined/score/git/github/marc-bernard-tools/MBT-Command-Field/f674a818e9a3b1aa411089696df71f9692287ff8?label=ClearlyDefined%20Score)](https://clearlydefined.io/definitions/git/github/marc-bernard-tools/MBT-Command-Field/f674a818e9a3b1aa411089696df71f9692287ff8)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?color=green)](CODE_OF_CONDUCT.md)
 
 # MBT Command Field
 
 The world's first enhancement for the SAP® GUI command field
 
-For details, visit [Marc Bernard Tools](https://marcbernardtools.com/downloads/mbt-command-field) and follow [@marcfbe](https://twitter.com/marcfbe) on Twitter.
+For details, visit **[Marc Bernard Tools](https://marcbernardtools.com/downloads/mbt-command-field)** and follow [@marcfbe](https://twitter.com/marcfbe) on Twitter.
+
+![image](https://user-images.githubusercontent.com/59966492/146286684-cdd751ed-651e-4895-b07c-ea152c6b1765.png)
+
+![image](https://user-images.githubusercontent.com/59966492/146286711-c7dd7946-fc1d-4aba-a002-e3d335674641.png)
+
+## Installation
+
+Use the [MBT Installer](https://marcbernardtools.com/downloads/mbt-installer/) to deploy the repository to your SAP system. For more infornation, see 
+[Installation Instructions](https://marcbernardtools.com/docs/marc-bernard-tools/installation/).
 
 ## Contributions
 
