@@ -399,6 +399,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
   METHOD select.
 
     DATA:
+      lv_dummy   TYPE i,
       lr_objects TYPE /mbtools/if_definitions=>ty_object_range,
       lr_names   TYPE /mbtools/if_definitions=>ty_name_range,
       lv_msg     TYPE string.
