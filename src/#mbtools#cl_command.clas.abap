@@ -949,7 +949,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     CLEAR gt_object_list.
 
     " Check if MBT Transport Request is installed and active
-    IF /mbtools/cl_switches=>is_active( 'MBT Transport Request' ) = abap_false.
+    IF /mbtools/cl_switches=>is_active( /mbtools/cl_switches=>c_tool-mbt_transport_request ) = abap_false.
       " Default is program id, object and object name only
       LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
         MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
