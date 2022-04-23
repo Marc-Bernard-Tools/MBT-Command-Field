@@ -46,7 +46,7 @@ CLASS /mbtools/cl_command DEFINITION
     CONSTANTS c_badi_class TYPE seoclsname VALUE '/MBTOOLS/BC_CTS_REQ_DISPLAY' ##NO_TEXT.
     CONSTANTS c_badi_method TYPE seocmpname VALUE 'GET_OBJECT_DESCRIPTIONS' ##NO_TEXT.
     CONSTANTS c_badi_type TYPE tabname VALUE '/MBTOOLS/TRWBO_S_E071_TXT' ##NO_TEXT.
-    CONSTANTS c_max_hits TYPE i VALUE 1000 ##NO_TEXT.
+    CONSTANTS c_max_hits TYPE i VALUE 1000.
     CONSTANTS:
       BEGIN OF c_split,
         operator TYPE c LENGTH 1 VALUE ':',

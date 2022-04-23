@@ -51,9 +51,9 @@ CLASS /mbtools/cl_command_field DEFINITION
 
     CONSTANTS c_command_result TYPE tabname VALUE '/MBTOOLS/COMMAND_RESULT'.
     CONSTANTS c_break_chars TYPE string VALUE '=+*/; ' ##NO_TEXT.
-    CONSTANTS c_max_len_msg TYPE i VALUE 50 ##NO_TEXT.
-    CONSTANTS c_max_len_result TYPE i VALUE 75 ##NO_TEXT.
-    CONSTANTS c_max_lines_result TYPE i VALUE 10 ##NO_TEXT.
+    CONSTANTS c_max_len_msg TYPE i VALUE 50.
+    CONSTANTS c_max_len_result TYPE i VALUE 75.
+    CONSTANTS c_max_lines_result TYPE i VALUE 10.
 
     CLASS-DATA gt_commands TYPE /mbtools/if_command=>ty_commands.
     CLASS-DATA gs_infos TYPE help_info.

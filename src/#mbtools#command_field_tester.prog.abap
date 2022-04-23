@@ -63,8 +63,8 @@ SELECTION-SCREEN:
     SKIP,
   END OF BLOCK scr_header,
   BEGIN OF TABBED BLOCK scr_tab FOR 20 LINES,
-    TAB (40) scr_tab2 USER-COMMAND scr_push2 DEFAULT SCREEN 0200,
-    TAB (40) scr_tab9 USER-COMMAND scr_push9 DEFAULT SCREEN 0900,
+    TAB (40) scr_tab2 USER-COMMAND scr_push2 DEFAULT SCREEN 200,
+    TAB (40) scr_tab9 USER-COMMAND scr_push9 DEFAULT SCREEN 900,
   END OF BLOCK scr_tab.
 
 *-----------------------------------------------------------------------
@@ -106,8 +106,6 @@ INITIALIZATION.
 
   scr_t200 = 'Enter a command in the field below (w/o leading "?") and'(200).
   scr_t201 = 'select how you want to simulate the execution'(201).
-
-  scr_tab-prog = sy-cprog. " abaplint #1291
 
 *-----------------------------------------------------------------------
 
