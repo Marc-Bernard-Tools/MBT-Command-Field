@@ -338,6 +338,10 @@
 			"exclude": [],
 			"severity": "Error"
 		},
+		"identical_descriptions": {
+			"exclude": [],
+			"severity": "Error"
+		},
 		"identical_form_names": {
 			"exclude": [],
 			"severity": "Error"
@@ -364,10 +368,6 @@
 			"ignoreGlobalClassDefinition": false,
 			"ignoreGlobalInterface": false,
 			"selectionScreenBlockIndentation": false,
-			"severity": "Error"
-		},
-		"identical_descriptions": {
-			"exclude": [],
 			"severity": "Error"
 		},
 		"inline_data_old_versions": {
