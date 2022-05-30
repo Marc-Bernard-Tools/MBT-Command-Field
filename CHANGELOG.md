@@ -8,12 +8,18 @@ and [ISO Date Format](https://www.iso.org/iso-8601-date-and-time-format.html).
 
 ## [Unreleased]
 
-### Added 
+## Version [1.3.0] - 2022-05-30
+
+### Added
+
+- Added REUSE license infos and compliance check
+- Added Changelog
+- Added Contributor Covenant Code of Conduct
 
 ### Changed
 
-### Fixed
-
+- Enhanced Readme 
+- Updated linting rules
 
 ## Version [1.2.0] - 2021-12-06
 
@@ -38,7 +44,8 @@ Launch Release
 Initial Release. For details, see [Features](https://marcbernardtools.com/docs/mbt-command-field/features).
 
 
-[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.2.0...main
+[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.3.0...main
+[1.3.0]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.1.1...1.2.0
 [1.1.1]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.0.0...1.1.1
 [1.1.0]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.0.0...1.1.0
