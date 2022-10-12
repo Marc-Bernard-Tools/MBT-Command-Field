@@ -6,20 +6,14 @@
    <TEXT>MBT Command Field (Thumbnail)</TEXT>
    <PARAMS>
     <WWWPARAMS>
-     <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD_TN</OBJID>
      <NAME>fileextension</NAME>
      <VALUE>.jpg</VALUE>
     </WWWPARAMS>
     <WWWPARAMS>
-     <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD_TN</OBJID>
      <NAME>filename</NAME>
      <VALUE>MBT_Command_Field_TN.jpg</VALUE>
     </WWWPARAMS>
     <WWWPARAMS>
-     <RELID>MI</RELID>
-     <OBJID>/MBTOOLS/MBT_COMMAND_FIELD_TN</OBJID>
      <NAME>mimetype</NAME>
      <VALUE>image/jpeg</VALUE>
     </WWWPARAMS>
