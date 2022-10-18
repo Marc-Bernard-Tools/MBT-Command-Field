@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/Marc-Bernard-Tools/MBT-Command-Field?label=License&color=green)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=green)](CODE_OF_CONDUCT.md)
 [![REUSE Status](https://api.reuse.software/badge/github.com/Marc-Bernard-Tools/MBT-Command-Field)](https://api.reuse.software/info/github.com/Marc-Bernard-Tools/MBT-Command-Field)
-[![ClearlyDefined Score](https://img.shields.io/clearlydefined/score/git/github/marc-bernard-tools/MBT-Command-Field/f674a818e9a3b1aa411089696df71f9692287ff8?label=ClearlyDefined%20Score)](https://clearlydefined.io/definitions/git/github/marc-bernard-tools/MBT-Command-Field/f674a818e9a3b1aa411089696df71f9692287ff8)
+[![ClearlyDefined Score](https://img.shields.io/clearlydefined/score/git/github/marc-bernard-tools/MBT-Command-Field/1e9549d8c9d81e4cf3bef28d5dc5827097a3c9af?label=ClearlyDefined%20Score)](https://clearlydefined.io/definitions/git/github/marc-bernard-tools/MBT-Command-Field/1e9549d8c9d81e4cf3bef28d5dc5827097a3c9af)
 
 # MBT Command Field
 
@@ -22,7 +22,7 @@ Use the [MBT Installer](https://marcbernardtools.com/downloads/mbt-installer/) t
 
 ## Contributions
 
-All contributions are welcome! Just fork this repo and create a pull request. 
+All contributions are welcome! Read our [Contribution Guidelines](CONTRIBUTING.md), fork this repo, and create a pull request.
 
 ## About
 
