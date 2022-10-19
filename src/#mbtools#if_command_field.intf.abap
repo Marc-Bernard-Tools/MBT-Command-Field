@@ -5,7 +5,7 @@ INTERFACE /mbtools/if_command_field
 * MBT Command Field
 *
 * Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
-* SPDX-License-Identifier: GPL-3.0-or-later
+* SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
   CONSTANTS:
     BEGIN OF c_pgmid,

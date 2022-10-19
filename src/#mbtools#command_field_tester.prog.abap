@@ -3,7 +3,7 @@ REPORT /mbtools/command_field_tester.
 * MBT Command Field - Tester
 *
 * Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
-* SPDX-License-Identifier: GPL-3.0-or-later
+* SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
 
 TABLES: sscrfields.

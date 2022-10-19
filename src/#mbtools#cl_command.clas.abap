@@ -7,7 +7,7 @@ CLASS /mbtools/cl_command DEFINITION
 * MBT Command - Object
 *
 * Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
-* SPDX-License-Identifier: GPL-3.0-or-later
+* SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
   PUBLIC SECTION.
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.

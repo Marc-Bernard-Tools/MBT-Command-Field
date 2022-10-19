@@ -6,7 +6,7 @@ INTERFACE /mbtools/if_command
 * MBT Command Interface
 *
 * Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
-* SPDX-License-Identifier: GPL-3.0-or-later
+* SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
   INTERFACES if_badi_interface.
 
