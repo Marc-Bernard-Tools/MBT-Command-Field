@@ -715,9 +715,9 @@
 			"ignorePatterns": [],
 			"parameter": "^P_.+$",
 			"patternKind": "required",
+      "screenElement": "^SC_.+$",
 			"selectOption": "^S_.+$",
-			"severity": "Error",
-      "screenElement": "^SC_.+$"
+			"severity": "Error"
 		},
 		"sequential_blank": {
 			"exclude": [],
