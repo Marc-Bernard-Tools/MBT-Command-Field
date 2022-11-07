@@ -19,10 +19,8 @@ CLASS /mbtools/cl_command__calc DEFINITION
   PRIVATE SECTION.
 
     TYPES:
-      ty_p0  TYPE p LENGTH 16 DECIMALS 0.
-    TYPES:
-      ty_p7  TYPE p LENGTH 16 DECIMALS 7.
-    TYPES:
+      ty_p0  TYPE p LENGTH 16 DECIMALS 0,
+      ty_p7  TYPE p LENGTH 16 DECIMALS 7,
       ty_p14 TYPE p LENGTH 16 DECIMALS 14.
 
     CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
@@ -40,7 +38,6 @@ CLASS /mbtools/cl_command__calc DEFINITION
         !iv_value        TYPE f
       RETURNING
         VALUE(rv_result) TYPE string.
-
 ENDCLASS.
 
 
@@ -158,11 +155,9 @@ CLASS /mbtools/cl_command__calc IMPLEMENTATION.
 
   METHOD class_constructor.
 
-    DATA:
-      lo_p TYPE REF TO data.
+    DATA lo_p TYPE REF TO data.
 
-    FIELD-SYMBOLS:
-      <lv_p> TYPE any.
+    FIELD-SYMBOLS <lv_p> TYPE any.
 
     lo_p = cl_abap_exceptional_values=>get_max_value( gv_max_p0 ).
     ASSIGN lo_p->* TO <lv_p>.

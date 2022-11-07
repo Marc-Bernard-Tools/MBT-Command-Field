@@ -12,14 +12,13 @@ TABLES: sscrfields.
 
 * Main
 SELECTION-SCREEN:
-  BEGIN OF SCREEN 200 AS SUBSCREEN,
-    BEGIN OF BLOCK b200 WITH FRAME,
-      COMMENT /1(77) sc_t200,
-      COMMENT /1(77) sc_t201,
-    END OF BLOCK b200,
-    BEGIN OF BLOCK b210 WITH FRAME.
-PARAMETERS:
-  p_cmd TYPE string LOWER CASE OBLIGATORY.
+BEGIN OF SCREEN 200 AS SUBSCREEN,
+BEGIN OF BLOCK b200 WITH FRAME,
+COMMENT /1(77) sc_t200,
+COMMENT /1(77) sc_t201,
+END OF BLOCK b200,
+BEGIN OF BLOCK b210 WITH FRAME.
+PARAMETERS p_cmd TYPE string LOWER CASE OBLIGATORY.
 SELECTION-SCREEN:
 END OF BLOCK b210,
 BEGIN OF BLOCK b220 WITH FRAME.
@@ -34,38 +33,38 @@ END OF SCREEN 200.
 
 * About
 SELECTION-SCREEN:
-  BEGIN OF SCREEN 900 AS SUBSCREEN,
-    BEGIN OF BLOCK b900 WITH FRAME,
-      COMMENT /1(50) sc_t900,
-      COMMENT 60(25) sc_t901,
-      SKIP,
-      COMMENT /1(77) sc_t902,
-    END OF BLOCK b900,
-    BEGIN OF BLOCK b910 WITH FRAME,
-      PUSHBUTTON /1(55) sc_docu USER-COMMAND docu,
-      SKIP,
-      PUSHBUTTON /1(55) sc_tool USER-COMMAND tool,
-      SKIP,
-      PUSHBUTTON /1(55) sc_lice USER-COMMAND lice,
-      SKIP,
-      PUSHBUTTON /1(55) sc_home USER-COMMAND home,
-    END OF BLOCK b910,
-  END OF SCREEN 900.
+BEGIN OF SCREEN 900 AS SUBSCREEN,
+BEGIN OF BLOCK b900 WITH FRAME,
+COMMENT /1(50) sc_t900,
+COMMENT 60(25) sc_t901,
+SKIP,
+COMMENT /1(77) sc_t902,
+END OF BLOCK b900,
+BEGIN OF BLOCK b910 WITH FRAME,
+PUSHBUTTON /1(55) sc_docu USER-COMMAND docu,
+SKIP,
+PUSHBUTTON /1(55) sc_tool USER-COMMAND tool,
+SKIP,
+PUSHBUTTON /1(55) sc_lice USER-COMMAND lice,
+SKIP,
+PUSHBUTTON /1(55) sc_home USER-COMMAND home,
+END OF BLOCK b910,
+END OF SCREEN 900.
 
 *-----------------------------------------------------------------------
 
 * Header
 SELECTION-SCREEN:
-  BEGIN OF BLOCK sc_header,
-    SKIP,
-    SKIP,
-    COMMENT /3(77) sc_t001,
-    SKIP,
-  END OF BLOCK sc_header,
-  BEGIN OF TABBED BLOCK sc_tab FOR 20 LINES,
-    TAB (40) sc_tab2 USER-COMMAND sc_push2 DEFAULT SCREEN 200,
-    TAB (40) sc_tab9 USER-COMMAND sc_push9 DEFAULT SCREEN 900,
-  END OF BLOCK sc_tab.
+BEGIN OF BLOCK sc_header,
+SKIP,
+SKIP,
+COMMENT /3(77) sc_t001,
+SKIP,
+END OF BLOCK sc_header,
+BEGIN OF TABBED BLOCK sc_tab FOR 20 LINES,
+TAB (40) sc_tab2 USER-COMMAND sc_push2 DEFAULT SCREEN 200,
+TAB (40) sc_tab9 USER-COMMAND sc_push9 DEFAULT SCREEN 900,
+END OF BLOCK sc_tab.
 
 *-----------------------------------------------------------------------
 
@@ -126,16 +125,17 @@ START-OF-SELECTION.
   LOG-POINT ID /mbtools/bc SUBKEY c_title FIELDS sy-datum sy-uzeit sy-uname.
 
   DO.
-    IF p_popup = abap_true.
-      gs_help_infos-menufunct = p_cmd.
-      gs_help_infos-call      = 'D'.
-      gs_help_infos-docuid    = 'OK'.
-      gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
-    ELSEIF p_exec = abap_true.
-      gs_help_infos-menufunct = p_cmd.
-      gs_help_infos-call      = 'H'.
-      gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
-    ENDIF.
+    CASE abap_true.
+      WHEN p_popup.
+        gs_help_infos-menufunct = p_cmd.
+        gs_help_infos-call      = 'D'.
+        gs_help_infos-docuid    = 'OK'.
+        gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
+      WHEN p_exec.
+        gs_help_infos-menufunct = p_cmd.
+        gs_help_infos-call      = 'H'.
+        gv_exit = /mbtools/cl_command_field=>do_command( gs_help_infos ).
+    ENDCASE.
     IF gv_exit = abap_true.
       EXIT.
     ENDIF.

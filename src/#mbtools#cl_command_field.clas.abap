@@ -150,7 +150,7 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
 
   METHOD execute_command.
 
-    CONSTANTS: lc_max_len TYPE i VALUE 20.
+    CONSTANTS lc_max_len TYPE i VALUE 20.
 
     DATA:
       lv_checked_input TYPE string,

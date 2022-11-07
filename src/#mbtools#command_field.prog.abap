@@ -18,8 +18,7 @@ FORM callback_eval
     e_value    TYPE f
     e_subrc    TYPE any ##CALLED.
 
-  DATA:
-    lv_subrc TYPE sy-subrc.
+  DATA lv_subrc TYPE sy-subrc.
 
   /mbtools/cl_utilities=>get_property(
     EXPORTING

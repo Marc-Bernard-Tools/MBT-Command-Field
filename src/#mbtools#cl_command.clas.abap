@@ -183,8 +183,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       lv_obj_name TYPE tadir-obj_name,
       lt_obj_name TYPE TABLE OF tadir-obj_name.
 
-    FIELD-SYMBOLS:
-      <lr_range> LIKE LINE OF rr_range.
+    FIELD-SYMBOLS <lr_range> LIKE LINE OF rr_range.
 
     CHECK iv_obj_name IS NOT INITIAL.
 
@@ -233,8 +232,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       lv_object TYPE tadir-object,
       lt_object TYPE TABLE OF tadir-object.
 
-    FIELD-SYMBOLS:
-      <lr_range> LIKE LINE OF rr_range.
+    FIELD-SYMBOLS <lr_range> LIKE LINE OF rr_range.
 
     CHECK iv_object IS NOT INITIAL.
 
@@ -280,65 +278,65 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       lt_fieldcat  TYPE slis_t_fieldcat_alv,
       ls_object    TYPE /mbtools/if_definitions=>ty_object_ext.
 
-    FIELD-SYMBOLS:
-      <ls_fieldcat> TYPE slis_fieldcat_alv.
+    FIELD-SYMBOLS <ls_fieldcat> TYPE slis_fieldcat_alv.
 
     CLEAR: es_tadir_key, ev_count.
 
     ev_count = lines( gt_object_list ).
 
-    IF ev_count = 0.
-      MESSAGE 'No object found'(001) TYPE 'S'.
-      " Nothing...
-    ELSEIF ev_count = 1.
-      " Exactly one object...
-      lv_tabindex = 1.
-    ELSE.
-      " Multiple objects...
-      CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
-        EXPORTING
-          i_structure_name       = c_object_with_icon_text
-        CHANGING
-          ct_fieldcat            = lt_fieldcat
-        EXCEPTIONS
-          inconsistent_interface = 1
-          program_error          = 2
-          OTHERS                 = 3.
-      ASSERT sy-subrc = 0.
+    CASE ev_count.
+      WHEN 0.
+        MESSAGE 'No object found'(001) TYPE 'S'.
+        " Nothing...
+      WHEN 1.
+        " Exactly one object...
+        lv_tabindex = 1.
+      WHEN OTHERS.
+        " Multiple objects...
+        CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+          EXPORTING
+            i_structure_name       = c_object_with_icon_text
+          CHANGING
+            ct_fieldcat            = lt_fieldcat
+          EXCEPTIONS
+            inconsistent_interface = 1
+            program_error          = 2
+            OTHERS                 = 3.
+        ASSERT sy-subrc = 0.
 
-      READ TABLE gt_object_list INTO ls_object INDEX 1.
-      IF sy-subrc = 0 AND ls_object-icon IS INITIAL.
-        " Hide icon and text columns if not filled
-        LOOP AT lt_fieldcat ASSIGNING <ls_fieldcat>
-          WHERE fieldname = 'ICON' OR fieldname = 'TEXT'.
-          <ls_fieldcat>-no_out = abap_true.
-        ENDLOOP.
-      ENDIF.
-
-      " Display object list
-      CALL FUNCTION 'REUSE_ALV_LIST_DISPLAY'
-        EXPORTING
-          i_callback_program      = c_callback_prog
-          i_callback_user_command = c_callback_alv
-          i_structure_name        = c_object_with_icon_text
-          it_fieldcat             = lt_fieldcat
-        IMPORTING
-          e_exit_caused_by_caller = lv_exit_flag
-        TABLES
-          t_outtab                = gt_object_list
-        EXCEPTIONS
-          program_error           = 1
-          OTHERS                  = 2.
-      IF sy-subrc = 0 AND lv_exit_flag = abap_true.
-        " Get index of seleced row which was exported in callback routine
-        IMPORT tabindex TO ls_selfield-tabindex FROM MEMORY ID c_tabix.
-        IF sy-subrc = 0.
-          lv_tabindex = ls_selfield-tabindex.
-          FREE MEMORY ID c_tabix.
+        READ TABLE gt_object_list INTO ls_object INDEX 1.
+        IF sy-subrc = 0 AND ls_object-icon IS INITIAL.
+          " Hide icon and text columns if not filled
+          LOOP AT lt_fieldcat ASSIGNING <ls_fieldcat>
+            WHERE fieldname = 'ICON' OR fieldname = 'TEXT'.
+            <ls_fieldcat>-no_out = abap_true.
+          ENDLOOP.
         ENDIF.
-      ENDIF.
 
-    ENDIF.
+        " Display object list
+        CALL FUNCTION 'REUSE_ALV_LIST_DISPLAY'
+          EXPORTING
+            i_callback_program      = c_callback_prog
+            i_callback_user_command = c_callback_alv
+            i_structure_name        = c_object_with_icon_text
+            it_fieldcat             = lt_fieldcat
+          IMPORTING
+            e_exit_caused_by_caller = lv_exit_flag
+          TABLES
+            t_outtab                = gt_object_list
+          EXCEPTIONS
+            program_error           = 1
+            OTHERS                  = 2.
+        IF sy-subrc = 0 AND lv_exit_flag = abap_true.
+          " Get index of seleced row which was exported in callback routine
+          IMPORT tabindex TO ls_selfield-tabindex FROM MEMORY ID c_tabix.
+          IF sy-subrc = 0.
+            lv_tabindex = ls_selfield-tabindex.
+            FREE MEMORY ID c_tabix.
+          ENDIF.
+        ENDIF.
+
+    ENDCASE.
 
     IF lv_tabindex BETWEEN 1 AND ev_count.
       READ TABLE gt_object_list INTO ls_object INDEX lv_tabindex.
@@ -473,8 +471,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_add.
 
-    DATA:
-      lt_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
 
     FIELD-SYMBOLS:
       <ls_tadir_key> TYPE /mbtools/if_definitions=>ty_tadir_key,
@@ -719,8 +716,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_func.
 
-    DATA:
-      lt_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
 
     CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-func
                         iv_sel_objects = iv_sel_objects
@@ -831,8 +827,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_meth.
 
-    DATA:
-      lt_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
 
     CHECK select_check( iv_object       = /mbtools/if_command_field=>c_objects_abap-meth
                         iv_sel_objects  = iv_sel_objects
@@ -855,11 +850,9 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_object.
 
-    DATA:
-      lt_objects TYPE /mbtools/if_definitions=>ty_objects.
+    DATA lt_objects TYPE /mbtools/if_definitions=>ty_objects.
 
-    FIELD-SYMBOLS:
-      <lv_object> TYPE /mbtools/if_definitions=>ty_object.
+    FIELD-SYMBOLS <lv_object> TYPE /mbtools/if_definitions=>ty_object.
 
     IF iv_object IN iv_sel_objects.
       rv_result = abap_true.
@@ -879,8 +872,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
 
   METHOD select_reps.
 
-    DATA:
-      lt_names TYPE /mbtools/if_definitions=>ty_names.
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
 
     CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_abap-reps
                         iv_sel_objects = iv_sel_objects

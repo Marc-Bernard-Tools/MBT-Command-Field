@@ -166,8 +166,7 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
 
   METHOD run_func.
 
-    DATA:
-      lv_funcname TYPE funcname.
+    DATA lv_funcname TYPE funcname.
 
     CHECK is_tadir_key-object = /mbtools/if_command_field=>c_objects_exec-func.
 
@@ -217,8 +216,7 @@ CLASS /mbtools/cl_command__run IMPLEMENTATION.
 
   METHOD run_mbt.
 
-    DATA:
-      ls_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key.
+    DATA ls_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key.
 
     ls_tadir_key-pgmid    = /mbtools/if_command_field=>c_pgmid-r3tr.
     ls_tadir_key-object   = /mbtools/if_command_field=>c_objects_exec-tran.
