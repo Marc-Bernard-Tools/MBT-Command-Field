@@ -11,6 +11,7 @@ CLASS /mbtools/cl_command__mbt DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    INTERFACES if_badi_interface.
     INTERFACES /mbtools/if_command.
 
     CLASS-METHODS class_constructor.

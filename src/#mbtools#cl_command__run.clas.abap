@@ -11,6 +11,7 @@ CLASS /mbtools/cl_command__run DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    INTERFACES if_badi_interface.
     INTERFACES /mbtools/if_command.
 
     CLASS-METHODS class_constructor.
@@ -25,26 +26,31 @@ CLASS /mbtools/cl_command__run DEFINITION
         !iv_obj_name   TYPE string
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS run_listcube
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS run_tabl
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS run_func
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS run_prog
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS run_tran
       IMPORTING
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key

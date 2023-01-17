@@ -11,6 +11,7 @@ CLASS /mbtools/cl_command__show DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    INTERFACES if_badi_interface.
     INTERFACES /mbtools/if_command.
 
     CLASS-METHODS class_constructor.
@@ -25,16 +26,19 @@ CLASS /mbtools/cl_command__show DEFINITION
         !is_tadir_key  TYPE /mbtools/if_definitions=>ty_tadir_key
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS show_message
       IMPORTING
         !iv_message    TYPE /mbtools/if_definitions=>ty_name
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS show_parameter
       IMPORTING
         !iv_parameter  TYPE string
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -54,7 +58,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
     " First, check if it's just a property
     lv_value = /mbtools/cl_utilities=>get_profile_parameter( iv_parameters ).
 
-    IF lv_value <> /mbtools/cl_utilities=>c_unknown.
+    IF lv_value <> /mbtools/cl_utilities=>c_value-unknown.
       cv_exit = show_parameter( /mbtools/cl_utilities=>get_profile_parameter_name( iv_parameters ) ).
     ELSE.
 

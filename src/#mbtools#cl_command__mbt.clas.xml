@@ -13,6 +13,13 @@
     <RSTAT>K</RSTAT>
     <MSG_ID>/MBTOOLS/BC_CL</MSG_ID>
    </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CLASS_CONSTRUCTOR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Class Constructor</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

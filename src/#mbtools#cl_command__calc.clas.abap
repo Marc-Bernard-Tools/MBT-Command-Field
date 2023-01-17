@@ -11,6 +11,7 @@ CLASS /mbtools/cl_command__calc DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    INTERFACES if_badi_interface.
     INTERFACES /mbtools/if_command.
 
     CLASS-METHODS class_constructor.
@@ -38,6 +39,7 @@ CLASS /mbtools/cl_command__calc DEFINITION
         !iv_value        TYPE f
       RETURNING
         VALUE(rv_result) TYPE string.
+
 ENDCLASS.
 
 
