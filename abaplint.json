@@ -8,7 +8,7 @@
     {
       "files": "/src/**/*.*",
       "folder": "/deps2",
-      "url": "https://github.com/Marc-Bernard-Tools/MBT-Base"
+      "url": "https://github.com/Marc-Bernard-Tools/MBT-Package-Manager"
     }
   ],
   "global": {
