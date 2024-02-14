@@ -6,7 +6,7 @@ REPORT /mbtools/command_field_tester.
 * SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
 
-TABLES: sscrfields.
+TABLES sscrfields.
 
 *-----------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ END OF BLOCK sc_tab.
 
 *-----------------------------------------------------------------------
 
-CONSTANTS:
+CONSTANTS
   c_title TYPE string VALUE /mbtools/cl_tool_bc_cl=>c_tool-title.
 
 DATA:
