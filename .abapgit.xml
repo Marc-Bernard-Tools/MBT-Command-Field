@@ -2,6 +2,7 @@
 <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
  <asx:values>
   <DATA>
+   <NAME>mbt-command-field</NAME>
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
    <STARTING_FOLDER>/src/</STARTING_FOLDER>
    <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
@@ -11,9 +12,10 @@
      <MIN_RELEASE>731</MIN_RELEASE>
     </item>
    </REQUIREMENTS>
+   <VERSION_CONSTANT>/MBTOOLS/CL_TOOL_BC_CL=&gt;C_TOOL-VERSION</VERSION_CONSTANT>
    <PACKAGING>
     <NAME>mbt-command-field</NAME>
-    <VERSION>1.4.0</VERSION>
+    <VERSION>1.4.1</VERSION>
     <DESCRIPTION>The world&apos;s first enhancement for the SAP GUI command field</DESCRIPTION>
     <TARGET_PACKAGE>/MBTOOLS/BC-CL</TARGET_PACKAGE>
     <LOGO>/MBTOOLS/MBT_COMMAND_FIELD_TN</LOGO>
