@@ -8,6 +8,13 @@ and [ISO Date Format](https://www.iso.org/iso-8601-date-and-time-format.html).
 
 ## [Unreleased]
 
+## Version [1.4.2] - 2024-04-07
+
+### Fixed
+
+- Replace POPUP_GET_VALUES
+- Fix error messages for CALC command
+
 ## Version [1.4.1] - 2024-02-15
 
 ### Changed
@@ -73,7 +80,8 @@ Launch Release
 Initial Release. For details, see [Features](https://marcbernardtools.com/docs/mbt-command-field/features).
 
 
-[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.1...main
+[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.2...main
+[1.4.2]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.3.0...1.3.1
