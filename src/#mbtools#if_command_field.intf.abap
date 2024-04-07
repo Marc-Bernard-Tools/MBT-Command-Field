@@ -9,8 +9,9 @@ INTERFACE /mbtools/if_command_field
 ************************************************************************
   CONSTANTS:
     BEGIN OF c_pgmid,
-      r3tr TYPE pgmid VALUE 'R3TR',
-      limu TYPE pgmid VALUE 'LIMU',
+      r3tr  TYPE pgmid VALUE 'R3TR',
+      limu  TYPE pgmid VALUE 'LIMU',
+      basis TYPE pgmid VALUE 'ZZZZ',
     END OF c_pgmid .
   CONSTANTS:
     BEGIN OF c_objects_db,
@@ -96,4 +97,29 @@ INTERFACE /mbtools/if_command_field
       c5      TYPE c VALUE ',',
       append  TYPE dd02l-tabclass VALUE 'APPEND',
     END OF c_table_class.
+  CONSTANTS:
+    " Matches /mbtools/cl_sap=>class_constructor
+    BEGIN OF c_objects_basis,
+      activity         TYPE adir_key-object VALUE 'ZACT',
+      c1               TYPE c VALUE ',',
+      client           TYPE adir_key-object VALUE 'ZCLI',
+      c2               TYPE c VALUE ',',
+      devclass         TYPE adir_key-object VALUE 'ZPCK',
+      c3               TYPE c VALUE ',',
+      owner            TYPE adir_key-object VALUE 'ZOWN',
+      c4               TYPE c VALUE ',',
+      project          TYPE adir_key-object VALUE 'ZPRJ',
+      c5               TYPE c VALUE ',',
+      request          TYPE adir_key-object VALUE 'ZREQ',
+      c6               TYPE c VALUE ',',
+      system           TYPE adir_key-object VALUE 'ZSYS',
+      c7               TYPE c VALUE ',',
+      target_group     TYPE adir_key-object VALUE 'ZGRP',
+      c8               TYPE c VALUE ',',
+      translayer       TYPE adir_key-object VALUE 'ZLAY',
+      c9               TYPE c VALUE ',',
+      transport_target TYPE adir_key-object VALUE 'ZTGT',
+      c10              TYPE c VALUE ',',
+      user             TYPE adir_key-object VALUE 'ZUSR',
+    END OF c_objects_basis.
 ENDINTERFACE.
