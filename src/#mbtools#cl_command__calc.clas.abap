@@ -117,18 +117,34 @@ CLASS /mbtools/cl_command__calc IMPLEMENTATION.
             units_not_valid         = 9
             missing_parameter       = 10
             OTHERS                  = 11.
-        IF sy-subrc = 0.
-          " Format result nicely like a calculator
-          lv_result = format_result( lv_f ).
-          lv_icon   = icon_equal.
-        ELSEIF sy-subrc BETWEEN 1 AND 4 OR sy-subrc BETWEEN 6 AND 10.
-          MESSAGE ID sy-msgid TYPE 'I' NUMBER sy-msgno
-             WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO lv_result.
-        ELSEIF sy-subrc = 5.
-          lv_result = 'Unknown value'(001).
-        ELSE.
-          lv_result = 'Error in EVAL_FORMULA' ##NO_TEXT.
-        ENDIF.
+        CASE sy-subrc.
+          WHEN 0.
+            " Format result nicely like a calculator
+            lv_result = format_result( lv_f ).
+            lv_icon   = icon_equal.
+          WHEN 1.
+            lv_result = 'Division by zero'(001).
+          WHEN 2.
+            lv_result = 'Expression error'(002).
+          WHEN 3.
+            lv_result = 'Invalid formula table'(003).
+          WHEN 4.
+            lv_result = 'Invalid expression'(004).
+          WHEN 5.
+            lv_result = 'Unknown value'(005).
+          WHEN 6.
+            lv_result = 'Logarithm error'(006).
+          WHEN 7.
+            lv_result = 'Parameter error'(007).
+          WHEN 8.
+            lv_result = 'Square root error'(008).
+          WHEN 9.
+            lv_result = 'Invalid units'(009).
+          WHEN 10.
+            lv_result = 'Missing parameter'(010).
+          WHEN OTHERS.
+            lv_result = 'Error in EVAL_FORMULA' ##NO_TEXT.
+        ENDCASE.
       ENDIF.
     ENDIF.
 
