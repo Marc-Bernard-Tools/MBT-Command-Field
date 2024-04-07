@@ -1,7 +1,8 @@
 CLASS /mbtools/cl_command DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
+
 
 ************************************************************************
 * MBT Command - Object
@@ -10,62 +11,75 @@ CLASS /mbtools/cl_command DEFINITION
 * SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
   PUBLIC SECTION.
-    CONSTANTS c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD' ##NO_TEXT.
-    CONSTANTS c_callback_alv TYPE slis_formname VALUE 'CALLBACK_ALV' ##NO_TEXT.
-    CONSTANTS c_tabix TYPE fieldname VALUE '/MBTOOLS/BC_CF_TABIX' ##NO_TEXT.
+
+    CONSTANTS:
+      c_callback_prog TYPE progname VALUE '/MBTOOLS/COMMAND_FIELD',
+      c_callback_alv  TYPE slis_formname VALUE 'CALLBACK_ALV',
+      c_tabix         TYPE fieldname VALUE '/MBTOOLS/BC_CF_TABIX'.
 
     METHODS select
       IMPORTING
         !iv_object   TYPE string OPTIONAL
-        !iv_obj_name TYPE string .
-    METHODS filter_tabl .
-    METHODS text .
+        !iv_obj_name TYPE string.
+
+    METHODS filter_tabl.
+
+    METHODS text.
+
+    METHODS text_fallback.
+
     METHODS pick
       EXPORTING
         !es_tadir_key TYPE /mbtools/if_definitions=>ty_tadir_key
         !ev_count     TYPE i
       RAISING
         /mbtools/cx_exception.
+
     METHODS split
       IMPORTING
         !iv_parameters TYPE string
       EXPORTING
         !ev_operator   TYPE csequence
-        !ev_operand    TYPE csequence .
+        !ev_operand    TYPE csequence.
+
     METHODS split_message
       IMPORTING
         !iv_message TYPE csequence
       EXPORTING
         !ev_msgid   TYPE sy-msgid
-        !ev_msgno   TYPE sy-msgno .
-  PROTECTED SECTION.
+        !ev_msgno   TYPE sy-msgno.
 
+  PROTECTED SECTION.
   PRIVATE SECTION.
 
-    CONSTANTS c_object_with_icon_text TYPE tabname VALUE '/MBTOOLS/OBJECT_WITH_ICON_TEXT' ##NO_TEXT.
-    CONSTANTS c_badi_class TYPE seoclsname VALUE '/MBTOOLS/BC_CTS_REQ_DISPLAY' ##NO_TEXT.
-    CONSTANTS c_badi_method TYPE seocmpname VALUE 'GET_OBJECT_DESCRIPTIONS' ##NO_TEXT.
-    CONSTANTS c_badi_type TYPE tabname VALUE '/MBTOOLS/TRWBO_S_E071_TXT' ##NO_TEXT.
-    CONSTANTS c_max_hits TYPE i VALUE 1000.
     CONSTANTS:
+      c_object_with_icon_text TYPE tabname VALUE '/MBTOOLS/OBJECT_WITH_ICON_TEXT',
+      c_badi_class            TYPE seoclsname VALUE '/MBTOOLS/BC_CTS_REQ_DISPLAY',
+      c_badi_method           TYPE seocmpname VALUE 'GET_OBJECT_DESCRIPTIONS',
+      c_badi_type             TYPE tabname VALUE '/MBTOOLS/TRWBO_S_E071_TXT',
+      c_max_hits              TYPE i VALUE 1000,
       BEGIN OF c_split,
         operator TYPE c LENGTH 1 VALUE ':',
         values   TYPE c LENGTH 1 VALUE ',',
         low_high TYPE c LENGTH 2 VALUE '..',
       END OF c_split.
-    CLASS-DATA gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext.
-    CLASS-DATA gt_tadir_list TYPE /mbtools/if_definitions=>ty_tadir_keys.
+
+    CLASS-DATA:
+      gt_object_list TYPE /mbtools/if_definitions=>ty_objects_ext,
+      gt_tadir_list  TYPE /mbtools/if_definitions=>ty_tadir_keys.
 
     METHODS name_split
       IMPORTING
         !iv_obj_name    TYPE string
       RETURNING
         VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_name_range.
+
     METHODS object_split
       IMPORTING
         !iv_object      TYPE string
       RETURNING
         VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_object_range.
+
     METHODS range_derive
       IMPORTING
         !iv_input      TYPE csequence
@@ -75,6 +89,7 @@ CLASS /mbtools/cl_command DEFINITION
         !ev_option     TYPE clike
         !ev_low        TYPE csequence
         !ev_high       TYPE csequence.
+
     METHODS select_check
       IMPORTING
         !iv_object       TYPE /mbtools/if_definitions=>ty_object
@@ -83,49 +98,69 @@ CLASS /mbtools/cl_command DEFINITION
         !iv_if_requested TYPE abap_bool DEFAULT abap_false
       RETURNING
         VALUE(rv_result) TYPE abap_bool.
+
     METHODS select_object
       IMPORTING
         !iv_object       TYPE /mbtools/if_definitions=>ty_object
         !iv_sel_objects  TYPE /mbtools/if_definitions=>ty_object_range
       RETURNING
         VALUE(rv_result) TYPE abap_bool.
+
     METHODS select_add
       IMPORTING
         !iv_pgmid     TYPE /mbtools/if_definitions=>ty_pgmid
         !iv_object    TYPE /mbtools/if_definitions=>ty_object
         !iv_sel_name  TYPE /mbtools/if_definitions=>ty_name OPTIONAL
         !iv_sel_names TYPE /mbtools/if_definitions=>ty_names OPTIONAL.
+
     METHODS select_bw
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
         !iv_obj_name    TYPE string.
+
     METHODS select_func
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
     METHODS select_mess
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
     METHODS select_meth
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
     METHODS select_reps
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
+    METHODS select_basis_users
+      IMPORTING
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
+    METHODS select_basis_requests
+      IMPORTING
+        !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
+        !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
     METHODS select_bw_classic
       IMPORTING
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range
         !iv_obj_name    TYPE string.
+
     METHODS select_bw_hana
       IMPORTING
         !io_search      TYPE REF TO object
         !iv_sel_objects TYPE /mbtools/if_definitions=>ty_object_range
         !iv_sel_names   TYPE /mbtools/if_definitions=>ty_name_range.
+
 ENDCLASS.
 
 
@@ -455,6 +490,20 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
         iv_obj_name    = iv_obj_name ).
     ENDIF.
 
+    " Select users (if requested)
+    IF lines( gt_tadir_list ) < c_max_hits.
+      select_basis_users(
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
+    ENDIF.
+
+    " Select transport requests (if requested)
+    IF lines( gt_tadir_list ) < c_max_hits.
+      select_basis_requests(
+        iv_sel_objects = lr_objects
+        iv_sel_names   = lr_names ).
+    ENDIF.
+
     " Deduplicate
     SORT gt_tadir_list.
     DELETE ADJACENT DUPLICATES FROM gt_tadir_list.
@@ -489,6 +538,46 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
       <ls_tadir_key>-object   = iv_object.
       <ls_tadir_key>-obj_name = <lv_name>.
     ENDLOOP.
+
+  ENDMETHOD.
+
+
+  METHOD select_basis_requests.
+
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
+
+    CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_basis-request
+                        iv_sel_objects = iv_sel_objects
+                        iv_sel_names   = iv_sel_names ) = abap_true.
+
+    SELECT trkorr FROM e070 INTO TABLE lt_names WHERE trkorr IN iv_sel_names.
+
+    IF sy-subrc = 0.
+      select_add(
+        iv_pgmid     = /mbtools/if_command_field=>c_pgmid-basis
+        iv_object    = /mbtools/if_command_field=>c_objects_basis-request
+        iv_sel_names = lt_names ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD select_basis_users.
+
+    DATA lt_names TYPE /mbtools/if_definitions=>ty_names.
+
+    CHECK select_check( iv_object      = /mbtools/if_command_field=>c_objects_basis-user
+                        iv_sel_objects = iv_sel_objects
+                        iv_sel_names   = iv_sel_names ) = abap_true.
+
+    SELECT bname FROM usr02 INTO TABLE lt_names WHERE bname IN iv_sel_names.
+
+    IF sy-subrc = 0.
+      select_add(
+        iv_pgmid     = /mbtools/if_command_field=>c_pgmid-basis
+        iv_object    = /mbtools/if_command_field=>c_objects_basis-user
+        iv_sel_names = lt_names ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -941,13 +1030,7 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     CLEAR gt_object_list.
 
     " Check if MBT Transport Request is installed and active
-    IF /mbtools/cl_switches=>is_active( /mbtools/cl_switches=>c_tool-mbt_transport_request ) = abap_false.
-      " Default is program id, object and object name only
-      LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
-        MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
-        INSERT ls_object INTO TABLE gt_object_list.
-      ENDLOOP.
-    ELSE.
+    IF /mbtools/cl_switches=>is_active( /mbtools/cl_switches=>c_tool-mbt_transport_request ) = abap_true.
       TRY.
           " Fill icon and description via MBT Transport Request Enhancement (if installed)
           GET BADI lo_badi TYPE (c_badi_class).
@@ -974,16 +1057,30 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
             ENDLOOP.
           ENDIF.
 
-        CATCH cx_root.
-          " Fallback to program id, object and object name only
-          LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
-            MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
-            INSERT ls_object INTO TABLE gt_object_list.
-          ENDLOOP.
+        CATCH cx_root ##NO_HANDLER.
       ENDTRY.
     ENDIF.
 
+    IF gt_object_list IS INITIAL.
+      " Fallback to program id, object and object name only
+      text_fallback( ).
+    ENDIF.
+
     SORT gt_object_list BY object obj_name.
+
+  ENDMETHOD.
+
+
+  METHOD text_fallback.
+
+    DATA ls_object TYPE /mbtools/if_definitions=>ty_object_ext.
+
+    FIELD-SYMBOLS <ls_tadir_key> TYPE /mbtools/if_definitions=>ty_tadir_key.
+
+    LOOP AT gt_tadir_list ASSIGNING <ls_tadir_key>.
+      MOVE-CORRESPONDING <ls_tadir_key> TO ls_object.
+      INSERT ls_object INTO TABLE gt_object_list.
+    ENDLOOP.
 
   ENDMETHOD.
 ENDCLASS.
