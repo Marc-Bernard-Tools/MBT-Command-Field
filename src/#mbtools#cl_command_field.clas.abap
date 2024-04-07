@@ -12,16 +12,19 @@ CLASS /mbtools/cl_command_field DEFINITION
   PUBLIC SECTION.
 
     CLASS-METHODS class_constructor.
+
     CLASS-METHODS do_command
       IMPORTING
         !is_help_infos TYPE help_info
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
     CLASS-METHODS do_help_start
       IMPORTING
         !iv_called_for_tab TYPE help_info-tabname
       RETURNING
         VALUE(rv_exit)     TYPE abap_bool.
+
     CLASS-METHODS show_result
       IMPORTING
         !iv_command    TYPE csequence
@@ -31,6 +34,7 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_via_popup  TYPE abap_bool
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
+
   PROTECTED SECTION.
 
     CLASS-METHODS execute_command
@@ -46,29 +50,32 @@ CLASS /mbtools/cl_command_field DEFINITION
         !iv_result     TYPE string OPTIONAL
       RETURNING
         VALUE(rv_exit) TYPE abap_bool.
-
   PRIVATE SECTION.
 
-    CONSTANTS c_command_result TYPE tabname VALUE '/MBTOOLS/COMMAND_RESULT'.
-    CONSTANTS c_break_chars TYPE string VALUE '=+*/; ' ##NO_TEXT.
-    CONSTANTS c_max_len_msg TYPE i VALUE 50.
-    CONSTANTS c_max_len_result TYPE i VALUE 75.
-    CONSTANTS c_max_lines_result TYPE i VALUE 10.
+    CONSTANTS:
+      c_command_result   TYPE tabname VALUE '/MBTOOLS/COMMAND_RESULT',
+      c_break_chars      TYPE string VALUE '=+*/; ' ##NO_TEXT,
+      c_max_len_msg      TYPE i VALUE 50,
+      c_max_len_result   TYPE i VALUE 75,
+      c_max_lines_result TYPE i VALUE 10.
 
-    CLASS-DATA gt_commands TYPE /mbtools/if_command=>ty_commands.
-    CLASS-DATA gs_infos TYPE help_info.
+    CLASS-DATA:
+      gt_commands TYPE /mbtools/if_command=>ty_commands,
+      gs_infos    TYPE help_info.
 
     CLASS-METHODS input_check
       IMPORTING
         !iv_input         TYPE csequence
       RETURNING
         VALUE(rv_command) TYPE string.
+
     CLASS-METHODS input_split
       IMPORTING
         !iv_input      TYPE csequence
       EXPORTING
         !ev_command    TYPE string
         !ev_parameters TYPE string.
+
 ENDCLASS.
 
 
@@ -244,25 +251,11 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
   METHOD popup_command.
 
     DATA:
-      lt_field     TYPE TABLE OF sval,
-      lt_result    TYPE TABLE OF sval-value,
-      lv_start_col TYPE i,
-      lv_start_row TYPE i VALUE 2,
-      lv_tabix     TYPE n LENGTH 2,
-      lv_answer    TYPE c LENGTH 1.
-
-    FIELD-SYMBOLS:
-      <lv_field>  TYPE sval,
-      <lv_result> LIKE LINE OF lt_result.
+      lv_input  TYPE string,
+      lt_result TYPE string_table.
 
     " Always exit command field, for commands processed via popup
     rv_exit = abap_true.
-
-    APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-    <lv_field>-tabname    = c_command_result.
-    <lv_field>-fieldname  = 'COMMAND'.
-    <lv_field>-fieldtext  = icon_greater && 'Command'(040).
-    <lv_field>-value      = iv_input.
 
     " If given, show lt_result of previous command
     IF iv_result IS NOT INITIAL.
@@ -286,62 +279,27 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
         RETURN.
       ENDIF.
 
-      LOOP AT lt_result ASSIGNING <lv_result> TO c_max_lines_result.
-        lv_tabix = sy-tabix.
-        APPEND INITIAL LINE TO lt_field ASSIGNING <lv_field>.
-        <lv_field>-tabname   = c_command_result.
-        <lv_field>-fieldname = 'RESULT_' && lv_tabix.
-        IF lv_tabix = 1.
-          IF iv_icon = icon_message_error_small.
-            <lv_field>-fieldtext = iv_icon && 'Error'(042).
-          ELSE.
-            <lv_field>-fieldtext = iv_icon && 'Result'(041).
-          ENDIF.
-        ELSE.
-          <lv_field>-fieldtext = icon_space.
-        ENDIF.
-        <lv_field>-field_attr = '02'. "no entry
-        <lv_field>-value      = <lv_result>.
-      ENDLOOP.
-
       IF lines( lt_result ) > c_max_lines_result.
         MESSAGE w003 WITH c_max_lines_result.
       ENDIF.
     ENDIF.
 
-    " Center perfectly, if screen is a list
-    lv_start_col = ( sy-scols - 110 ) / 2.
-    IF lv_start_col < 50.
-      " If not, we take a guess since there does not seem to be a way to get the
-      " width of the SAPGUI window
-      lv_start_col = 40.
-    ENDIF.
-
-    CALL FUNCTION 'POPUP_GET_VALUES'
+    CALL FUNCTION '/MBTOOLS/COMMAND_FIELD_POPUP'
       EXPORTING
-        no_value_check  = abap_true
-        popup_title     = /mbtools/cl_tool_bc_cl=>c_tool-title
-        start_column    = lv_start_col
-        start_row       = lv_start_row
+        iv_input  = iv_input
+        iv_icon   = iv_icon
+        it_result = lt_result
       IMPORTING
-        returncode      = lv_answer
-      TABLES
-        fields          = lt_field
+        ev_input  = lv_input
       EXCEPTIONS
-        error_in_fields = 1
-        OTHERS          = 2.
+        cancelled = 1
+        OTHERS    = 2.
     IF sy-subrc <> 0.
-      MESSAGE e000 WITH 'Error in POPUP_GET_VALUES' ##NO_TEXT.
-      RETURN.
-    ELSEIF lv_answer = 'A'.
-      RETURN.
+      EXIT.
     ENDIF.
-
-    READ TABLE lt_field INDEX 1 ASSIGNING <lv_field>.
-    ASSERT sy-subrc = 0.
 
     execute_command(
-      iv_input     = <lv_field>-value
+      iv_input     = lv_input
       iv_via_popup = abap_true ).
 
   ENDMETHOD.
