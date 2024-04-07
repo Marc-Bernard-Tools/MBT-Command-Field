@@ -294,13 +294,13 @@ CLASS /mbtools/cl_command_field IMPLEMENTATION.
       EXCEPTIONS
         cancelled = 1
         OTHERS    = 2.
-    IF sy-subrc <> 0.
-      EXIT.
-    ENDIF.
+    IF sy-subrc = 0.
 
-    execute_command(
-      iv_input     = lv_input
-      iv_via_popup = abap_true ).
+      execute_command(
+        iv_input     = lv_input
+        iv_via_popup = abap_true ).
+
+    ENDIF.
 
   ENDMETHOD.
 
