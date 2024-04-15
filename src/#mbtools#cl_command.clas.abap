@@ -74,6 +74,12 @@ CLASS /mbtools/cl_command DEFINITION
       RETURNING
         VALUE(rr_range) TYPE /mbtools/if_definitions=>ty_name_range.
 
+    METHODS name_adjust
+      IMPORTING
+        !iv_obj_name       TYPE csequence
+      RETURNING
+        VALUE(rv_obj_name) TYPE string.
+
     METHODS object_split
       IMPORTING
         !iv_object      TYPE string
@@ -212,6 +218,22 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD name_adjust.
+
+    DATA lv_len TYPE i.
+
+    lv_len = strlen( iv_obj_name ) - 1.
+
+    " Remove trailing #
+    IF lv_len > 0 AND iv_obj_name+lv_len(1) = '#'.
+      rv_obj_name = iv_obj_name(lv_len).
+    ELSE.
+      rv_obj_name = iv_obj_name.
+    ENDIF.
+
+  ENDMETHOD.
+
+
   METHOD name_split.
 
     DATA:
@@ -225,6 +247,8 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
     IF iv_obj_name CS c_split-values.
       SPLIT iv_obj_name AT c_split-values INTO TABLE lt_obj_name.
       LOOP AT lt_obj_name INTO lv_obj_name.
+        lv_obj_name = name_adjust( lv_obj_name ).
+
         APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
         range_derive(
@@ -240,11 +264,13 @@ CLASS /mbtools/cl_command IMPLEMENTATION.
         <lr_range>-high = /mbtools/cl_sap=>object_name_check( <lr_range>-high ).
       ENDLOOP.
     ELSE.
+      lv_obj_name = name_adjust( iv_obj_name ).
+
       APPEND INITIAL LINE TO rr_range ASSIGNING <lr_range>.
 
       range_derive(
         EXPORTING
-          iv_input  = iv_obj_name
+          iv_input  = lv_obj_name
         IMPORTING
           ev_sign   = <lr_range>-sign
           ev_option = <lr_range>-option

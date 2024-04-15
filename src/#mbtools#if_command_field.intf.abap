@@ -1,5 +1,4 @@
-INTERFACE /mbtools/if_command_field
-  PUBLIC .
+INTERFACE /mbtools/if_command_field PUBLIC .
 
 ************************************************************************
 * MBT Command Field
@@ -7,18 +6,23 @@ INTERFACE /mbtools/if_command_field
 * Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
 * SPDX-License-Identifier: GPL-3.0-only
 ************************************************************************
+
+  " TODO: Replace with /mbtools/cl_sap constants
+
   CONSTANTS:
     BEGIN OF c_pgmid,
       r3tr  TYPE pgmid VALUE 'R3TR',
       limu  TYPE pgmid VALUE 'LIMU',
-      basis TYPE pgmid VALUE 'ZZZZ',
-    END OF c_pgmid .
+      basis TYPE pgmid VALUE 'ZZ01',
+    END OF c_pgmid.
+
   CONSTANTS:
     BEGIN OF c_objects_db,
       tabl TYPE adir_key-object VALUE 'TABL',
       c1   TYPE c VALUE ',',
       view TYPE adir_key-object VALUE 'VIEW',
     END OF c_objects_db.
+
   CONSTANTS:
     BEGIN OF c_objects_bw,
       all  TYPE adir_key-object VALUE 'BW',
@@ -53,6 +57,7 @@ INTERFACE /mbtools/if_command_field
       c14  TYPE c VALUE ',',
       trpr TYPE adir_key-object VALUE 'TRPR',
     END OF c_objects_bw.
+
   CONSTANTS:
     BEGIN OF c_objects_abap,
       prog TYPE adir_key-object VALUE 'PROG',
@@ -71,10 +76,12 @@ INTERFACE /mbtools/if_command_field
       c7   TYPE c VALUE ',',
       type TYPE adir_key-object VALUE 'TYPE',
     END OF c_objects_abap.
+
   CONSTANTS:
     BEGIN OF c_objects_limu,
       mess TYPE adir_key-object VALUE 'MESS',
     END OF c_objects_limu.
+
   CONSTANTS:
     BEGIN OF c_objects_exec,
       prog TYPE adir_key-object VALUE 'PROG',
@@ -83,6 +90,7 @@ INTERFACE /mbtools/if_command_field
       c2   TYPE c VALUE ',',
       func TYPE adir_key-object VALUE 'FUNC',
     END OF c_objects_exec.
+
   CONSTANTS:
     BEGIN OF c_table_class,
       transp  TYPE dd02l-tabclass VALUE 'TRANSP',
@@ -97,8 +105,8 @@ INTERFACE /mbtools/if_command_field
       c5      TYPE c VALUE ',',
       append  TYPE dd02l-tabclass VALUE 'APPEND',
     END OF c_table_class.
+
   CONSTANTS:
-    " Matches /mbtools/cl_sap=>class_constructor
     BEGIN OF c_objects_basis,
       activity         TYPE adir_key-object VALUE 'ZACT',
       c1               TYPE c VALUE ',',
@@ -122,4 +130,5 @@ INTERFACE /mbtools/if_command_field
       c10              TYPE c VALUE ',',
       user             TYPE adir_key-object VALUE 'ZUSR',
     END OF c_objects_basis.
+
 ENDINTERFACE.
