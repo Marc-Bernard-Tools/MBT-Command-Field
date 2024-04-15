@@ -148,9 +148,9 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
     DATA:
       lv_tcode  TYPE tstc-tcode,
       lv_param  TYPE tstcp-param,
+      lt_param  TYPE string_table,
       ls_report TYPE srepovari,
-      lv_class  TYPE seoclsname,
-      lv_method TYPE seocmpname,
+      ls_mtdkey TYPE seocpdkey,
       lv_object TYPE c LENGTH 120.
 
     lv_tcode = iv_object_name.
@@ -178,9 +178,11 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'RS38M-PROGRAMM=(.+);' IN lv_param SUBMATCHES lv_object.
+    SPLIT lv_param AT ';' INTO TABLE lt_param.
+
+    FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc <> 0.
-      FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN lv_param SUBMATCHES lv_object.
+      FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN TABLE lt_param SUBMATCHES lv_object.
     ENDIF.
 
     IF lv_object IS NOT INITIAL.
@@ -189,63 +191,53 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'CLASS=(.+);' IN lv_param SUBMATCHES lv_class.
+    FIND REGEX 'CLASS=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname.
     IF sy-subrc = 0.
-      FIND REGEX 'METHOD=(.+);' IN lv_param SUBMATCHES lv_method.
+      FIND REGEX 'METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-cpdname.
     ELSE.
-      FIND REGEX '\\CLASS=(.+)\\METHOD=(.+)' IN lv_param SUBMATCHES lv_class lv_method.
+      FIND REGEX '\\CLASS=(.+)\\METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname ls_mtdkey-cpdname.
     ENDIF.
 
-    IF lv_class IS NOT INITIAL.
-      SYSTEM-CALL QUERY CLASS lv_class.              "#EC CI_SYSTEMCALL
-      IF sy-subrc = 0.
-        rs_tadir_key-object   = 'CLAS'.
-        rs_tadir_key-obj_name = lv_class.
-        IF lv_method IS NOT INITIAL.
-          SYSTEM-CALL QUERY METHOD lv_method OF CLASS lv_class
-            INCLUDE INTO lv_object NO DBLOCK.        "#EC CI_SYSTEMCALL
-          IF sy-subrc = 0.
-            rs_tadir_key-object   = 'PROG'.
-            rs_tadir_key-obj_name = lv_object.
-            RETURN.
-          ELSE.
-            RETURN.
-          ENDIF.
-        ELSE.
-          RETURN.
-        ENDIF.
+    IF ls_mtdkey-clsname IS NOT INITIAL.
+      rs_tadir_key-object   = 'CLAS'.
+      rs_tadir_key-obj_name = ls_mtdkey-clsname.
+      IF ls_mtdkey-cpdname IS NOT INITIAL.
+        rs_tadir_key-object   = 'PROG'.
+        rs_tadir_key-obj_name = cl_oo_classname_service=>get_method_include( ls_mtdkey ).
+      ELSE.
+        RETURN.
       ENDIF.
     ENDIF.
 
-    FIND REGEX 'TABLENAME=(.+);' IN lv_param SUBMATCHES lv_object.
+    FIND REGEX 'TABLENAME=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'TABL'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'VIEWNAME=(.+);' IN lv_param SUBMATCHES lv_object.
+    FIND REGEX 'VIEWNAME=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'VIEW'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'VCLNAME=(.+);' IN lv_param SUBMATCHES lv_object.
+    FIND REGEX 'VCLNAME=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'VIEW'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'WDYID.*APPLICATION=(.+);' IN lv_param SUBMATCHES lv_object.
+    FIND REGEX 'WDYID.*APPLICATION=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'WDYA'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'SNUM.*TRNO-OBJECT=(.+);' IN lv_param SUBMATCHES lv_object.
+    FIND REGEX 'SNUM.*TRNO-OBJECT=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'SNUM'.
       rs_tadir_key-obj_name = lv_object.
