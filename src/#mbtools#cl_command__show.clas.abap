@@ -180,9 +180,9 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
 
     SPLIT lv_param AT ';' INTO TABLE lt_param.
 
-    FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
+    FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc <> 0.
-      FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN TABLE lt_param SUBMATCHES lv_object.
+      FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object ##SUBRC_OK.
     ENDIF.
 
     IF lv_object IS NOT INITIAL.
@@ -191,11 +191,10 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'CLASS=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname.
-    IF sy-subrc = 0.
-      FIND REGEX 'METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-cpdname.
-    ELSE.
-      FIND REGEX '\\CLASS=(.+)\\METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname ls_mtdkey-cpdname.
+    FIND REGEX '\\CLASS=(.+)\\METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname ls_mtdkey-cpdname.
+    IF sy-subrc <> 0.
+      FIND REGEX 'CLASS=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-clsname ##SUBRC_OK.
+      FIND REGEX 'METHOD=(.+)' IN TABLE lt_param SUBMATCHES ls_mtdkey-cpdname ##SUBRC_OK.
     ENDIF.
 
     IF ls_mtdkey-clsname IS NOT INITIAL.
@@ -230,16 +229,16 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'WDYID.*APPLICATION=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
+    FIND REGEX 'APPLICATION=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
       rs_tadir_key-object   = 'WDYA'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
 
-    FIND REGEX 'SNUM.*TRNO-OBJECT=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
+    FIND REGEX 'TNRO-OBJECT=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc = 0.
-      rs_tadir_key-object   = 'SNUM'.
+      rs_tadir_key-object   = 'NROB'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
