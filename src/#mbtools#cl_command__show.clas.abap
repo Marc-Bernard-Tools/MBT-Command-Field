@@ -165,13 +165,32 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
         report_structure      = ls_report
       EXCEPTIONS
         no_report_transaction = 1
-        OTHERS                = 2.
+        others                = 2.
     IF sy-subrc = 0 AND ls_report-report IS NOT INITIAL.
       rs_tadir_key-object   = 'PROG'.
-      rs_tadir_key-obj_name = ls_report-report.
+      CASE ls_report-reporttype.
+        WHEN INITIAL.
+          rs_tadir_key-obj_name = ls_report-report.
+        WHEN 'TR'.
+        " It is very unlikely to have a parameter t-code for
+        " another parameter t-code
+        " and SAP discourages it with warning
+        " so this is sufficient
+        lv_tcode = ls_report-report.
+        CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
+          EXPORTING
+            tcode                 = lv_tcode
+          IMPORTING
+            report_structure      = ls_report
+          EXCEPTIONS
+            no_report_transaction = 1
+            others                = 2.
+
+          rs_tadir_key-obj_name = ls_report-report.
+      WHEN OTHERS.
+      ENDCASE.
       RETURN.
     ENDIF.
-
     " Parameter Transaction
     SELECT SINGLE param INTO lv_param FROM tstcp WHERE tcode = lv_tcode.
     IF sy-subrc <> 0.
