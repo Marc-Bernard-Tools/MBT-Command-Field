@@ -57,6 +57,12 @@ CLASS /mbtools/cl_command__show DEFINITION
       RETURNING
         VALUE(rs_tadir_key) TYPE /mbtools/if_definitions=>ty_tadir_key.
 
+    CLASS-METHODS get_report_from_tcode
+      IMPORTING
+        !iv_tcode        TYPE csequence
+      RETURNING
+        VALUE(rs_report) TYPE srepovari.
+
 ENDCLASS.
 
 
@@ -146,91 +152,53 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
   METHOD get_object_from_tcode.
 
     DATA:
-      lv_tcode  TYPE tstc-tcode,
-      lv_param  TYPE tstcp-param,
-      lt_param  TYPE string_table,
-      ls_report TYPE srepovari,
-      ls_mtdkey TYPE seocpdkey,
+      lv_param           TYPE tstcp-param,
+      lt_param           TYPE string_table,
+      ls_report          TYPE srepovari,
+      ls_mtdkey          TYPE seocpdkey,
       lv_object_is_tcode TYPE abap_bool,
-      lv_object TYPE c LENGTH 120.
+      lv_object          TYPE c LENGTH 120.
 
-    lv_tcode = iv_object_name.
+    rs_tadir_key-pgmid  = 'R3TR'.
+    rs_tadir_key-object = 'PROG'.
 
-    rs_tadir_key-pgmid = 'R3TR'.
+    " Dialog transaction
+    SELECT SINGLE pgmna INTO lv_object FROM tstc WHERE tcode = iv_object_name.
+    IF lv_object IS NOT INITIAL.
+      rs_tadir_key-obj_name = lv_object.
+      RETURN.
+    ENDIF.
 
-    " Report transaction
-    CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
-      EXPORTING
-        tcode                 = lv_tcode
-      IMPORTING
-        report_structure      = ls_report
-      EXCEPTIONS
-        no_report_transaction = 1
-        OTHERS                = 2.
-    IF sy-subrc = 0 AND ls_report-report IS NOT INITIAL.
-      rs_tadir_key-object   = 'PROG'.
+    " Report transactions
+    ls_report = get_report_from_tcode( iv_object_name ).
+    IF ls_report-report IS NOT INITIAL.
       CASE ls_report-reporttype.
         WHEN ''.
           rs_tadir_key-obj_name = ls_report-report.
         WHEN 'TR'.
-        " It is very unlikely to have a parameter t-code for
-        " another parameter t-code
-        " and SAP discourages it with warning
-        " so this is sufficient
-          lv_tcode = ls_report-report.
-          CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
-            EXPORTING
-              tcode                 = lv_tcode
-            IMPORTING
-              report_structure      = ls_report
-            EXCEPTIONS
-              no_report_transaction = 1
-              OTHERS                = 2.
-          rs_tadir_key-obj_name = ls_report-report.
+          " It is very unlikely to have a parameter t-code for another parameter t-code
+          " and SAP discourages it with warning so this is sufficient
+          rs_tadir_key-obj_name = get_report_from_tcode( ls_report-report )-report.
         WHEN OTHERS.
           MESSAGE 'It is a generated report' TYPE 'I'.
-          RETURN.
       ENDCASE.
       RETURN.
     ENDIF.
+
     " Parameter Transaction
-    SELECT SINGLE param INTO lv_param FROM tstcp WHERE tcode = lv_tcode.
+    SELECT SINGLE param INTO lv_param FROM tstcp WHERE tcode = iv_object_name.
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
 
     SPLIT lv_param AT ';' INTO TABLE lt_param.
+
     FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc <> 0.
-      FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object ##SUBRC_OK.
-      CHECK sy-subrc <> 0.
-      " if skip initial screen is checked and it is assigned to t-code
-      FIND REGEX '\/\*(\w+)' IN TABLE lt_param SUBMATCHES lv_object.
-      IF sy-subrc = 0.
-        lv_object_is_tcode = abap_true.
-      ENDIF.
-      CHECK sy-subrc <> 0.
-      " if skip initial screen is not checked
-      FIND REGEX '\/N(\w+)' IN TABLE lt_param SUBMATCHES lv_object.
-      IF sy-subrc = 0.
-        lv_object_is_tcode = abap_true.
-      ENDIF.
+      FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
     ENDIF.
-    IF lv_object IS NOT INITIAL AND lv_object_is_tcode = abap_true.
-      CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
-        EXPORTING
-          tcode                 = lv_object
-        IMPORTING
-          report_structure      = ls_report
-        EXCEPTIONS
-          no_report_transaction = 1
-          OTHERS                = 2.
-      rs_tadir_key-object   = 'PROG'.
-      rs_tadir_key-obj_name = ls_report-report.
-      RETURN.
-    ENDIF.
-    IF lv_object IS NOT INITIAL.
-      rs_tadir_key-object   = 'PROG'.
+
+    IF sy-subrc = 0.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
     ENDIF.
@@ -247,9 +215,8 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       IF ls_mtdkey-cpdname IS NOT INITIAL.
         rs_tadir_key-object   = 'PROG'.
         rs_tadir_key-obj_name = cl_oo_classname_service=>get_method_include( ls_mtdkey ).
-      ELSE.
-        RETURN.
       ENDIF.
+      RETURN.
     ENDIF.
 
     FIND REGEX 'TABLENAME=(.+)' IN TABLE lt_param SUBMATCHES lv_object.
@@ -285,6 +252,45 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       rs_tadir_key-object   = 'NROB'.
       rs_tadir_key-obj_name = lv_object.
       RETURN.
+    ENDIF.
+
+    " if skip initial screen is checked and it is assigned to t-code
+    FIND REGEX '\/\*([\w|\/]+)' IN TABLE lt_param SUBMATCHES lv_object.
+    IF sy-subrc = 0.
+      lv_object_is_tcode = abap_true.
+    ELSE.
+      " if skip initial screen is not checked
+      FIND REGEX '\/N([\w|\/]+)' IN TABLE lt_param SUBMATCHES lv_object.
+      IF sy-subrc = 0.
+        lv_object_is_tcode = abap_true.
+      ENDIF.
+    ENDIF.
+
+    IF lv_object_is_tcode = abap_true.
+      rs_tadir_key-object = 'PROG'.
+      rs_tadir_key-obj_name = get_report_from_tcode( lv_object )-report.
+      RETURN.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD get_report_from_tcode.
+
+    DATA lv_tcode TYPE tstc-tcode.
+
+    lv_tcode = iv_tcode.
+
+    CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
+      EXPORTING
+        tcode                 = lv_tcode
+      IMPORTING
+        report_structure      = rs_report
+      EXCEPTIONS
+        no_report_transaction = 1
+        OTHERS                = 2.
+    IF sy-subrc <> 0.
+      CLEAR rs_report.
     ENDIF.
 
   ENDMETHOD.
