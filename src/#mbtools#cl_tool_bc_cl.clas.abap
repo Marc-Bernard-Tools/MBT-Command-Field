@@ -15,7 +15,7 @@ CLASS /mbtools/cl_tool_bc_cl DEFINITION
 
     CONSTANTS:
       BEGIN OF c_tool,
-        version      TYPE string VALUE '1.4.2' ##NO_TEXT,
+        version      TYPE string VALUE '1.4.3' ##NO_TEXT,
         title        TYPE string VALUE 'MBT Command Field' ##NO_TEXT,
         description  TYPE string
         VALUE `The world's first enhancement for the SAP GUI command field` ##NO_TEXT,
