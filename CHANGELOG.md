@@ -8,6 +8,14 @@ and [ISO Date Format](https://www.iso.org/iso-8601-date-and-time-format.html).
 
 ## [Unreleased]
 
+## Version [1.4.3] - 2024-04-17
+
+### Added
+
+- Add support for displaying users and requests
+- Show corresponding object for transactions
+- Support for more types of parameter t-codes
+
 ## Version [1.4.2] - 2024-04-07
 
 ### Fixed
@@ -80,7 +88,8 @@ Launch Release
 Initial Release. For details, see [Features](https://marcbernardtools.com/docs/mbt-command-field/features).
 
 
-[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.2...main
+[Unreleased]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.3...main
+[1.4.3]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.2...1.4.3
 [1.4.2]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/Marc-Bernard-Tools/MBT-Command-Field/compare/1.3.1...1.4.0
