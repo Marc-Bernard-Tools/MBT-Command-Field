@@ -188,7 +188,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
               OTHERS                = 2.
           rs_tadir_key-obj_name = ls_report-report.
         WHEN OTHERS.
-          MESSAGE 'It is a generated report' type 'I'.
+          MESSAGE 'It is a generated report' TYPE 'I'.
           RETURN.
       ENDCASE.
       RETURN.
@@ -216,7 +216,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
         lv_object_is_tcode = abap_true.
       ENDIF.
     ENDIF.
-    IF lv_object IS NOT INITIAL AND lv_object_is_tcode.
+    IF lv_object IS NOT INITIAL AND lv_object_is_tcode = abap_true.
       CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
         EXPORTING
           tcode                 = lv_object
