@@ -23,10 +23,10 @@ CLASS ltcl_command_show IMPLEMENTATION.
 
   METHOD test.
 
-    DATA ls_tstc TYPE tstc.
+    DATA lv_tcode TYPE tstc-tcode.
     DATA ls_act TYPE /mbtools/if_definitions=>ty_tadir_key.
 
-    SELECT SINGLE * INTO ls_tstc FROM tstc WHERE tcode = iv_tcode.
+    SELECT SINGLE tcode INTO lv_tcode FROM tstc WHERE tcode = iv_tcode.
     CHECK sy-subrc = 0.
 
     ls_act = /mbtools/cl_command__show=>get_object_from_tcode( iv_tcode ).
