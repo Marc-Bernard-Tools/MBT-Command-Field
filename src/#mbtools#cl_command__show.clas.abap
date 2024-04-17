@@ -151,6 +151,7 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
       lt_param  TYPE string_table,
       ls_report TYPE srepovari,
       ls_mtdkey TYPE seocpdkey,
+      lv_object_is_tcode TYPE abap_bool,
       lv_object TYPE c LENGTH 120.
 
     lv_tcode = iv_object_name.
@@ -165,29 +166,30 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
         report_structure      = ls_report
       EXCEPTIONS
         no_report_transaction = 1
-        others                = 2.
+        OTHERS                = 2.
     IF sy-subrc = 0 AND ls_report-report IS NOT INITIAL.
       rs_tadir_key-object   = 'PROG'.
       CASE ls_report-reporttype.
-        WHEN INITIAL.
+        WHEN ''.
           rs_tadir_key-obj_name = ls_report-report.
         WHEN 'TR'.
         " It is very unlikely to have a parameter t-code for
         " another parameter t-code
         " and SAP discourages it with warning
         " so this is sufficient
-        lv_tcode = ls_report-report.
-        CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
-          EXPORTING
-            tcode                 = lv_tcode
-          IMPORTING
-            report_structure      = ls_report
-          EXCEPTIONS
-            no_report_transaction = 1
-            others                = 2.
-
+          lv_tcode = ls_report-report.
+          CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
+            EXPORTING
+              tcode                 = lv_tcode
+            IMPORTING
+              report_structure      = ls_report
+            EXCEPTIONS
+              no_report_transaction = 1
+              OTHERS                = 2.
           rs_tadir_key-obj_name = ls_report-report.
-      WHEN OTHERS.
+        WHEN OTHERS.
+          MESSAGE 'It is a generated report' type 'I'.
+          RETURN.
       ENDCASE.
       RETURN.
     ENDIF.
@@ -198,12 +200,35 @@ CLASS /mbtools/cl_command__show IMPLEMENTATION.
     ENDIF.
 
     SPLIT lv_param AT ';' INTO TABLE lt_param.
-
     FIND REGEX '\\PROGRAM=(.+)\\CLASS' IN TABLE lt_param SUBMATCHES lv_object.
     IF sy-subrc <> 0.
       FIND REGEX 'RS38M-PROGRAMM=(.+)' IN TABLE lt_param SUBMATCHES lv_object ##SUBRC_OK.
+      CHECK sy-subrc <> 0.
+      " if skip initial screen is checked and it is assigned to t-code
+      FIND REGEX '\/\*(\w+)' IN TABLE lt_param SUBMATCHES lv_object.
+      IF sy-subrc = 0.
+        lv_object_is_tcode = abap_true.
+      ENDIF.
+      CHECK sy-subrc <> 0.
+      " if skip initial screen is not checked
+      FIND REGEX '\/N(\w+)' IN TABLE lt_param SUBMATCHES lv_object.
+      IF sy-subrc = 0.
+        lv_object_is_tcode = abap_true.
+      ENDIF.
     ENDIF.
-
+    IF lv_object IS NOT INITIAL AND lv_object_is_tcode.
+      CALL FUNCTION 'SRT_GET_REPORT_OF_TCODE'
+        EXPORTING
+          tcode                 = lv_object
+        IMPORTING
+          report_structure      = ls_report
+        EXCEPTIONS
+          no_report_transaction = 1
+          OTHERS                = 2.
+      rs_tadir_key-object   = 'PROG'.
+      rs_tadir_key-obj_name = ls_report-report.
+      RETURN.
+    ENDIF.
     IF lv_object IS NOT INITIAL.
       rs_tadir_key-object   = 'PROG'.
       rs_tadir_key-obj_name = lv_object.
