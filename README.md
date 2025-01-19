@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/endpoint?url=https%3A%2F%2Fshield.abap.space%2Fversion-shield-json%2Fgithub%2FMarc-Bernard-Tools%2FMBT-Command-Field%2Fsrc%2F%2523mbtools%2523cl_tool_bc_cl.clas.abap&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/Marc-Bernard-Tools/MBT-Command-Field/src/%2523mbtools%2523cl_tool_bc_cl.clas.abap&label=Version&color=blue)
 [![Slack](https://img.shields.io/badge/Join-Slack-blue)](https://communityinviter.com/apps/marc-bernard-tools/join-our-slack-community)
 
 [![License](https://img.shields.io/github/license/Marc-Bernard-Tools/MBT-Command-Field?label=License&color=success)](LICENSE)
@@ -27,10 +27,10 @@ All contributions are welcome! Read our [Contribution Guidelines](CONTRIBUTING.m
 
 ## About
 
-Made with :heart: in Canada
+Made with ❤️ in Canada
 
 Copyright 2021 Marc Bernard <https://marcbernardtools.com/>
 
-Follow [@marcfbe](https://twitter.com/marcfbe) on Twitter
+Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Bluesky and [@marcfbe](https://linkedin.com/in/marcfbe) on LinkedIn
 
 <p><a href="https://marcbernardtools.com/"><img width="160" height="65" src="https://marcbernardtools.com/info/MBT_Logo_640x250_on_Gray.png" alt="MBT Logo"></a></p>
