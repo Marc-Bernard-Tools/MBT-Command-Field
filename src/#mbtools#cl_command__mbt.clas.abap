@@ -47,30 +47,34 @@ CLASS /mbtools/cl_command__mbt IMPLEMENTATION.
     lv_operand = to_upper( lv_operand ).
 
     " Commands from registered tools
-    lt_tools = /mbtools/cl_tool_manager=>select( ).
+    IF lv_operand IS NOT INITIAL.
+      lt_tools = /mbtools/cl_tool_manager=>select( ).
 
-    LOOP AT lt_tools INTO ls_tool.
-      lo_tool = ls_tool-manager.
+      LOOP AT lt_tools INTO ls_tool.
+        lo_tool = ls_tool-manager.
 
-      IF lv_operand = lo_tool->get_command( ) OR lv_operand = lo_tool->get_shortcut( ).
-        lo_tool->launch( ).
-        lv_found = abap_true.
-        EXIT.
-      ENDIF.
-    ENDLOOP.
+        IF lv_operand = lo_tool->get_command( ) OR lv_operand = lo_tool->get_shortcut( ).
+          lo_tool->launch( ).
+          lv_found = abap_true.
+          EXIT.
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
 
     " Additional commands from MBT Base
-    CASE lv_operand.
-      WHEN ''.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT' ).
-        lv_found = abap_true.
-      WHEN 'INST' OR 'INSTALL'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_INSTALLER' ).
-        lv_found = abap_true.
-      WHEN 'SUPP' OR 'SUPPORT'.
-        /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_SUPPORT' ).
-        lv_found = abap_true.
-    ENDCASE.
+    IF lv_found IS INITIAL.
+      CASE lv_operand.
+        WHEN ''.
+          /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT' ).
+          lv_found = abap_true.
+        WHEN 'INST' OR 'INSTALL'.
+          /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_INSTALLER' ).
+          lv_found = abap_true.
+        WHEN 'SUPP' OR 'SUPPORT'.
+          /mbtools/cl_sap=>run_program( '/MBTOOLS/MBT_SUPPORT' ).
+          lv_found = abap_true.
+      ENDCASE.
+    ENDIF.
 
     IF lv_found IS INITIAL.
       MESSAGE 'Unknown tool.' TYPE 'S' DISPLAY LIKE 'E'.
